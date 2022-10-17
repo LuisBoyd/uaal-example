@@ -47,6 +47,14 @@ public class MainActivity extends AppCompatActivity {
     public void btnLoadUnity(View v) {
         isUnityLoaded = true;
         Intent intent = new Intent(this, MainUnityActivity.class);
+
+        //Creating Bundle this is for testing just dummy locations should be removed
+        Bundle bundle = new Bundle();
+
+        bundle.putInt("pointOfInterestId",137316); //Great Haywood Marina Dummy
+
+        intent.putExtras(bundle);
+
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivityForResult(intent, 1);
     }

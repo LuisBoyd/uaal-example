@@ -8,14 +8,18 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.company.product.OverrideUnityActivity;
+import com.unity3d.player.UnityPlayer;
 
 public class MainUnityActivity extends OverrideUnityActivity {
+
+    private int m_locationID;
     // Setup activity layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addControlsToUnityFrame();
+        //addControlsToUnityFrame();
         Intent intent = getIntent();
+        m_locationID = intent.getExtras().getInt("pointOfInterestId");
         handleIntent(intent);
     }
 
@@ -25,6 +29,14 @@ public class MainUnityActivity extends OverrideUnityActivity {
         handleIntent(intent);
         setIntent(intent);
     }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        UnityPlayer.UnitySendMessage("NativeBridge", "AppendLocation",  String.valueOf(m_locationID));
+    }
+
 
     void handleIntent(Intent intent) {
         if(intent == null || intent.getExtras() == null) return;
