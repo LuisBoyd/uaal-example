@@ -10,6 +10,9 @@ import android.widget.FrameLayout;
 import com.company.product.OverrideUnityActivity;
 import com.unity3d.player.UnityPlayer;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainUnityActivity extends OverrideUnityActivity {
 
     private int m_locationID;
@@ -17,7 +20,7 @@ public class MainUnityActivity extends OverrideUnityActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //addControlsToUnityFrame();
+        addControlsToUnityFrame();
         Intent intent = getIntent();
         m_locationID = intent.getExtras().getInt("pointOfInterestId");
         handleIntent(intent);
@@ -34,7 +37,22 @@ public class MainUnityActivity extends OverrideUnityActivity {
     protected void onStart()
     {
         super.onStart();
-        UnityPlayer.UnitySendMessage("NativeBridge", "AppendLocation",  String.valueOf(m_locationID));
+
+        JSONObject Initobj = new JSONObject();
+        JSONObject LoadLocationobj = new JSONObject();
+
+        try {
+            Initobj.put("Code", "Init");
+            Initobj.put("Region", "UK_EnglandWales");
+            LoadLocationobj.put("Code", "LL");
+            LoadLocationobj.put("POIid", String.valueOf(m_locationID));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        UnityPlayer.UnitySendMessage("NativeBridge", "RecieveJSONCMD", Initobj.toString()); //Send The Initialisation Message
+        UnityPlayer.UnitySendMessage("NativeBridge", "RecieveJSONCMD",LoadLocationobj.toString());
+
     }
 
 
@@ -82,7 +100,16 @@ public class MainUnityActivity extends OverrideUnityActivity {
             myButton.setY(500);
             myButton.setOnClickListener( new View.OnClickListener() {
                 public void onClick(View v) {
-                    mUnityPlayer.UnitySendMessage("Cube", "ChangeColor", "yellow");
+
+                    JSONObject DebugObj = new JSONObject();
+                    try {
+                        DebugObj.put("Code", "Debug");
+                        DebugObj.put("message", "Clicked the button");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    mUnityPlayer.UnitySendMessage("NativeBridge", "RecieveJSONCMD", DebugObj.toString());
                 }
             });
             layout.addView(myButton, 300, 200);
