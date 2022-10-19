@@ -5,12 +5,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Patterns;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     boolean isUnityLoaded = false;
+    EditText m_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        m_email = findViewById(R.id.editTextTextEmailAddress);
         setSupportActionBar(toolbar);
 
         handleIntent(getIntent());
@@ -45,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btnLoadUnity(View v) {
+
+        if(!ValidateEmail(m_email))
+        {
+            return;
+        }
         isUnityLoaded = true;
         Intent intent = new Intent(this, MainUnityActivity.class);
 
@@ -52,11 +63,26 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
 
         bundle.putInt("pointOfInterestId",137316); //Great Haywood Marina Dummy
+        bundle.putString("Email", m_email.getText().toString());
 
         intent.putExtras(bundle);
 
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivityForResult(intent, 1);
+    }
+
+    private boolean ValidateEmail(EditText email)
+    {
+        String emailToText = email.getText().toString();
+
+        if(!emailToText.isEmpty() && Patterns.EMAIL_ADDRESS
+                .matcher(emailToText).matches())
+        {
+            return true;
+        }else{
+            showToast("Enter Valid Email First");
+            return false;
+        }
     }
 
     @Override

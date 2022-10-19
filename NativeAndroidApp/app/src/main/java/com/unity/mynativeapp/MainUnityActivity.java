@@ -16,6 +16,7 @@ import org.json.JSONObject;
 public class MainUnityActivity extends OverrideUnityActivity {
 
     private int m_locationID;
+    private String m_email;
     // Setup activity layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class MainUnityActivity extends OverrideUnityActivity {
         addControlsToUnityFrame();
         Intent intent = getIntent();
         m_locationID = intent.getExtras().getInt("pointOfInterestId");
+        m_email = intent.getExtras().getString("Email");
         handleIntent(intent);
     }
 
@@ -44,6 +46,7 @@ public class MainUnityActivity extends OverrideUnityActivity {
         try {
             Initobj.put("Code", "Init");
             Initobj.put("Region", "UK_EnglandWales");
+            Initobj.put("Email", m_email);
             LoadLocationobj.put("Code", "LL");
             LoadLocationobj.put("POIid", String.valueOf(m_locationID));
         } catch (JSONException e) {

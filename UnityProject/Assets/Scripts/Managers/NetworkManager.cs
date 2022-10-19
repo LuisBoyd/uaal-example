@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RCR.Managers
 {
+    [DefaultExecutionOrder(-3)]
     public class NetworkManager: Singelton<NetworkManager>
     {
         public IEnumerator PutRequest(string phpRequestName,
