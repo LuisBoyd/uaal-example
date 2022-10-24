@@ -5,6 +5,7 @@ using DataStructures;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RCR.BaseClasses;
+using RCR.DataStructures;
 using RCR.Utilities;
 using UnityEngine;
 
