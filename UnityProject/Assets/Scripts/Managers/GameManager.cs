@@ -195,6 +195,7 @@ namespace RCR.Managers
                 }
             }
             //TODO after I have the json look at the "Filemangager to find the relevant map file if not create a default one" look at whiteboard at home
+            
         }
 
         private void On_RecivedGameLocationData(bool success, string json)

@@ -8,4 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DevelopmentScene.unity
     guid: 4611944785bef8746a32711ae609e1d7
-  m_configObjects: {}
+  m_configObjects:
+    com.rcr.TilemapAssets: {fileID: 11400000, guid: 8892dc746b865d8479c26cc464a8a456,
+      type: 2}
+    com.unity.addressableassets: {fileID: 11400000, guid: 5b489bfd88ab12344b1ab22f5e024381,
+      type: 2}

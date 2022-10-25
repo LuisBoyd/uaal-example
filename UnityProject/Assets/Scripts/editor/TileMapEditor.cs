@@ -14,7 +14,7 @@ namespace editor
             {
                 if (target is Tilemap)
                 {
-                    (target as Tilemap).serializeTilemap();
+                    (target as Tilemap).SerializeTilemap("");
                 }
             }
         }
