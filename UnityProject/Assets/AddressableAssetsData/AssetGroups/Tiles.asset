@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Tiles
+  m_EditorClassIdentifier: 
+  m_GroupName: Tiles
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 8013c824fcd4d8e41a541e15de241bf5
+  m_SerializeEntries:
+  - m_GUID: 2037befa168dc184f859b656b82585e8
+    m_Address: Assets/2D/Tiles/AutoTiles
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 6dfb98c128afeee4396e39b36169c8ac, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 42bb4fe8346ed454894ab510f3c9decd, type: 2}
+    - {fileID: 11400000, guid: 2992a6011f9f24f458e1f67dfe1472b7, type: 2}

@@ -4,7 +4,6 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using DataStructures;
-using Enums;
 using RCR.ScriptableObjects;
 using UnityEngine.Tilemaps;
 using Newtonsoft.Json;
@@ -68,7 +67,7 @@ namespace RCR.Utilities
                         TileBase[] tileArray = tilemap.GetTilesBlock(tilemap.cellBounds);
 
                         Dictionary<int, int> tileInstanceID = new Dictionary<int, int>();
-                        int[] tileArrayInt = new int[tileArray.Length];
+                        byte[] tileArrayInt = new Byte[tileArray.Length];
 
                         for (int i = 0; i < tileArray.Length; i++)
                         {
@@ -78,7 +77,15 @@ namespace RCR.Utilities
                                 if(!tileInstanceID.ContainsKey(id))
                                     tileInstanceID.Add(id, tileInstanceID.Count + 1);
 
-                                tileArrayInt[i] = tileInstanceID[id];
+                                try
+                                {
+                                    tileArrayInt[i] = Convert.ToByte(tileInstanceID[id]);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e);
+                                    throw;
+                                }
                             }
                             else
                             {

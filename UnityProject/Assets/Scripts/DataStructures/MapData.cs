@@ -8,6 +8,6 @@ namespace DataStructures
         public List<string> TileAssetPaths;
         public int X = 0;
         public int Y = 0;
-        public int[] TileArray = default;
+        public byte[] TileArray = default;
     }
 }

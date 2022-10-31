@@ -1,16 +1,21 @@
-﻿namespace Enums
+﻿namespace RCR.Enums
 {
     public enum TileType
     {
+        //Maximum tile type Count 255
         None = 0,
         
         //Ground
-        Grass = 2,
-        Path = 3,
+        GreenGrass = 1,
+        PathGrass = 2,
         //End Ground
         
         //Water
-        CenterWater = 4
+        Water = 3,
         //End Water
+        
+        //Path
+      
+        //End Path
     }
 }
