@@ -9,6 +9,8 @@ using UnityEngine.Tilemaps;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Linq;
+using RCR.Enums;
+using RCR.Managers;
 using UnityEditor;
 using UnityEngine;
 
@@ -65,26 +67,29 @@ namespace RCR.Utilities
                     using (BsonDataWriter writer = new BsonDataWriter(ms))
                     {
                         TileBase[] tileArray = tilemap.GetTilesBlock(tilemap.cellBounds);
-
-                        Dictionary<int, int> tileInstanceID = new Dictionary<int, int>();
+                        
                         byte[] tileArrayInt = new Byte[tileArray.Length];
 
                         for (int i = 0; i < tileArray.Length; i++)
                         {
                             if (tileArray[i] != null)
                             {
-                                int id = tileArray[i].GetInstanceID();
-                                if(!tileInstanceID.ContainsKey(id))
-                                    tileInstanceID.Add(id, tileInstanceID.Count + 1);
-
-                                try
+                                string id = AssetDatabase.GetAssetPath(tileArray[i]);
+                                if (TileManager.m_AssetDatabaseLookup.ContainsKey(id))
                                 {
-                                    tileArrayInt[i] = Convert.ToByte(tileInstanceID[id]);
+                                    try
+                                    {
+                                        tileArrayInt[i] = Convert.ToByte(TileManager.m_AssetDatabaseLookup[id]);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine(e);
+                                        throw;
+                                    }
                                 }
-                                catch (Exception e)
+                                else
                                 {
-                                    Console.WriteLine(e);
-                                    throw;
+                                    tileArrayInt[i] = 0;
                                 }
                             }
                             else
@@ -93,42 +98,105 @@ namespace RCR.Utilities
                             }
                         }
 
-                        List<string> relevantTileAssetPaths = new List<string>();
-
-                        foreach (KeyValuePair<int,int> tileID in tileInstanceID)
+                        // List<string> relevantTileAssetPaths = new List<string>();
+                        //
+                        // foreach (KeyValuePair<int,int> tileID in tileInstanceID)
+                        // {
+                        //     relevantTileAssetPaths.Add(AssetDatabase.GetAssetPath(tileID.Key));
+                        // }
+                        //
+                        // MapData mData = new MapData()
+                        // {
+                        //     TileArray = tileArrayInt
+                        // };
+                        //
+                        //
+                        //
+                        // JsonSerializer serializer = new JsonSerializer();
+                        // serializer.Serialize(writer, mData);
+                        
+                        if (!FileManager.WriteToFile(path, Convert.ToBase64String(tileArrayInt), true))
                         {
-                            relevantTileAssetPaths.Add(AssetDatabase.GetAssetPath(tileID.Key));
+                            Debug.LogError($"Targeted Tilemap could not be converted to a Json Format {tilemap.name}");
+                            return;
                         }
-
-                        MapData mData = new MapData()
+                        else
                         {
-                            TileArray = tileArrayInt, TileAssetPaths = relevantTileAssetPaths,
-                            X = tilemap.size.x, Y = tilemap.size.y
-                        };
-
-                       
-
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.Serialize(writer, mData);
-                    }
-
-                    if (!FileManager.WriteToFile(path, Convert.ToBase64String(ms.ToArray()), true))
-                    {
-                        Debug.LogError($"Targeted Tilemap could not be converted to a Json Format {tilemap.name}");
-                        return;
-                    }
-                    else
-                    {
-                        if (!Dependinces.Contains(path))
-                        {
-                            Dependinces.Add(path);
-                            FileManager.WriteToFile(FileManager.MapPartitionManifest, JsonConvert.SerializeObject(Dependinces), true);
+                            if (!Dependinces.Contains(path))
+                            {
+                                Dependinces.Add(path);
+                                FileManager.WriteToFile(FileManager.MapPartitionManifest, JsonConvert.SerializeObject(Dependinces), true);
+                            }
                         }
                     }
+
                   
                 }
             }
             
+        }
+
+        public static async void DeserializeTilemap(this Tilemap tilemap)
+        {
+            string path = EditorUtility.OpenFilePanel("Open Tilemap File", "", "bmap");
+            if (tilemap != null && !string.IsNullOrEmpty(path))
+            {
+                char[] result;
+                StringBuilder builder = new StringBuilder();
+                using (StreamReader streamReader = File.OpenText(path))
+                {
+                    result = new char[streamReader.BaseStream.Length];
+                    await streamReader.ReadAsync(result, 0, (int)streamReader.BaseStream.Length);
+                }
+
+                foreach (char character in result)
+                {
+                    builder.Append(character);
+                }
+                
+                byte[] ReadBytes = Convert.FromBase64String(builder.ToString());
+                TileType[] types = new TileType[ReadBytes.Length];
+                for (int i = 0; i < ReadBytes.Length; i++)
+                {
+                    types[i] = (TileType)ReadBytes[i];
+                }
+
+                Dictionary<TileType, TileBase> lookup = new Dictionary<TileType, TileBase>();
+                TileBase[] tiles = new TileBase[types.Length];
+                for (int i = 0; i < tiles.Length; i++)
+                {
+                    if (!lookup.ContainsKey(types[i]))
+                    {
+                        if (TileManager.m_TileAddressable.TryGetValue(types[i], out string AssetPath))
+                        {
+                            TileBase tile = AssetDatabase.LoadAssetAtPath<TileBase>(AssetPath);
+                            lookup.Add(types[i], tile);
+                            tiles[i] = tile;
+                        }
+                    }
+                    else
+                    {
+                        if (lookup.TryGetValue(types[i], out TileBase value))
+                            tiles[i] = value;
+                    }
+                }
+
+                if (Mathf.Sqrt(tiles.Length) <= tilemap.size.x && Mathf.Sqrt(tiles.Length) <= tilemap.size.y)
+                {
+                    tilemap.SetTilesBlock(tilemap.cellBounds, tiles);
+                }
+                else
+                {
+                    Debug.LogError($"Length of array {tiles.Length} bigger than the bounds of the tilemap");
+                    Debug.Log($"Resized bounds to accomadate array length");
+                    tilemap.size = new Vector3Int(Mathf.CeilToInt(Mathf.Sqrt(tiles.Length)),
+                        Mathf.CeilToInt(Mathf.Sqrt(tiles.Length)));
+                    tilemap.ResizeBounds();
+                    tilemap.SetTilesBlock(tilemap.cellBounds, tiles);
+                    return;
+                }
+                
+            }
         }
 
 

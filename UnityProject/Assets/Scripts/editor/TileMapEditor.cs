@@ -17,6 +17,24 @@ namespace editor
                     (target as Tilemap).SerializeTilemap("");
                 }
             }
+
+            if (GUILayout.Button("De-Serialize Tilemap"))
+            {
+                if (target is Tilemap)
+                {
+                    (target as Tilemap).DeserializeTilemap();
+                }
+            }
+
+            if (GUILayout.Button("Clear TileMap"))
+            {
+                if (target is Tilemap)
+                {
+                    (target as Tilemap).ClearAllTiles();
+                    (target as Tilemap).size = Vector3Int.one;
+                    (target as Tilemap).ResizeBounds();
+                }
+            }
         }
     }
 }
