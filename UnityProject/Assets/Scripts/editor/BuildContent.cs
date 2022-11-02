@@ -137,13 +137,13 @@ namespace editor
                     builder.Append(character);
                 }
                 
-                byte[] ReadBytes = Convert.FromBase64String(builder.ToString());
-                var byteContent = new ByteArrayContent(ReadBytes);
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                //byte[] ReadBytes = Convert.FromBase64String(builder.ToString());
+                //var byteContent = new ByteArrayContent(ReadBytes);
+                var Base64StringByteContent = new StringContent(builder.ToString());
+                
 
                 var multipartContent = new MultipartFormDataContent();
-                multipartContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                multipartContent.Add(byteContent,"ByteData");
+                multipartContent.Add(Base64StringByteContent,"ByteData");
 
                 var response = client.PostAsync(apiUri, multipartContent);
                 await response;
