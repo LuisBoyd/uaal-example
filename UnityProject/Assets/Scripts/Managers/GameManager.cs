@@ -8,6 +8,14 @@ using RCR.BaseClasses;
 using RCR.DataStructures;
 using RCR.Utilities;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
+/*
+ * Information To be passed into me
+ *
+ * Location - poiID
+ * user - username/Email 
+ */
 
 namespace RCR.Managers
 {
@@ -27,7 +35,6 @@ namespace RCR.Managers
             public string Email;
             public string Region;
         }
-        
         private struct DummyLocationData
         {
             public string POIid;

@@ -76,6 +76,31 @@ public class NativeBridge : Singelton<NativeBridge>
         }
     }
 
+    private event OnOutOfPOIRange m_rangeLeft;
+    public event OnOutOfPOIRange RangeLeft
+    {
+        add
+        {
+            Debug.Log($"{value.Method.Name} Subscribed To RangeLeft");
+            m_rangeLeft += value;
+        }
+        remove
+        {
+            Debug.Log($"{value.Method.Name} Un-Subscribed To RangeLeft");
+            m_rangeLeft -= value;
+        }
+    }
+    
+    void OnExitRange(string cmd)
+    {
+        m_rangeLeft?.Invoke();
+    }
+
+    void VerifyLocation(string cmd)
+    {
+        
+    }
+
     #region CommandsList
 
     /*
