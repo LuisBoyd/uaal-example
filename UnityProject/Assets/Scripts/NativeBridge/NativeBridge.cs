@@ -91,16 +91,28 @@ public class NativeBridge : Singelton<NativeBridge>
         }
     }
     
+    /// <summary>
+    /// To be called from The Native Side in A background process to indicate we have left the range
+    /// of a POI
+    /// </summary>
+    /// <param name="cmd"></param>
     void OnExitRange(string cmd)
     {
         m_rangeLeft?.Invoke();
     }
 
-    void VerifyLocation(string cmd)
-    {
-        
-    }
 
+    /// <summary>
+    /// Verify's the RCR Members access to the passed in Location
+    /// </summary>
+    /// <param name="cmd">A JSON Value containing the User Key and the Location Key to enter</param>
+    void VerifyEntry(string cmd)
+    {
+        //TODO Implement Method
+        //Should mostly be done on the Native side before entry to the app
+    }
+    
+    
     #region CommandsList
 
     /*

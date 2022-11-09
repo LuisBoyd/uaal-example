@@ -1,5 +1,6 @@
 package com.unity.mynativeapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,10 +12,29 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 public class MainActivity extends AppCompatActivity {
 
     boolean isUnityLoaded = false;
     EditText m_email;
+    EditText m_POIIDField;
+    boolean FailedToVerify = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         m_email = findViewById(R.id.editTextTextEmailAddress);
+        m_POIIDField = findViewById(R.id.PoiID);
         setSupportActionBar(toolbar);
 
         handleIntent(getIntent());
@@ -56,13 +77,39 @@ public class MainActivity extends AppCompatActivity {
         {
             return;
         }
+
+        CallBackThread Task = new CallBackThread(
+                new ICallbackNoParams() {
+                    @Override
+                    public void callback() {
+                        LoadUnity();
+                    }
+
+                    @Override
+                    public void FailedCallback() {
+                        showToast("Failed To Verify User");
+                    }
+                }
+        , Integer.parseInt(m_POIIDField.getText().toString()),
+                m_email.getText().toString(),
+                "UK_EnglandWales");
+
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        executor.execute(Task);
+
+    }
+
+    private void LoadUnity(){
+
         isUnityLoaded = true;
         Intent intent = new Intent(this, MainUnityActivity.class);
 
         //Creating Bundle this is for testing just dummy locations should be removed
         Bundle bundle = new Bundle();
 
-        bundle.putInt("pointOfInterestId",137316); //Great Haywood Marina Dummy
+        bundle.putInt("pointOfInterestId",Integer.parseInt(m_POIIDField.getText().toString())); //Great Haywood Marina Dummy
         bundle.putString("Email", m_email.getText().toString());
 
         intent.putExtras(bundle);
@@ -85,6 +132,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*private String Parse(String ResponseBody){
+        try {
+            JSONArray albums = new JSONArray(ResponseBody);
+            for (int i = 0; i < albums.length(); i++){
+                JSONObject album = albums.getJSONObject(i);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }*/
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 1) isUnityLoaded = false;
@@ -106,10 +164,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showToast(String message) {
-        CharSequence text = message;
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-        toast.show();
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                CharSequence text = message;
+                int duration = Toast.LENGTH_SHORT;
+                final Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+                toast.show();
+            }
+        });
     }
 
     @Override
