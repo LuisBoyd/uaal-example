@@ -17,6 +17,7 @@ public class MainUnityActivity extends OverrideUnityActivity {
 
     private int m_locationID;
     private String m_email;
+    private String m_region;
     // Setup activity layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class MainUnityActivity extends OverrideUnityActivity {
         Intent intent = getIntent();
         m_locationID = intent.getExtras().getInt("pointOfInterestId");
         m_email = intent.getExtras().getString("Email");
+        m_region = intent.getExtras().getString("Region");
         handleIntent(intent);
     }
 
@@ -41,20 +43,17 @@ public class MainUnityActivity extends OverrideUnityActivity {
         super.onStart();
 
         JSONObject Initobj = new JSONObject();
-        JSONObject LoadLocationobj = new JSONObject();
 
         try {
-            Initobj.put("Code", "Init");
-            Initobj.put("Region", "UK_EnglandWales");
-            Initobj.put("Email", m_email);
-            LoadLocationobj.put("Code", "LL");
-            LoadLocationobj.put("POIid", String.valueOf(m_locationID));
+            Initobj.put("userkey", m_email);
+            Initobj.put("Poid", m_locationID);
+            Initobj.put("Region", m_email);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        UnityPlayer.UnitySendMessage("NativeBridge", "RecieveJSONCMD", Initobj.toString()); //Send The Initialisation Message
-        UnityPlayer.UnitySendMessage("NativeBridge", "RecieveJSONCMD",LoadLocationobj.toString());
+        UnityPlayer.UnitySendMessage("NativeBridge", "LoadLocation", Initobj.toString()); //Send The Initialisation Message
 
     }
 

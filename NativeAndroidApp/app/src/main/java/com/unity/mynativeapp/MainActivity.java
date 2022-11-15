@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         bundle.putInt("pointOfInterestId",Integer.parseInt(m_POIIDField.getText().toString())); //Great Haywood Marina Dummy
         bundle.putString("Email", m_email.getText().toString());
+        bundle.putString("Region", "UK_EnglandWales");
 
         intent.putExtras(bundle);
 

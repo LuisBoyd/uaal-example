@@ -18,6 +18,8 @@ namespace RCR.Utilities
 {
     public static class ExtensionMethods
     {
+#if UNITY_EDITOR
+        
         public static void SerializeTilemap(this Tilemap tilemap, string assetBundlePath)
         {
             const int X = 50;
@@ -200,6 +202,6 @@ namespace RCR.Utilities
         }
 
 
-
+#endif
     }
     }

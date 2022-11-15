@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using RCR.BaseClasses;
+using RCR.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +14,8 @@ public class NativeBridge : Singelton<NativeBridge>
 {
 
     private Dictionary<string, Action<string>> m_proc;
+
+    private const int MAX_AREA_COUNT = 25;
 
     protected override void Awake()
     {
@@ -99,6 +103,61 @@ public class NativeBridge : Singelton<NativeBridge>
     void OnExitRange(string cmd)
     {
         m_rangeLeft?.Invoke();
+    }
+
+    void LoadLocation(string cmd)
+    {
+        JObject passOverObj = JObject.Parse(cmd);
+        if (passOverObj != null)
+        {
+            GameManager.Instance.PoulateData(passOverObj["userkey"].ToString(),  passOverObj["Poid"].ToString(), passOverObj["Region"].ToString());
+            StartCoroutine(NetworkManager.Instance.PutRequest(" RequestUserMapData",
+                new Dictionary<string, string>
+                {
+                    { "userKey", passOverObj["userkey"].ToString() },
+                    { "POIID", passOverObj["Poid"].ToString() },
+                    {"region", passOverObj["Region"].ToString()}
+                }, onLoadLocation_Complete));
+        }
+        else
+        {
+            //TODO EXIT out of game no need to launch or save anything
+            ExitApplication();
+        }
+    }
+
+    /// <summary>
+    /// Callback Method passed to the network Manager
+    /// </summary>
+    private void onLoadLocation_Complete(bool value, string response)
+    {
+        if (!value)
+            ExitApplication();
+
+        JObject LocationResponseObj = JObject.Parse(response);
+        if (LocationResponseObj != null)
+        {
+            string AreaData = LocationResponseObj["areaData"].ToString();
+            int[] int_Area_data = AreaData.Split(',').Select(int.Parse).ToArray();
+            if (int_Area_data.Length != MAX_AREA_COUNT)
+            {
+                Debug.Log("AREA MAP SIZE IS NOT MAX");
+                ExitApplication();
+            }
+            else
+            {
+                GameManager.Instance.ProcessAreaData(int_Area_data);
+            }
+        }
+        else
+        {
+            ExitApplication();
+        }
+    }
+
+    private void ExitApplication()
+    {
+        Application.Quit();
     }
 
 

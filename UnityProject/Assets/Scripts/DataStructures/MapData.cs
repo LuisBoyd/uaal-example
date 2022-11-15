@@ -3,8 +3,10 @@
 namespace DataStructures
 {
     [System.Serializable]
-    public class MapData
+    public struct MapData
     {
-        public byte[] TileArray = default;
+        public string Region;
+        public string MapID;
+        public int[] MapIdArray;
     }
 }

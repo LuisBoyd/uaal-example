@@ -11,7 +11,6 @@ namespace RCR.Utilities
         protected override void Awake()
         {
             base.Awake();
-            NativeBridge.Instance.InsertCMD("Debug", RecieveJsonMessage);
         }
 
         void appendToText(string line) { m_textField.text += line + "\n"; }
