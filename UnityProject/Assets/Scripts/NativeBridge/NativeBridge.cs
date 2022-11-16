@@ -111,7 +111,7 @@ public class NativeBridge : Singelton<NativeBridge>
         if (passOverObj != null)
         {
             GameManager.Instance.PoulateData(passOverObj["userkey"].ToString(),  passOverObj["Poid"].ToString(), passOverObj["Region"].ToString());
-            StartCoroutine(NetworkManager.Instance.PutRequest(" RequestUserMapData",
+            StartCoroutine(NetworkManager.Instance.PutRequest("RequestUserMapData",
                 new Dictionary<string, string>
                 {
                     { "userKey", passOverObj["userkey"].ToString() },
@@ -133,21 +133,14 @@ public class NativeBridge : Singelton<NativeBridge>
     {
         if (!value)
             ExitApplication();
-
+        
         JObject LocationResponseObj = JObject.Parse(response);
         if (LocationResponseObj != null)
         {
-            string AreaData = LocationResponseObj["areaData"].ToString();
+            string AreaData = LocationResponseObj["MapData"].ToString();
+            Debug.Log($"THIS IS AREA DATA {AreaData}");
             int[] int_Area_data = AreaData.Split(',').Select(int.Parse).ToArray();
-            if (int_Area_data.Length != MAX_AREA_COUNT)
-            {
-                Debug.Log("AREA MAP SIZE IS NOT MAX");
-                ExitApplication();
-            }
-            else
-            {
-                GameManager.Instance.ProcessAreaData(int_Area_data);
-            }
+            GameManager.Instance.ProcessAreaData(int_Area_data);
         }
         else
         {

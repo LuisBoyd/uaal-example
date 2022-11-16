@@ -1,4 +1,5 @@
 ﻿using DataStructures;
+using RCR.Enums;
 
 namespace RCR.BaseClasses
 {
@@ -25,6 +26,8 @@ namespace RCR.BaseClasses
     /// Result of Verification Process
     /// </summary>
     public delegate void OnVerificationResult(bool result);
-    
-    
+
+    public delegate void OnQuit();
+
+
 }

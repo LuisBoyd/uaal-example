@@ -47,7 +47,7 @@ public class MainUnityActivity extends OverrideUnityActivity {
         try {
             Initobj.put("userkey", m_email);
             Initobj.put("Poid", m_locationID);
-            Initobj.put("Region", m_email);
+            Initobj.put("Region", m_region);
 
         } catch (JSONException e) {
             e.printStackTrace();

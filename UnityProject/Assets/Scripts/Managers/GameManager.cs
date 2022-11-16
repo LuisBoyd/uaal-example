@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using DataStructures;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RCR.BaseClasses;
 using RCR.DataStructures;
+using RCR.Enums;
 using RCR.Utilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 
 /*
  * Information To be passed into me
@@ -30,6 +34,25 @@ namespace RCR.Managers
         private MapData m_mapData;
 
         private bool m_mapProccessingProblem = false;
+
+        private Tilemap m_tilemap;
+
+
+        public event OnQuit OnQuitting
+        {
+            add
+            {
+                Debug.Log($"{value.Method.Name} subscribed to OnQuit Event");
+                m_OnQuitting += value;
+            }
+            remove
+            {
+                Debug.Log($"{value.Method.Name} Un-subscribed to OnQuit Event");
+                m_OnQuitting -= value;
+            }
+        }
+        private event OnQuit m_OnQuitting;
+        
         
         protected override void Awake()
         {
@@ -46,24 +69,38 @@ namespace RCR.Managers
             m_playerData.UserKey = userKey;
         }
 
-        public void ProcessAreaData(int[] areaData)
+        private bool IsBlankMap()
         {
-            bool newArea = true;
-            for (int i = 0; i < areaData.Length; i++)
+            for (int i = 0; i < m_mapData.MapSize ; i++)
             {
-                if (areaData[i] != 0)
-                    newArea = false;
+                if (m_mapData.MapIdArray[i] != 0)
+                    return false;
             }
 
+            return true;
+        }
+        
+        public void ProcessAreaData(int[] areaData)
+        {
+            m_mapData.MapSize = areaData.Length;
+            m_mapData.MapSize_sqr = Mathf.Sqrt(areaData.Length);
             m_mapData.MapIdArray = areaData;
-            
-            if (newArea)
+            if (!MathUtils.IsFloatWhole(m_mapData.MapSize_sqr))
             {
-                ProcessNewArea();
+                RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.WARNING, RCRMessageType.MAP_NOT_EQUIDIMENSIONAL));
+                Application.Quit(); //TODO APPLE IMPLEMENTATION DOES NOT RECOMMEND CALLING QUIT https://developer.apple.com/library/archive/qa/qa1561/_index.html
+                return;
             }
             else
             {
-                ProcessOldAreaData();
+                if (!IsBlankMap())
+                {
+                    StartCoroutine(ProcessOldAreaData());
+                }
+                else
+                {
+                    ProcessNewArea();
+                }
             }
         }
 
@@ -77,12 +114,12 @@ namespace RCR.Managers
                     if (RandomMapID != null)
                     {
                         m_mapData.MapIdArray[0] = RandomMapID["MapId"].ToObject<int>();
-                        ProcessOldAreaData();
+                        StartCoroutine(ProcessOldAreaData());
                     }
                     else
                     {
-                        Debug.LogError("Problem with Processing New map");
-                        MapProcessingProblem();
+                        RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.MAP_PROCESSING_PROBLEM));
+                        Application.Quit();//TODO ALERT USER THAT THEIR WAS A PROBLEM AND IMPLEMENT A WAY TO RESOLVE THIS
                     }
                 }
             };
@@ -96,15 +133,63 @@ namespace RCR.Managers
                 }, responseMethod));
         }
 
-        private void ProcessOldAreaData()
+        private IEnumerator ProcessOldAreaData()
         {
-            LoggingUtils.Instance.Debug($"This is the map Data {m_mapData.MapIdArray.ToString()}");
+            int i = 0;
+            JObject MapBase64 = null;
+            Action<bool, string> response = (b, s) =>
+            {
+                MapBase64 = null;
+                if (b)
+                {
+                    MapBase64 = JObject.Parse(s);
+                    if (MapBase64 != null)
+                    {
+                        string Base64 = MapBase64["SegmentData"].ToString();
+                        byte[] TileBytes = Convert.FromBase64String(Base64);
+                        
+                        Buffer.BlockCopy(TileBytes,0, m_mapData.MapByteStructure, i, 2500);
+                        
+                    }
+                    else
+                    {
+                        RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.MAP_PROCESSING_PROBLEM));
+                        Application.Quit();
+                    }
+                }
+            };
+            for (i = 0; i < m_mapData.MapIdArray.Length; i += 2500)
+            {
+
+                yield return NetworkManager.Instance.PutRequest("RequestMapSectionData",
+                    new Dictionary<string, string>()
+                    {
+                        {"SegmentID", m_mapData.MapIdArray[i].ToString()}
+                    }, response);
+                
+                yield return new WaitForEndOfFrame();
+            }
+            
+            
         }
 
-        private void MapProcessingProblem()
+        private IEnumerator RenderTiles()
         {
-            LoggingUtils.Instance.Debug("There was a processing problem");
+            m_tilemap = new GameObject("Map").AddComponent<Tilemap>();
+            m_tilemap.origin = Vector3Int.zero;
+            int Length = Mathf.FloorToInt(m_mapData.MapSize_sqr) * 2500;
+            m_tilemap.size = new Vector3Int(Length,Length);
+
+            for (int i = 0; i < Length; i++)
+            {
+                
+            }
+            
+            
+            
+            
         }
-        
+
+
     }
 }

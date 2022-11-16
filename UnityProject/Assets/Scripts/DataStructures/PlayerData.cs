@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace DataStructures
 {
-    public struct PlayerData
+    public class PlayerData
     {
         public string UserKey;
     }

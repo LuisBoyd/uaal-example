@@ -21,5 +21,16 @@ namespace RCR.Utilities
             var d = EarthRadius * e;
             return d;
         }
+
+
+        /// <summary>
+        /// Determines if the floating point Value is whole and could easily be cast to Type Int
+        /// </summary>
+        /// <param name="num">Floating point value</param>
+        /// <returns>True if number is whole</returns>
+        public static bool IsFloatWhole(float num)
+        {
+            return (num % 1) == 0;
+        }
     }
 }
