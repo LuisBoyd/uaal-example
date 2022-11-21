@@ -11,7 +11,8 @@ namespace RCR.Utilities
         public static readonly Dictionary<RCRMessageType, string> Messages = new Dictionary<RCRMessageType, string>()
         {
             { RCRMessageType.MAP_NOT_EQUIDIMENSIONAL, "Gathered Map is not Equidimensional"},
-            { RCRMessageType.MAP_PROCESSING_PROBLEM , "Problem with Processing map"}
+            { RCRMessageType.MAP_PROCESSING_PROBLEM , "Problem with Processing map"},
+            { RCRMessageType.ADDRESABBLE_TILE_LOADING_ISSUE, "Problem with Loading the Tiles from the addressables system"}
         };
 
         public class RCRMessage
@@ -25,6 +26,12 @@ namespace RCR.Utilities
                 this.Severity = severity;
                 this.Message = RiverCanalLogger.Messages[messageType];
                 this.Exception = e;
+            }
+
+            public RCRMessage(RCRSeverityLevel severity, string message)
+            {
+                this.Severity = severity;
+                this.Message = message;
             }
         }
         

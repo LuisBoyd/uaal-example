@@ -32,5 +32,13 @@ namespace RCR.Utilities
         {
             return (num % 1) == 0;
         }
+
+        /// <summary>
+        /// Returns the Count of Division
+        /// </summary>
+        public static int DivisionInto(int total, int divisionnumber)
+        {
+            return total / divisionnumber;
+        }
     }
 }

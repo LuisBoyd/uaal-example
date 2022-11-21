@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using DataStructures;
 using RCR.BaseClasses;
 using RCR.Enums;
+using RCR.Utilities;
 using Ruccho.Utilities;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.Tilemaps;
 
 namespace RCR.Managers
 {
+    [DefaultExecutionOrder(-5)]
     public class TileManager : Singelton<TileManager>
     {
-        [SerializeField, Tooltip("This Field Defines the Height And width each map section should be")]
-        private int m_WidthHeight;
-        
+
         public static readonly Dictionary<TileType, string> m_TileAddressable = new Dictionary<TileType, string>()
         {
             { TileType.GreenGrass, "Assets/2D/Tiles/AutoTiles/AU_GreenGrass.asset"},
@@ -37,65 +38,79 @@ namespace RCR.Managers
         {
             return (TileType)data;
         }
-        
-        private async void Load()
-        {
-            
-            
-            CancellationTokenSource source = new CancellationTokenSource();
-            CancellationToken token = source.Token;
-            
-            Task<AsyncOperationHandle<FangAutoTile>> task = Task<AsyncOperationHandle<FangAutoTile>>.Factory.StartNew(() =>
-            { 
-                AsyncOperationHandle<FangAutoTile> handle = AddressablesManager.LoadAsset<FangAutoTile>("");
-                if(handle.Result == null)
-                    source.Cancel();
-                return handle;
-            }, token);
 
-            try
+        protected override async void Awake()
+        {
+            base.Awake();
+            Task<bool> LoadingTask = Load();
+            await LoadingTask;
+
+            if (!LoadingTask.Result)
             {
-                await task;
-                if (!task.IsCanceled && !m_tileHandles.ContainsKey(task.Result.Result.TileType))
-                {
-                    // m_tileHandles.Add();
-                }
-            }
-            catch (OperationCanceledException e)
-            {
-                Debug.LogError(e);
-            }
-            finally
-            {
-                source.Dispose();
+                RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.MAP_PROCESSING_PROBLEM));
+                Application.Quit();
             }
         }
-        
 
-        private void recieveBytes(byte[] bytes)
+        private async Task<bool> Load()
         {
-            if (bytes.Length % m_WidthHeight == 0)
+            foreach (TileType type in Enum.GetValues(typeof(TileType)))
             {
-                TileType[] TileTypes = new TileType[bytes.Length];
-                for (int i = 0; i < TileTypes.Length; i++)
+                if (m_TileAddressable.TryGetValue(type, out string address))
                 {
-                    TileTypes[i] = ConvertToTileType(bytes[i]);
-                }
+                    CancellationTokenSource source = new CancellationTokenSource();
+                    CancellationToken token = source.Token;
+            
+                    Task<AsyncOperationHandle<FangAutoTile>> task = Task<AsyncOperationHandle<FangAutoTile>>.Factory.StartNew(() =>
+                    { 
+                        AsyncOperationHandle<FangAutoTile> handle = AddressablesManager.LoadAsset<FangAutoTile>(address);
+                        if(handle.Result == null)
+                            source.Cancel();
+                        return handle;
+                    }, token);
 
-                Array2d<TileType> TileTypesArray = new Array2d<TileType>(TileTypes, TileTypes.Length);
-
-                for (int x = 0; x < m_WidthHeight; x++)
-                {
-                    for (int y = 0; y < m_WidthHeight; y++)
+                    try
                     {
-                        if (!m_tileHandles.ContainsKey(TileTypesArray[x, y]))
+                        await task;
+                        if (!task.IsCanceled && !m_tileHandles.ContainsKey(task.Result.Result.TileType))
                         {
-                            
+                            m_tileHandles.Add(type, task.Result);
                         }
+                    }
+                    catch (OperationCanceledException e)
+                    {
+                        Debug.LogError(e);
+                        source.Dispose();
+                        return false;
+                    }
+                    finally
+                    {
+                        source.Dispose();
                     }
                 }
             }
-            //Failed To RecieveBytes
+
+            return true;
+        }
+        
+
+        public TileBase[] recieveBytes(byte[] bytes)
+        {
+            TileBase[] returnValue = new TileBase[bytes.Length];
+            for (int i = 0; i < returnValue.Length; i++)
+            {
+                TileType type = ConvertToTileType(bytes[i]);
+                if (m_tileHandles.TryGetValue(type, out AsyncOperationHandle<FangAutoTile> value))
+                {
+                    returnValue[i] = value.Result;
+                }
+                else
+                {
+                    returnValue[i] = null;
+                }
+            }
+
+            return returnValue;
         }
     }
 }

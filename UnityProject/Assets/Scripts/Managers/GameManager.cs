@@ -14,6 +14,7 @@ using RCR.Utilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
+using Grid = UnityEngine.Grid;
 
 /*
  * Information To be passed into me
@@ -36,6 +37,11 @@ namespace RCR.Managers
         private bool m_mapProccessingProblem = false;
 
         private Tilemap m_tilemap;
+        
+        private const int Tile_sectionSize_bytes = 2500;
+
+        // private DelegateNoArg m_data_proccessed_ready;
+        // private DelegateNoArg m_initialRenderingDone;
 
 
         public event OnQuit OnQuitting
@@ -51,6 +57,7 @@ namespace RCR.Managers
                 m_OnQuitting -= value;
             }
         }
+
         private event OnQuit m_OnQuitting;
         
         
@@ -85,6 +92,7 @@ namespace RCR.Managers
             m_mapData.MapSize = areaData.Length;
             m_mapData.MapSize_sqr = Mathf.Sqrt(areaData.Length);
             m_mapData.MapIdArray = areaData;
+            m_mapData.MapByteStructure = new byte[Tile_sectionSize_bytes * areaData.Length];
             if (!MathUtils.IsFloatWhole(m_mapData.MapSize_sqr))
             {
                 RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.WARNING, RCRMessageType.MAP_NOT_EQUIDIMENSIONAL));
@@ -146,19 +154,25 @@ namespace RCR.Managers
                     if (MapBase64 != null)
                     {
                         string Base64 = MapBase64["SegmentData"].ToString();
+                        Debug.Log(Base64);
                         byte[] TileBytes = Convert.FromBase64String(Base64);
-                        
-                        Buffer.BlockCopy(TileBytes,0, m_mapData.MapByteStructure, i, 2500);
-                        
+                        Debug.Log($"{TileBytes.Length} The length of tiles");
+                        Buffer.BlockCopy(TileBytes,0, m_mapData.MapByteStructure, i * Tile_sectionSize_bytes, Tile_sectionSize_bytes);
+                        Debug.Log("Buffer Copy");
                     }
                     else
                     {
-                        RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.MAP_PROCESSING_PROBLEM));
+                        RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.ADDRESABBLE_TILE_LOADING_ISSUE));
                         Application.Quit();
                     }
                 }
+                else
+                {
+                    RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.WARNING, s));
+                }
             };
-            for (i = 0; i < m_mapData.MapIdArray.Length; i += 2500)
+            Debug.Log($"Map ID ARRAY Length : {m_mapData.MapIdArray.Length}");
+            for (i = 0; i < m_mapData.MapIdArray.Length; i++)
             {
 
                 yield return NetworkManager.Instance.PutRequest("RequestMapSectionData",
@@ -166,28 +180,24 @@ namespace RCR.Managers
                     {
                         {"SegmentID", m_mapData.MapIdArray[i].ToString()}
                     }, response);
-                
-                yield return new WaitForEndOfFrame();
+                Debug.Log("completed one instance");
             }
-            
-            
+
+            m_mapData.MapByteStructure = AppUtilities.SortBytes(m_mapData.MapByteStructure, Tile_sectionSize_bytes);
+
+            yield return RenderTiles(TileManager.Instance.recieveBytes(m_mapData.MapByteStructure));
         }
 
-        private IEnumerator RenderTiles()
+        private IEnumerable RenderTiles(TileBase[] tiles)
         {
+            Grid grid = new GameObject("Grid").AddComponent<Grid>();
             m_tilemap = new GameObject("Map").AddComponent<Tilemap>();
+            m_tilemap.gameObject.transform.SetParent(grid.transform);
             m_tilemap.origin = Vector3Int.zero;
-            int Length = Mathf.FloorToInt(m_mapData.MapSize_sqr) * 2500;
+            int Length = Mathf.FloorToInt(m_mapData.MapSize_sqr) * Tile_sectionSize_bytes;
             m_tilemap.size = new Vector3Int(Length,Length);
-
-            for (int i = 0; i < Length; i++)
-            {
-                
-            }
-            
-            
-            
-            
+            m_tilemap.SetTilesBlock(m_tilemap.cellBounds, tiles);
+            yield return new WaitForEndOfFrame();
         }
 
 

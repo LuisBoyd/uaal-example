@@ -28,6 +28,7 @@ namespace RCR.BaseClasses
     public delegate void OnVerificationResult(bool result);
 
     public delegate void OnQuit();
+    
 
 
 }
