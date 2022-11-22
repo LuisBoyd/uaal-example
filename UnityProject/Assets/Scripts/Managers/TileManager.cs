@@ -54,24 +54,22 @@ namespace RCR.Managers
 
         private async Task<bool> Load()
         {
+            //Might need to kick off Initialization Later on in A Asset Manager
             foreach (TileType type in Enum.GetValues(typeof(TileType)))
             {
+                Debug.Log($"{type.ToString()} this is the TYPE");
                 if (m_TileAddressable.TryGetValue(type, out string address))
                 {
                     CancellationTokenSource source = new CancellationTokenSource();
                     CancellationToken token = source.Token;
-            
-                    Task<AsyncOperationHandle<FangAutoTile>> task = Task<AsyncOperationHandle<FangAutoTile>>.Factory.StartNew(() =>
-                    { 
-                        AsyncOperationHandle<FangAutoTile> handle = AddressablesManager.LoadAsset<FangAutoTile>(address);
-                        if(handle.Result == null)
-                            source.Cancel();
-                        return handle;
-                    }, token);
+
+                    Task<AsyncOperationHandle<FangAutoTile>> task =
+                        AddressablesManager.LoadAssetAsync<FangAutoTile>(address);
 
                     try
                     {
                         await task;
+                        Debug.Log($"This IS THE TASK {task.Result.Result.TileType}");
                         if (!task.IsCanceled && !m_tileHandles.ContainsKey(task.Result.Result.TileType))
                         {
                             m_tileHandles.Add(type, task.Result);

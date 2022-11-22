@@ -40,5 +40,15 @@ namespace RCR.Utilities
         {
             return total / divisionnumber;
         }
+
+        public static int sqrt(int value)
+        {
+            return Mathf.FloorToInt(Mathf.Sqrt(value));
+        }
+
+        public static int sqrt(float value)
+        {
+            return Mathf.FloorToInt(Mathf.Sqrt(value));
+        }
     }
 }

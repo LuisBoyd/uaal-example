@@ -188,14 +188,17 @@ namespace RCR.Managers
             yield return RenderTiles(TileManager.Instance.recieveBytes(m_mapData.MapByteStructure));
         }
 
-        private IEnumerable RenderTiles(TileBase[] tiles)
+        private IEnumerator RenderTiles(TileBase[] tiles)
         {
             Grid grid = new GameObject("Grid").AddComponent<Grid>();
             m_tilemap = new GameObject("Map").AddComponent<Tilemap>();
+            Debug.Log($"Added Grid length of tile is {tiles.Length}");
+            m_tilemap.gameObject.AddComponent<TilemapRenderer>();
             m_tilemap.gameObject.transform.SetParent(grid.transform);
             m_tilemap.origin = Vector3Int.zero;
-            int Length = Mathf.FloorToInt(m_mapData.MapSize_sqr) * Tile_sectionSize_bytes;
-            m_tilemap.size = new Vector3Int(Length,Length);
+            int Length = Mathf.FloorToInt(Mathf.Sqrt(tiles.Length));
+            m_tilemap.size = new Vector3Int(Length,Length, 1);
+            m_tilemap.ResizeBounds();
             m_tilemap.SetTilesBlock(m_tilemap.cellBounds, tiles);
             yield return new WaitForEndOfFrame();
         }

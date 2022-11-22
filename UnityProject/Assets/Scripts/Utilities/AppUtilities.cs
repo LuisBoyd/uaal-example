@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataStructures;
 using UnityEngine;
 
 namespace RCR.Utilities
@@ -22,34 +23,58 @@ namespace RCR.Utilities
 
         public static byte[] SortBytes(byte[] unorderedBytes, int SizeOfByteArray)
         {
-            byte[] combined_bytes = new byte[unorderedBytes.Length];
-            byte[] Sorted_bytes = new byte[combined_bytes.Length];
+            // byte[] Sorted_bytes = new byte[unorderedBytes.Length];
+            //
+            // //The lengthOfRow is the how long a Horizontal row of a Map Section is
+            // int lengthOfRow = Mathf.FloorToInt(Mathf.Sqrt(SizeOfByteArray));
+            //
+            // //The length of line is the legnth of the combined row
+            // int Length_of_Line = Mathf.FloorToInt(Mathf.Sqrt(Sorted_bytes.Length));
+            // //How many map Sections are in a row
+            // int Legnth_Of_Dimension = Mathf.FloorToInt(Mathf.Sqrt(MathUtils.DivisionInto(Sorted_bytes.Length, SizeOfByteArray)));
+            //
+            //
+            // int destOffset = 0;
+            // for (int i = 0; i < Length_of_Line; i++)
+            // {
+            //     for (int j = 0; j < Legnth_Of_Dimension; j++)
+            //     {
+            //         Buffer.BlockCopy(unorderedBytes, (i * lengthOfRow) + (j * SizeOfByteArray), Sorted_bytes,
+            //             destOffset, lengthOfRow);
+            //
+            //         destOffset += lengthOfRow;
+            //
+            //         //j * sizeOfByteArray = skipping map section
+            //         //i * lengthOfRow = offset within Map section
+            //     }
+            // }
+            //
+            // return Sorted_bytes;
 
-            int CollectionLength = MathUtils.DivisionInto(unorderedBytes.Length, SizeOfByteArray); //unorderedBytes.Count;
-            
-            for (int i = 0; i < CollectionLength; i++)
-            {
-                Buffer.BlockCopy(unorderedBytes, i * SizeOfByteArray, combined_bytes, i * SizeOfByteArray, SizeOfByteArray);
-            }
-            int Length_of_Line = Mathf.FloorToInt(Mathf.Sqrt(combined_bytes.Length));
-            int Legnth_Of_Dimension = Mathf.FloorToInt(Mathf.Sqrt(CollectionLength));
+            int MaxMapSectionCount = MathUtils.DivisionInto(unorderedBytes.Length, SizeOfByteArray);
+            int mapRowCount = MathUtils.sqrt(SizeOfByteArray);
+            int MaxRowEntries = MathUtils.sqrt(SizeOfByteArray);
 
-            for (int i = 0; i < MathUtils.DivisionInto(combined_bytes.Length, Length_of_Line); i++)
+            MapArray<byte> sortedBytes = new MapArray<byte>(unorderedBytes, MaxMapSectionCount,
+                mapRowCount, MaxRowEntries);
+
+            byte[] SortedBytes = new byte[unorderedBytes.Length];
+
+            for (int MS = 0; MS < MaxMapSectionCount; MS++)
             {
-                int Legnth_of_individual_array = Length_of_Line / Legnth_Of_Dimension;
-                for (int j = 0; j < Legnth_Of_Dimension; j++)
+                for (int RC = 0; RC < mapRowCount; RC++)
                 {
-                    Buffer.BlockCopy(combined_bytes, (i * Length_of_Line) + (j * Legnth_of_individual_array), Sorted_bytes,
-                        (i * Length_of_Line) + (j * Legnth_of_individual_array), Legnth_of_individual_array);
+                    for (int RE = 0; RE < MaxRowEntries; RE++)
+                    {
+                        //Buffer.BlockCopy(unorderedBytes, );
+                        //TODO WORK OUT THE ORDERING OF THESE BYTES
+                    }
                 }
             }
 
-            return Sorted_bytes;
 
-            // for (int LoopCount = 0; LoopCount < length * length; LoopCount += length)
-            // {
-            //     
-            // }
+
+            return null;
         }
         
         

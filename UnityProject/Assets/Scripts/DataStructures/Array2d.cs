@@ -16,5 +16,10 @@
             get { return m_input[index0 * this.m_length0 + index1]; }
             set { m_input[index0 * this.m_length0 + index1] = value; }
         }
+
+        public T[] FlatArray
+        {
+            get => m_input;
+        }
     }
 }

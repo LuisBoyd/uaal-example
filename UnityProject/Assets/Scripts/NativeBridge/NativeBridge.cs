@@ -105,6 +105,22 @@ public class NativeBridge : Singelton<NativeBridge>
         m_rangeLeft?.Invoke();
     }
 
+#if UNITY_EDITOR
+
+    /// <summary>
+    /// TODO remove for Builds
+    /// </summary>
+    private void Start()
+    {
+        JObject DummyData = new JObject();
+        DummyData.Add("userkey", "luis@rivercanalrescue.co.uk");
+        DummyData.Add("Poid", 137316);
+        DummyData.Add("Region", "UK_EnglandWales");
+        
+        LoadLocation(DummyData.ToString());
+    }
+#endif
+
     void LoadLocation(string cmd)
     {
         JObject passOverObj = JObject.Parse(cmd);

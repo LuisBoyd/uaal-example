@@ -191,8 +191,8 @@ namespace RCR.Utilities
                 {
                     Debug.LogError($"Length of array {tiles.Length} bigger than the bounds of the tilemap");
                     Debug.Log($"Resized bounds to accomadate array length");
-                    tilemap.size = new Vector3Int(Mathf.CeilToInt(Mathf.Sqrt(tiles.Length)),
-                        Mathf.CeilToInt(Mathf.Sqrt(tiles.Length)));
+                    tilemap.size = new Vector3Int(Mathf.FloorToInt(Mathf.Sqrt(tiles.Length)),
+                        Mathf.FloorToInt(Mathf.Sqrt(tiles.Length)), 1);
                     tilemap.ResizeBounds();
                     tilemap.SetTilesBlock(tilemap.cellBounds, tiles);
                     return;
