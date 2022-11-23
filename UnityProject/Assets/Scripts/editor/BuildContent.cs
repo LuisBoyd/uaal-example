@@ -121,9 +121,10 @@ namespace editor
             }
 
             var client = new HttpClient();
-            var apiUri = new Uri("https://waternav.co.uk/WaterNavGame/TestHttpResponse.php");
+            var apiUri = new Uri("https://waternav.co.uk/WaterNavGame/BuildTileMapContent.php"); //add t at end
             foreach (string file in files)
             {
+              
                 char[] result;
                 StringBuilder builder = new StringBuilder();
                 using (StreamReader streamReader = File.OpenText(file))
@@ -140,10 +141,11 @@ namespace editor
                 //byte[] ReadBytes = Convert.FromBase64String(builder.ToString());
                 //var byteContent = new ByteArrayContent(ReadBytes);
                 var Base64StringByteContent = new StringContent(builder.ToString());
-                
+                var Filename = new StringContent(Path.GetFileName(file));
 
                 var multipartContent = new MultipartFormDataContent();
                 multipartContent.Add(Base64StringByteContent,"ByteData");
+                multipartContent.Add(Filename, "FileName");
 
                 var response = client.PostAsync(apiUri, multipartContent);
                 await response;

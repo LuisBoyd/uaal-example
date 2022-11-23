@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RCR.Utilities
 {
@@ -49,6 +50,24 @@ namespace RCR.Utilities
         public static int sqrt(float value)
         {
             return Mathf.FloorToInt(Mathf.Sqrt(value));
+        }
+
+        public static Tuple<int,int> GetMedian(float number)
+        {
+            if (IsFloatWhole(number))
+            {
+                if (!IsFloatWhole((number + 1f) / 2f))
+                {
+                    int lower = Mathf.FloorToInt((number + 1f) / 2f);
+                    int Higher = Mathf.CeilToInt((number + 1f) / 2f);
+                    return Tuple.Create(lower, Higher);
+                }
+                else
+                {
+                    return Tuple.Create(Mathf.FloorToInt((number + 1f) / 2f), 0);
+                }
+            }
+            return Tuple.Create(0,0);
         }
     }
 }
