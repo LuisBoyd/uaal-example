@@ -58,23 +58,7 @@ namespace RCR.Utilities
             MapArray<byte> sortedBytes = new MapArray<byte>(unorderedBytes, MaxMapSectionCount,
                 mapRowCount, MaxRowEntries);
 
-            byte[] SortedBytes = new byte[unorderedBytes.Length];
-
-            for (int MS = 0; MS < MaxMapSectionCount; MS++)
-            {
-                for (int RC = 0; RC < mapRowCount; RC++)
-                {
-                    for (int RE = 0; RE < MaxRowEntries; RE++)
-                    {
-                        //Buffer.BlockCopy(unorderedBytes, );
-                        //TODO WORK OUT THE ORDERING OF THESE BYTES
-                    }
-                }
-            }
-
-
-
-            return null;
+            return sortedBytes.SortedArray;
         }
         
         
