@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using RCR.Enums;
+using RCR.Utilities;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -16,7 +19,23 @@ namespace DataStructures
         /// Y (Columns) : are Individual Tiles that correspond to some enum value to determine looks
         /// </summary>
         public byte[] MapByteStructure;
-        
+
+        public Dictionary<Vector2Int, TileType> SpecialLocations;
+
+        public Vector2Int this[int index]
+        {
+            get
+            {
+                int ArraySqr = MathUtils.sqrt(MapByteStructure.Length);
+                int quotient = Math.DivRem(index, ArraySqr, out int remainder);
+
+                return new Vector2Int(remainder, quotient);
+
+            }
+        }
+
+        //public MapArray<byte> mapData;
+
         /// <summary>
         /// MapSize_sqr is the square root of MapSize.
         /// </summary>

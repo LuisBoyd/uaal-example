@@ -21,9 +21,12 @@ namespace RCR.Managers
         public static readonly Dictionary<TileType, string> m_TileAddressable = new Dictionary<TileType, string>()
         {
             { TileType.GreenGrass, "Assets/2D/Tiles/AutoTiles/AU_GreenGrass.asset"},
+            { TileType.GreenGrassBuildSpot, "Assets/2D/Tiles/AutoTiles/AU_GreenGrass.asset"},
             { TileType.PathGrass , "Assets/2D/Tiles/AutoTiles/AU_PathGrass.asset"},
             { TileType.Water , "Assets/2D/Tiles/AutoTiles/AU_Water.asset"}
         };
+        
+        
         public static readonly Dictionary<string, TileType> m_AssetDatabaseLookup = new Dictionary<string, TileType>()
         {
             {"Assets/2D/Tiles/AutoTiles/AU_GreenGrass.asset", TileType.GreenGrass },

@@ -12,7 +12,8 @@ namespace RCR.Utilities
         {
             { RCRMessageType.MAP_NOT_EQUIDIMENSIONAL, "Gathered Map is not Equidimensional"},
             { RCRMessageType.MAP_PROCESSING_PROBLEM , "Problem with Processing map"},
-            { RCRMessageType.ADDRESABBLE_TILE_LOADING_ISSUE, "Problem with Loading the Tiles from the addressables system"}
+            { RCRMessageType.ADDRESABBLE_TILE_LOADING_ISSUE, "Problem with Loading the Tiles from the addressables system"},
+            { RCRMessageType.NEW_MAP_GENERATION_PROBLEM , "Problem with Generating a new map"}
         };
 
         public class RCRMessage

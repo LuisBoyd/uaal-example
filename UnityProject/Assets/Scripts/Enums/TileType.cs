@@ -15,7 +15,10 @@
         //End Water
         
         //Path
-      
         //End Path
+        
+        //Special Tiles
+        GreenGrassBuildSpot = 255
+        //End Special Tiles
     }
 }

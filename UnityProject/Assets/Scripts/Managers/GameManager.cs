@@ -121,7 +121,7 @@ namespace RCR.Managers
                     JObject RandomMapID = JObject.Parse(s);
                     if (RandomMapID != null)
                     {
-                        m_mapData.MapIdArray[0] = RandomMapID["MapId"].ToObject<int>();
+                        SetupStartArea(RandomMapID);
                         StartCoroutine(ProcessOldAreaData());
                     }
                     else
@@ -139,6 +139,26 @@ namespace RCR.Managers
                     {"Region", m_mapData.Region},
                     {"MapID", m_mapData.MapID}
                 }, responseMethod));
+        }
+
+        private void SetupStartArea(JObject obj)
+        {
+           Tuple<int,int> MeidanValues = MathUtils.GetMedian(m_mapData.MapSize_sqr);
+           if (MeidanValues.Item1 != 0 && MeidanValues.Item2 != 0)
+           {
+               m_mapData.MapIdArray[MeidanValues.Item1] = obj["MapId"].ToObject<int>();
+               m_mapData.MapIdArray[MeidanValues.Item1 + (int)m_mapData.MapSize_sqr] = obj["StaringLandID"].ToObject<int>();
+           }
+           else if (MeidanValues.Item1 != 0)
+           {
+               m_mapData.MapIdArray[MeidanValues.Item1] = obj["MapId"].ToObject<int>();
+               m_mapData.MapIdArray[MeidanValues.Item1 + (int)m_mapData.MapSize_sqr] = obj["StaringLandID"].ToObject<int>();
+           }
+           else
+           {
+               RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.MAP_PROCESSING_PROBLEM));
+               Application.Quit();
+           }
         }
 
         private IEnumerator ProcessOldAreaData()
@@ -184,10 +204,25 @@ namespace RCR.Managers
             }
 
             m_mapData.MapByteStructure = AppUtilities.SortBytes(m_mapData.MapByteStructure, Tile_sectionSize_bytes);
-
-            yield return RenderTiles(TileManager.Instance.recieveBytes(m_mapData.MapByteStructure));
+            
+            RecordSpecialTileLocations();
+            
+            yield return RenderTiles(TileManager.Instance.recieveBytes(m_mapData.MapByteStructure)); //Render Tiles last 
+            
+            //TODO 
         }
 
+        private void RecordSpecialTileLocations()
+        {
+            m_mapData.SpecialLocations = new Dictionary<Vector2Int, TileType>();
+            int[] IndexOfLocations = AppUtilities.GetSpecialByteValuesIndexes(m_mapData.MapByteStructure);
+            foreach (int index in IndexOfLocations)
+            {
+                byte type = m_mapData.MapByteStructure[index];
+                m_mapData.SpecialLocations.Add(m_mapData[index], (TileType) type);
+            }
+        }
+        
         private IEnumerator RenderTiles(TileBase[] tiles)
         {
             Grid grid = new GameObject("Grid").AddComponent<Grid>();
@@ -200,6 +235,7 @@ namespace RCR.Managers
             m_tilemap.size = new Vector3Int(Length,Length, 1);
             m_tilemap.ResizeBounds();
             m_tilemap.SetTilesBlock(m_tilemap.cellBounds, tiles);
+            yield return BuildingManager.Instance.init_build(m_tilemap, m_mapData.SpecialLocations);
             yield return new WaitForEndOfFrame();
         }
 

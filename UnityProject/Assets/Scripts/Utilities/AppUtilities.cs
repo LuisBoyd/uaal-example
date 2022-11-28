@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DataStructures;
+using RCR.Enums;
+using RCR.Managers;
 using UnityEngine;
 
 namespace RCR.Utilities
@@ -60,7 +63,12 @@ namespace RCR.Utilities
 
             return sortedBytes.SortedArray;
         }
-        
-        
+
+        public static int[] GetSpecialByteValuesIndexes(byte[] byteValues)
+        {
+           return Enumerable.Range(0, byteValues.Length).Where(x => BuildingManager.SpecialTileTypes.ContainsKey((TileType)byteValues[x])).ToArray();
+        }
+
+
     }
 }
