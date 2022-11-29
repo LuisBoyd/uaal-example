@@ -1,0 +1,34 @@
+{
+    "name": "PlayerInput",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "bf1b44cb-10cf-477d-8a1b-f88aacf317f0",
+            "actions": [
+                {
+                    "name": "OnScreenTap",
+                    "type": "PassThrough",
+                    "id": "70361265-a054-48a0-a815-fc93dd968011",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3e881aff-cd75-4492-96ad-71e00bc41b71",
+                    "path": "<Touchscreen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OnScreenTap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -17,11 +17,12 @@ namespace RCR.Managers
     {
         public static Dictionary<TileType, string> SpecialTileTypes = new Dictionary<TileType, string>
         {
-            {TileType.GreenGrassBuildSpot,"Assets/2D/Sprites/ExpandSign.png"}
+            {TileType.GreenGrassBuildSpot,"Assets/2D/Sprites/ExpandSign.png"},
+            { TileType.Water , "Assets/2D/Sprites/ExpandSign.png"}
         };
         
-        private Dictionary<TileType, AsyncOperationHandle<Sprite>> m_tileHandles =
-            new Dictionary<TileType, AsyncOperationHandle<Sprite>>();
+        private Dictionary<TileType, AsyncOperationHandle<Texture2D>> m_tileHandles =
+            new Dictionary<TileType, AsyncOperationHandle<Texture2D>>();
 
         private List<GameObject> m_gameObjects = new List<GameObject>();
 
@@ -49,8 +50,8 @@ namespace RCR.Managers
                     CancellationTokenSource source = new CancellationTokenSource();
                     CancellationToken token = source.Token;
 
-                    Task<AsyncOperationHandle<Sprite>> task =
-                        AddressablesManager.LoadAssetAsync<Sprite>(address);
+                    Task<AsyncOperationHandle<Texture2D>> task =
+                        AddressablesManager.LoadAssetAsync<Texture2D>(address);
 
                     try
                     {
@@ -81,11 +82,14 @@ namespace RCR.Managers
         {
             foreach (KeyValuePair<Vector2Int, TileType> valuePair in locations)
             {
-                if (m_tileHandles.TryGetValue(valuePair.Value, out AsyncOperationHandle<Sprite> handle))
+                if (m_tileHandles.TryGetValue(valuePair.Value, out AsyncOperationHandle<Texture2D> handle))
                 {
                     Vector3 WorldLocation = map.CellToWorld(new Vector3Int(valuePair.Key.x, valuePair.Key.y));
                     SpriteRenderer GameSprite = new GameObject($"{valuePair.Key} - Building Location").AddComponent<SpriteRenderer>();
-                    GameSprite.sprite = handle.Result;
+                    GameSprite.sprite = Sprite.Create(handle.Result, new Rect(Vector2.zero, new Vector2(handle.Result.width, handle.Result.height)), 
+                        new Vector2(0.5f,0.5f));
+                    GameSprite.transform.position = WorldLocation;
+                    m_gameObjects.Add(GameSprite.gameObject);
                 }
             }
 

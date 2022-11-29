@@ -33,7 +33,7 @@ namespace RCR.Managers
     {
         private PlayerData m_playerData;
         private MapData m_mapData;
-
+        
         private bool m_mapProccessingProblem = false;
 
         private Tilemap m_tilemap;
@@ -43,6 +43,23 @@ namespace RCR.Managers
         // private DelegateNoArg m_data_proccessed_ready;
         // private DelegateNoArg m_initialRenderingDone;
 
+        public OnGameModeSwitched OnGameModeSwitch;
+
+        private GameMode m_currentGameMode;
+        public GameMode CurrentGameMode
+        {
+            get
+            {
+                return m_currentGameMode;
+            }
+            set
+            {
+                m_currentGameMode = value;
+                OnGameModeSwitch?.Invoke(value);
+            }
+        }
+        
+        
 
         public event OnQuit OnQuitting
         {

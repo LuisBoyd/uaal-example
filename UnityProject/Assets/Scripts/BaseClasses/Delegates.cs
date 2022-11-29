@@ -28,7 +28,8 @@ namespace RCR.BaseClasses
     public delegate void OnVerificationResult(bool result);
 
     public delegate void OnQuit();
-    
+
+    public delegate void OnGameModeSwitched(GameMode mode);
 
 
 }
