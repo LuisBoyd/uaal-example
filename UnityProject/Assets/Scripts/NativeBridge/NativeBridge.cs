@@ -12,99 +12,6 @@ using UnityEngine.UI;
 [DefaultExecutionOrder(-2)]
 public class NativeBridge : Singelton<NativeBridge>
 {
-
-    private Dictionary<string, Action<string>> m_proc;
-
-    private const int MAX_AREA_COUNT = 25;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        m_proc = new Dictionary<string, Action<string>>();
-    }
-
-    // void appendToText(string line) { text.text += line + "\n"; }
-
-    public void InsertCMD(string CMDIdentifier, Action<string> callback)
-    {
-        if(!m_proc.ContainsKey(CMDIdentifier))
-            m_proc.Add(CMDIdentifier, callback);
-        
-        //Else already in there
-    }
-
-    public void RemoveCMD(string CMDIdentifier)
-    {
-        if (m_proc.ContainsKey(CMDIdentifier))
-            m_proc.Remove(CMDIdentifier);
-        
-        //Else Could not Remove From Dictionary
-    }
-    
-    // void AppendLocation(string cmd)
-    // {
-    //     appendToText($"Changing Location to {cmd}");
-    // }
-
-    void RecieveCMD(string cmd)
-    {
-        foreach (var keyValue in m_proc)
-        {
-            if (cmd.StartsWith(keyValue.Key))
-            {
-                string[] splitcmd = cmd.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                StringBuilder sb = new StringBuilder();
-                for (int i = 1; i < splitcmd.Length; i++)
-                {
-                    sb.Append($"{splitcmd[i]} ");
-                }
-
-                m_proc[splitcmd[0]](sb.ToString());
-
-            }
-        }
-    }
-
-    void RecieveJSONCMD(string cmd)
-    {
-        Debug.Log(cmd);
-        JObject JsonCMD = JObject.Parse(cmd);
-        if (JsonCMD != null)
-        {
-            string CMDCode = JsonCMD["Code"].ToString();
-            if (!string.IsNullOrEmpty(CMDCode))
-            {
-                if (m_proc.ContainsKey(CMDCode))
-                    m_proc[CMDCode](JsonCMD.ToString());
-            }
-        }
-    }
-
-    private event OnOutOfPOIRange m_rangeLeft;
-    public event OnOutOfPOIRange RangeLeft
-    {
-        add
-        {
-            Debug.Log($"{value.Method.Name} Subscribed To RangeLeft");
-            m_rangeLeft += value;
-        }
-        remove
-        {
-            Debug.Log($"{value.Method.Name} Un-Subscribed To RangeLeft");
-            m_rangeLeft -= value;
-        }
-    }
-    
-    /// <summary>
-    /// To be called from The Native Side in A background process to indicate we have left the range
-    /// of a POI
-    /// </summary>
-    /// <param name="cmd"></param>
-    void OnExitRange(string cmd)
-    {
-        m_rangeLeft?.Invoke();
-    }
-
 #if UNITY_EDITOR
 
     /// <summary>
@@ -140,6 +47,14 @@ public class NativeBridge : Singelton<NativeBridge>
             //TODO EXIT out of game no need to launch or save anything
             ExitApplication();
         }
+    }
+
+    void LoadGameData(string cmd)
+    {
+        //TODO UserMapData
+        //TODO BuildingData just enough to construct all building objects so maybe need a factory for that
+        //TODO Load User Details as well just like money and such anything related to the user.
+        
     }
 
     /// <summary>

@@ -12,6 +12,10 @@ namespace RCR.Managers
     [DefaultExecutionOrder(-3)]
     public class NetworkManager: Singelton<NetworkManager>
     {
+        
+        
+        
+        
         public IEnumerator PutRequest(string phpRequestName,
         IDictionary<string,string> Headers = null,
             Action<bool,string> JsonResponseCallback = null)

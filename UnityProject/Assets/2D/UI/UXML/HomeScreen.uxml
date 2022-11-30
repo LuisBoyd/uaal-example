@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/2D/UI/Uss/Common.uss?fileID=7433441132597879392&amp;guid=aa17e51d4094ce84aba567e660e7595f&amp;type=3#Common" />
+    <Style src="project://database/Assets/2D/UI/Uss/HomeScreen.uss?fileID=7433441132597879392&amp;guid=a3aa52d6c2473f048890db9ea42df7ed&amp;type=3#HomeScreen" />
+    <Style src="project://database/Assets/2D/UI/Uss/RadialProgress.uss?fileID=7433441132597879392&amp;guid=b08c2e2af98bd2a408de3504f52a96b1&amp;type=3#RadialProgress" />
+    <ui:VisualElement name="home_pannel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/2D/UI/Sprites/WaterNavLogo.png?fileID=21300000&amp;guid=a0545c824b2093548b28e2384432d3b1&amp;type=3#WaterNavLogo&apos;);">
+        <ui:VisualElement name="home-title__graphic" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+        <RCR.UI.RadialProgress progress="0" class="radial-progress" style="flex-grow: 1; flex-shrink: 1; flex-wrap: nowrap; align-self: stretch;" />
+        <ui:VisualElement name="home-chat__panel-parent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+    </ui:VisualElement>
+</ui:UXML>

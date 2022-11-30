@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using RCR.BaseClasses;
 using RCR.DataStructures;
 using RCR.Enums;
+using RCR.Systems;
 using RCR.Utilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -31,6 +32,9 @@ namespace RCR.Managers
     [DefaultExecutionOrder(-1)]
     public class GameManager: Singelton<GameManager>
     {
+
+        private GameFacade<GameLogicSystem, GameVisualSystem> m_gameFacade;
+
         private PlayerData m_playerData;
         private MapData m_mapData;
         
@@ -81,6 +85,7 @@ namespace RCR.Managers
         protected override void Awake()
         {
             base.Awake();
+            m_gameFacade = new GameFacade<GameLogicSystem, GameVisualSystem>();
         }
 
         public void PoulateData(string userKey, string mapID, string regionName)
