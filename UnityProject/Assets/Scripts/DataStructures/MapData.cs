@@ -20,6 +20,12 @@ namespace DataStructures
         /// </summary>
         public byte[] MapByteStructure;
 
+        private MapSection[] m_mapSections;
+        
+        public MapSection GetMapSection(int index0, int index1) => m_mapSections[index0 * m_mapSections.Length + index1];
+        public MapSection SetMapSection(int index0, int index1, MapSection data) =>
+            m_mapSections[index0 * m_mapSections.Length + index1] = data;
+        
         public Dictionary<Vector2Int, TileType> SpecialLocations;
 
         public Vector2Int this[int index]

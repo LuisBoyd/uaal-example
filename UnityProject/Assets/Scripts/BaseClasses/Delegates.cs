@@ -32,6 +32,7 @@ namespace RCR.BaseClasses
     public delegate void OnGameModeSwitched(GameMode mode);
 
     public delegate void OnObservableValueChanged<P, C>(P previousValue, C currentValue);
+    
 
 
 }

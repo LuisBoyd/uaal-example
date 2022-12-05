@@ -37,6 +37,22 @@ namespace RCR.Managers
 
         private PlayerData m_playerData;
         private MapData m_mapData;
+
+        private string m_userKey;
+        private string m_region;
+        private int m_mapID;
+        public string UserKey
+        {
+            get => m_userKey;
+        }
+        public string Region
+        {
+            get => m_region;
+        }
+        public int MapID
+        {
+            get => m_mapID;
+        }
         
         private bool m_mapProccessingProblem = false;
 

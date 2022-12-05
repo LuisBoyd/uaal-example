@@ -9,8 +9,14 @@ namespace RCR.Patterns
         public M Model;
         protected C Controller;
 
+        /// <summary>
+        /// Set To True if there are any problems in which case it can be handled
+        /// </summary>
+        protected bool IsValid;
+
         protected virtual void Awake()
         {
+            IsValid = false;
             Controller = new C();
             Controller.Setup(Model);
         }
