@@ -10,8 +10,8 @@
 /[Uu]nityProject/[Bb]uilds/
 /[Uu]nityProject/[Ll]ogs/
 /[Uu]nityProject/[Uu]ser[Ss]ettings/
-/[Uu]nityProject/[Aa]ssets/Gif/[Ss]uper_Retro_Collection
-/[Uu]nityProject/[Aa]ndroidBuild/
+/WaterNavUnityProject/[Aa]ssets/Gif/Super_Retro_Collection/
+/WaterNavUnityProject/[Aa]ndroidBuild/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -49,6 +49,7 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -107,3 +108,4 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
