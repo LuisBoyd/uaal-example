@@ -142,7 +142,7 @@ namespace RCR.Managers
                                 mx * Tile_sectionCellSize,
                                 byteArray,
                                 ((mx * (Tile_sectionCellSize * m_mapsize_sqr)) +
-                                 (x * Tile_sectionSize_bytes)) + (y * Tile_sectionCellSize),
+                                 (x * (Tile_sectionSize_bytes * m_mapsize_sqr))) + (y * Tile_sectionCellSize),
                                 Tile_sectionCellSize);
 
                             //Y pos + X Pos
