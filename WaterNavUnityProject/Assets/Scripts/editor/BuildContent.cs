@@ -107,59 +107,133 @@ namespace editor
         }
 
         [MenuItem("Window/Asset Management/Addressables/Build Addressables and Send Map Data")]
-        public async static Task<bool> BuildAddressablesAndMap()
+        public async static Task<bool> BuildAddressablesAndMaps()
         {
-            IEnumerable<string> files;
-            try
-            {
-               files = Directory.EnumerateFiles($"{Application.dataPath}/{serilizedMapFolder}").Where(s => s.EndsWith(".bmap"));
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-                throw;
-            }
-
+            BuildableMapContent content =
+                AssetDatabase.LoadAssetAtPath<BuildableMapContent>("Assets/BuildableMapContent.asset");
+            if (content == null)
+                return false;
+            
             var client = new HttpClient();
             var apiUri = new Uri("https://waternav.co.uk/WaterNavGame/BuildTileMapContent.php"); //add t at end
-            foreach (string file in files)
+            string Directory = Application.dataPath.Replace("Assets", "");
+            foreach (var file in content.SerializedTextAssets)
             {
-              
                 char[] result;
+                char[] BuildingDataResult;
                 StringBuilder builder = new StringBuilder();
-                using (StreamReader streamReader = File.OpenText(file))
+
+                string Base64StringBaseMap;
+                string Base64StringBuildingData;
+
+                
+                string filepath = $"{Directory}{AssetDatabase.GetAssetPath(file.Key)}";
+                
+                
+                using (StreamReader streamReader = File.OpenText(filepath))
                 {
                     result = new char[streamReader.BaseStream.Length];
                     await streamReader.ReadAsync(result, 0, (int)streamReader.BaseStream.Length);
                 }
-                
-                foreach (char character in result)
+
+                foreach (char c in result)
                 {
-                    builder.Append(character);
+                    builder.Append(c);
                 }
+
+                var filename = new StringContent(Path.GetFileName(filepath));
+                Base64StringBaseMap = builder.ToString();
+                builder.Clear();
+                filepath = $"{Directory}{AssetDatabase.GetAssetPath(file.value)}";
+                using (StreamReader streamReader = File.OpenText(filepath))
+                {
+                    result = new char[streamReader.BaseStream.Length];
+                    await streamReader.ReadAsync(result, 0, (int)streamReader.BaseStream.Length);
+                }
+
+                foreach (char c in result)
+                {
+                    builder.Append(c);
+                }
+
+                Base64StringBuildingData = builder.ToString();
+                builder.Clear();
+
+                var BaseMapByteContent = new StringContent(Base64StringBaseMap);
+                var BuildingDataByteContent = new StringContent(Base64StringBuildingData);
                 
-                //byte[] ReadBytes = Convert.FromBase64String(builder.ToString());
-                //var byteContent = new ByteArrayContent(ReadBytes);
-                var Base64StringByteContent = new StringContent(builder.ToString());
-                var Filename = new StringContent(Path.GetFileName(file));
-
                 var multipartContent = new MultipartFormDataContent();
-                multipartContent.Add(Base64StringByteContent,"ByteData");
-                multipartContent.Add(Filename, "FileName");
-
+                multipartContent.Add(BaseMapByteContent,"ByteData");
+                multipartContent.Add(filename, "FileName");
+                multipartContent.Add(BuildingDataByteContent, "BuildingData");
+                
                 var response = client.PostAsync(apiUri, multipartContent);
                 await response;
-
                 if (response.IsCanceled || !response.Result.IsSuccessStatusCode)
                 {
                     throw new Exception(
                         $"Response was either Canceled or we got a invalid respose back {response.Result.StatusCode}");
                 }
-                
             }
-
             return false;
         }
+
+        // [MenuItem("Window/Asset Management/Addressables/Build Addressables and Send Map Data")]
+        // public async static Task<bool> BuildAddressablesAndMap()
+        // {
+        //     IEnumerable<string> files;
+        //     IEnumerable<string> BuildingDataFiles;
+        //     try
+        //     {
+        //        files = Directory.EnumerateFiles($"{Application.dataPath}/{serilizedMapFolder}").Where(s => s.EndsWith(".bmap"));
+        //        BuildingDataFiles = Directory.EnumerateFiles($"{Application.dataPath}/{serilizedMapFolder}").Where(s => s.EndsWith(".bd"));
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Debug.LogError(e);
+        //         throw;
+        //     }
+        //
+        //     var client = new HttpClient();
+        //     var apiUri = new Uri("https://waternav.co.uk/WaterNavGame/BuildTileMapContent.php"); //add t at end
+        //     foreach (string file in files)
+        //     {
+        //
+        //         char[] result;
+        //         StringBuilder builder = new StringBuilder();
+        //         using (StreamReader streamReader = File.OpenText(file))
+        //         {
+        //             result = new char[streamReader.BaseStream.Length];
+        //             await streamReader.ReadAsync(result, 0, (int)streamReader.BaseStream.Length);
+        //         }
+        //         
+        //         foreach (char character in result)
+        //         {
+        //             builder.Append(character);
+        //         }
+        //
+        //         //byte[] ReadBytes = Convert.FromBase64String(builder.ToString());
+        //         //var byteContent = new ByteArrayContent(ReadBytes);
+        //         var Base64StringByteContent = new StringContent(builder.ToString());
+        //         var Filename = new StringContent(Path.GetFileName(file));
+        //
+        //         var multipartContent = new MultipartFormDataContent();
+        //         multipartContent.Add(Base64StringByteContent,"ByteData");
+        //         multipartContent.Add(Filename, "FileName");
+        //
+        //         var response = client.PostAsync(apiUri, multipartContent);
+        //         await response;
+        //
+        //         if (response.IsCanceled || !response.Result.IsSuccessStatusCode)
+        //         {
+        //             throw new Exception(
+        //                 $"Response was either Canceled or we got a invalid respose back {response.Result.StatusCode}");
+        //         }
+        //         
+        //     }
+        //
+        //     return false;
+        // }
     }
 }
 #endif

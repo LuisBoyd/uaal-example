@@ -15,10 +15,12 @@
         //End Water
         
         //Path
+        PathTile = 200,
         //End Path
         
-        //Special Tiles
+        //BuildingTiles Tiles
+        UnconstructedBuildingSpot = 254,
         GreenGrassBuildSpot = 255
-        //End Special Tiles
+        //BuildingTiles
     }
 }

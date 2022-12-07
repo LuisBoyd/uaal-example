@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96fad6e87967495ab574b4af0ea51b32, type: 3}
+  m_Name: BuildableMapContent
+  m_EditorClassIdentifier: 
+  SerializedTextAssets:
+  - Key: {fileID: 4900000, guid: 7e81156503b78ce4a8087b9905f3c337, type: 3}
+    value: {fileID: 4900000, guid: 660053be84a3aaf41b8f5ffe0308e97f, type: 3}

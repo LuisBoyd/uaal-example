@@ -57,12 +57,12 @@ namespace RCR.Input
 
         private void OnEnable()
         {
-            GameManager.Instance.OnGameModeSwitch += OnGameModeSwitch;
+            
         }
 
         private void OnDisable()
         {
-            GameManager.Instance.OnGameModeSwitch -= OnGameModeSwitch;
+            
         }
     }
 }

@@ -2,8 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using DataStructures;
 using Gameplay;
+using Interfaces;
 using Newtonsoft.Json.Linq;
 using RCR.BaseClasses;
 using RCR.DataStructures;
@@ -14,7 +17,7 @@ using UnityEngine.Tilemaps;
 
 namespace RCR.Managers
 {
-    public class MapManager : Singelton<MapManager>
+    public class MapManager : Singelton<MapManager>, Iinitializer
     {
         private int m_mapSize;
         private const int Tile_sectionSize_bytes = 2500;
@@ -35,6 +38,7 @@ namespace RCR.Managers
             get => m_ByteMapData[index0 * (Tile_sectionCellSize * m_mapsize_sqr) + index1];
             set => m_ByteMapData[index0 * (Tile_sectionCellSize * m_mapsize_sqr) + index1] = value;
         }
+        
 
         private int MaxMapSectionCount;
         private int mapRowCount;
@@ -55,32 +59,33 @@ namespace RCR.Managers
         }
 
 
-        public void LoadAreaData(int[] data)
-        {
-            m_IntergerMapData = data;
-            m_mapSize = m_IntergerMapData.Length;
-            m_ByteMapData = new byte[Tile_sectionSize_bytes * data.Length];
-            m_mapSections = new MapSectionView[m_mapsize_sqr, m_mapsize_sqr];
+        // public void LoadAreaData(int[] data)
+        // {
+        //     m_IntergerMapData = data;
+        //     m_mapSize = m_IntergerMapData.Length;
+        //     m_ByteMapData = new byte[Tile_sectionSize_bytes * data.Length];
+        //     m_mapSections = new MapSectionView[m_mapsize_sqr, m_mapsize_sqr];
+        //
+        //     if (!IsBlankMap(data)) //if any value != 0 returns true
+        //     {
+        //         StartCoroutine(NetworkManager.Instance.PutRequest("ProcessNewMap",
+        //             new Dictionary<string, string>
+        //             {
+        //                 {"Userkey", GameManager.Instance.UserKey},
+        //                 {"Region", GameManager.Instance.Region},
+        //                 {"MapID",  GameManager.Instance.MapID.ToString()}
+        //             }, StartAreaResponse));
+        //     }
+        //     else
+        //     {
+        //         StartCoroutine(ProcessData());
+        //     }
+        //     
+        //     
+        // }
+        
 
-            if (!IsBlankMap(data)) //if any value != 0 returns true
-            {
-                StartCoroutine(NetworkManager.Instance.PutRequest("ProcessNewMap",
-                    new Dictionary<string, string>
-                    {
-                        {"Userkey", GameManager.Instance.UserKey},
-                        {"Region", GameManager.Instance.Region},
-                        {"MapID",  GameManager.Instance.MapID.ToString()}
-                    }, StartAreaResponse));
-            }
-            else
-            {
-                StartCoroutine(ProcessData());
-            }
-            
-            
-        }
-
-        private IEnumerator ProcessData()
+        private IEnumerator ProcessData(CoroutineToken tkn)
         {
             // for (byte_segment_offset = 0; byte_segment_offset < m_IntergerMapData.Length; byte_segment_offset++)
             // {
@@ -96,7 +101,7 @@ namespace RCR.Managers
                 {
                     if (m_IntergerMapData[(m_iterationX * m_mapsize_sqr) + m_iterationY] != 0)
                     {
-                        yield return NetworkManager.Instance.PutRequest("RequestMapSectionData",
+                        yield return NetworkManager.Instance.PutRequest("RequestMapSectionData",tkn,
                             new Dictionary<string, string>()
                             {
                                 {
@@ -114,17 +119,17 @@ namespace RCR.Managers
         }
 
 
-        private byte[] AreabyteSorting( byte[] unorderedBytes)
-        {
-             MaxMapSectionCount = MathUtils.DivisionInto(unorderedBytes.Length, Tile_sectionSize_bytes); //MaxMap Sections like 5x5 is 25
-             mapRowCount = MathUtils.sqrt(Tile_sectionSize_bytes); //How many rows are in a Map Section
-             MaxRowEntries = MathUtils.sqrt(Tile_sectionSize_bytes); //How many elements are in a row
-
-            MapArray<byte> sortedBytes = new MapArray<byte>(unorderedBytes, MaxMapSectionCount,
-                mapRowCount, MaxRowEntries);
-
-            return sortedBytes.SortedArray;
-        }
+        // private byte[] AreabyteSorting( byte[] unorderedBytes)
+        // {
+        //      MaxMapSectionCount = MathUtils.DivisionInto(unorderedBytes.Length, Tile_sectionSize_bytes); //MaxMap Sections like 5x5 is 25
+        //      mapRowCount = MathUtils.sqrt(Tile_sectionSize_bytes); //How many rows are in a Map Section
+        //      MaxRowEntries = MathUtils.sqrt(Tile_sectionSize_bytes); //How many elements are in a row
+        //
+        //     MapArray<byte> sortedBytes = new MapArray<byte>(unorderedBytes, MaxMapSectionCount,
+        //         mapRowCount, MaxRowEntries);
+        //
+        //     return sortedBytes.SortedArray;
+        // }
 
         private void SortBytesForTileMap(ref byte[] byteArray)
         {
@@ -160,7 +165,7 @@ namespace RCR.Managers
         
         
 
-        private void mapSection_Onrecived(bool valid, string data)
+        private void mapSection_Onrecived(bool valid, string data, CoroutineToken tkn)
         {
             JObject mapBase64 = JObject.Parse(data);
             if (valid && mapBase64 != null)
@@ -186,32 +191,48 @@ namespace RCR.Managers
             }
             else
             {
-                RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.ADDRESABBLE_TILE_LOADING_ISSUE));
-                Application.Quit();
+                tkn.Cancel();
             }
         }
 
-        private void StartAreaResponse(bool valid, string data)
+        // private void StartAreaResponse(bool valid, string data)
+        // {
+        //     if (valid)
+        //     {
+        //         JObject randomMapId = JObject.Parse(data);
+        //         if (randomMapId != null)
+        //         {
+        //             startAreaSetup(randomMapId);
+        //             StartCoroutine(ProcessData());
+        //         }
+        //         else
+        //         {
+        //             //TODO Error Handling / Safety Check
+        //             RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.MAP_PROCESSING_PROBLEM));
+        //             Application.Quit();
+        //         }
+        //         
+        //     }
+        // }
+        
+        private void StartAreaResponse(bool valid, string data, CoroutineToken tkn)
         {
             if (valid)
             {
                 JObject randomMapId = JObject.Parse(data);
                 if (randomMapId != null)
                 {
-                    startAreaSetup(randomMapId);
-                    StartCoroutine(ProcessData());
+                    startAreaSetup(randomMapId, tkn);
                 }
                 else
                 {
-                    //TODO Error Handling / Safety Check
-                    RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.MAP_PROCESSING_PROBLEM));
-                    Application.Quit();
+                    tkn.Cancel();
                 }
                 
             }
         }
 
-        private void startAreaSetup(JObject obj)
+        private void startAreaSetup(JObject obj, CoroutineToken tkn)
         {
             Tuple<int, int> medianValues = MathUtils.GetMedian(m_mapsize_sqr);
             if (medianValues.Item1 != 0 && medianValues.Item2 != 0)
@@ -226,8 +247,7 @@ namespace RCR.Managers
             }
             else
             {
-                RiverCanalLogger.Log(new RiverCanalLogger.RCRMessage(RCRSeverityLevel.ERROR, RCRMessageType.MAP_PROCESSING_PROBLEM));
-                Application.Quit();
+                tkn.Cancel();
             }
         }
 
@@ -243,5 +263,58 @@ namespace RCR.Managers
             yield return new WaitForEndOfFrame();
         }
 
+
+        public IEnumerator Process_Init(CoroutineToken tkn)
+        {
+            yield return NetworkManager.Instance.PutRequest("RequestUserMapData",tkn,
+                new Dictionary<string, string>
+                {
+                    { "userKey", GameManager.Instance.UserKey },
+                    { "POIID", GameManager.Instance.MapID.ToString() },
+                    {"region", GameManager.Instance.Region}
+                }, onLoadLocation_Complete);
+            
+            
+            m_mapSize = m_IntergerMapData.Length;
+            m_ByteMapData = new byte[Tile_sectionSize_bytes * m_IntergerMapData.Length];
+            m_mapSections = new MapSectionView[m_mapsize_sqr, m_mapsize_sqr];
+            
+            if (!IsBlankMap(m_IntergerMapData)) //if any value != 0 returns true
+            {
+                yield return NetworkManager.Instance.PutRequest("ProcessNewMap",tkn,
+                    new Dictionary<string, string>
+                    {
+                        { "Userkey", GameManager.Instance.UserKey },
+                        { "Region", GameManager.Instance.Region },
+                        { "MapID", GameManager.Instance.MapID.ToString() }
+                    }, StartAreaResponse);
+                yield return ProcessData(tkn);
+            }
+            else
+            {
+                yield return ProcessData(tkn);
+            }
+            
+        }
+
+        public void Init_CleanUp()
+        {
+           //TODO implement Cleanup for INIT
+        }
+
+        private void onLoadLocation_Complete(bool valid, string response,
+            CoroutineToken tkn)
+        {
+            if(!valid)
+                tkn.Cancel();
+            
+            JObject responseObj = JObject.Parse(response);
+            if(responseObj == null)
+                tkn.Cancel();
+            
+            string areaData = responseObj["MapData"].ToString();
+            m_IntergerMapData = areaData.Split(',').Select(int.Parse).ToArray();
+        }
+        
     }
 }

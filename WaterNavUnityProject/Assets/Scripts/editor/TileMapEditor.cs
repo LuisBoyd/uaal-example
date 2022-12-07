@@ -8,21 +8,54 @@ namespace editor
     [CustomEditor(typeof(Tilemap))]
     public class TileMapEditor: Editor
     {
+        private enum TilemapSerializeMode
+        {
+            Basemap,
+            BuildingData
+        }
+
+        private TilemapSerializeMode m_serializeMode;
+        
         public override void OnInspectorGUI()
         {
+            m_serializeMode = (TilemapSerializeMode)EditorGUILayout.EnumPopup(
+                "Serialization Mode", m_serializeMode);
+            
             if (GUILayout.Button("Serialize Tilemap"))
             {
                 if (target is Tilemap)
                 {
-                    (target as Tilemap).SerializeTilemap("");
+                    switch (m_serializeMode)
+                    {
+                        case TilemapSerializeMode.Basemap:
+                            (target as Tilemap).SerializeTilemap("");
+                            break;
+                        case TilemapSerializeMode.BuildingData:
+                            (target as Tilemap).SerializeBuildingDataTilemap();
+                            break;
+                        default:
+                            break;
+                    }
+                    
                 }
             }
-
+            
             if (GUILayout.Button("De-Serialize Tilemap"))
             {
                 if (target is Tilemap)
                 {
-                    (target as Tilemap).DeserializeTilemap();
+                    switch (m_serializeMode)
+                    {
+                        case TilemapSerializeMode.BuildingData:
+                            Debug.LogWarning("Cant De-Seriliaze BuildingData");
+                            break;
+                        case TilemapSerializeMode.Basemap:
+                            (target as Tilemap).DeserializeTilemap();
+                            break;
+                        default:
+                            break;
+                    }
+                    
                 }
             }
 

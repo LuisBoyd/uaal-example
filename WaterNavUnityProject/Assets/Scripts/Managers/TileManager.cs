@@ -34,6 +34,12 @@ namespace RCR.Managers
             {"Assets/2D/Tiles/AutoTiles/AU_Water.asset", TileType.Water},
         };
 
+        public static readonly Dictionary<string, TileType> m_BuildingDataTiles = new Dictionary<string, TileType>()
+        {
+            { "Assets/2D/Tiles/AutoTiles/AU_UnconstrcutedBuildingSpot.asset", TileType.UnconstructedBuildingSpot },
+           {"Assets/2D/Tiles/AutoTiles/AU_PathData.asset", TileType.PathTile}
+        };
+
         private Dictionary<TileType, AsyncOperationHandle<FangAutoTile>> m_tileHandles =
             new Dictionary<TileType, AsyncOperationHandle<FangAutoTile>>();
 

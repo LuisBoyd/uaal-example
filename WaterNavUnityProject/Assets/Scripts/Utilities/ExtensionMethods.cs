@@ -19,7 +19,71 @@ namespace RCR.Utilities
     public static class ExtensionMethods
     {
 #if UNITY_EDITOR
-        
+
+        public static void SerializeBuildingDataTilemap(this Tilemap tilemap)
+        {
+            const int X = 50;
+            const int Y = 50;
+            tilemap.CompressBounds();
+            if (tilemap.size.x != X || tilemap.size.y != Y)
+            {
+                Debug.LogWarning($"The tilemap is not the correct dimensions based on constant value {X} and {Y}");
+                tilemap.origin = Vector3Int.zero;
+                tilemap.size = new Vector3Int(50, 50, 1);
+                tilemap.ResizeBounds();
+            }
+
+            string path = EditorUtility.SaveFilePanel("Save BuildingData as BSON", "", "BuildingData.bytes", "bytes");
+            if (tilemap != null && !string.IsNullOrEmpty(path))
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (BsonDataWriter writer = new BsonDataWriter(ms))
+                    {
+                        TileBase[] tileArray = tilemap.GetTilesBlock(tilemap.cellBounds);
+
+                        byte[] tileArrayInt = new Byte[tileArray.Length];
+
+                        for (int i = 0; i < tileArray.Length; i++)
+                        {
+                            if (tileArray[i] != null)
+                            {
+
+
+                                string id = AssetDatabase.GetAssetPath(tileArray[i]);
+                                if (TileManager.m_BuildingDataTiles.ContainsKey(id))
+                                {
+                                    try
+                                    {
+                                        tileArrayInt[i] = Convert.ToByte(TileManager.m_BuildingDataTiles[id]);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine(e);
+                                        throw;
+                                    }
+                                }
+                                else
+                                {
+                                    tileArrayInt[i] = 0;
+                                }
+                            }
+                            else
+                            {
+                                tileArrayInt[i] = 0;
+                            }
+                        }
+                        if (!FileManager.WriteToFile(path, Convert.ToBase64String(tileArrayInt), true))
+                        {
+                            Debug.LogError($"Targeted Tilemap could not be converted to a Json Format {tilemap.name}");
+                            return;
+                        }
+                    }
+                }
+                
+            }
+        }
+
         public static void SerializeTilemap(this Tilemap tilemap, string assetBundlePath)
         {
             const int X = 50;
@@ -61,7 +125,7 @@ namespace RCR.Utilities
                 return;
             }
             
-            string path = EditorUtility.SaveFilePanel("Save Tilemap as BSON", "", "Tilemap.bmap", "bmap");
+            string path = EditorUtility.SaveFilePanel("Save Tilemap as BSON", "", "Tilemap.bytes", "bytes");
             if (tilemap != null && !string.IsNullOrEmpty(path))
             {
                 using (MemoryStream ms = new MemoryStream())
@@ -140,7 +204,7 @@ namespace RCR.Utilities
 
         public static async void DeserializeTilemap(this Tilemap tilemap)
         {
-            string path = EditorUtility.OpenFilePanel("Open Tilemap File", "", "bmap");
+            string path = EditorUtility.OpenFilePanel("Open Tilemap File", "", "bytes");
             if (tilemap != null && !string.IsNullOrEmpty(path))
             {
                 char[] result;

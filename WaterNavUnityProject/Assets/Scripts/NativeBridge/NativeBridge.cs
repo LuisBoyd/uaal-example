@@ -28,26 +28,8 @@ public class NativeBridge : Singelton<NativeBridge>
     }
 #endif
 
-    void LoadLocation(string cmd)
-    {
-        JObject passOverObj = JObject.Parse(cmd);
-        if (passOverObj != null)
-        {
-            GameManager.Instance.PoulateData(passOverObj["userkey"].ToString(),  passOverObj["Poid"].ToString(), passOverObj["Region"].ToString());
-            StartCoroutine(NetworkManager.Instance.PutRequest("RequestUserMapData",
-                new Dictionary<string, string>
-                {
-                    { "userKey", passOverObj["userkey"].ToString() },
-                    { "POIID", passOverObj["Poid"].ToString() },
-                    {"region", passOverObj["Region"].ToString()}
-                }, onLoadLocation_Complete));
-        }
-        else
-        {
-            //TODO EXIT out of game no need to launch or save anything
-            ExitApplication();
-        }
-    }
+    void LoadLocation(string cmd) => GameManager.Instance.StartCoroutine(
+        GameManager.Instance.Start_init(cmd));
 
     void LoadGameData(string cmd)
     {
@@ -60,24 +42,24 @@ public class NativeBridge : Singelton<NativeBridge>
     /// <summary>
     /// Callback Method passed to the network Manager
     /// </summary>
-    private void onLoadLocation_Complete(bool value, string response)
-    {
-        if (!value)
-            ExitApplication();
-        
-        JObject LocationResponseObj = JObject.Parse(response);
-        if (LocationResponseObj != null)
-        {
-            string AreaData = LocationResponseObj["MapData"].ToString();
-            Debug.Log($"THIS IS AREA DATA {AreaData}");
-            int[] int_Area_data = AreaData.Split(',').Select(int.Parse).ToArray();
-            MapManager.Instance.LoadAreaData(int_Area_data);
-        }
-        else
-        {
-            ExitApplication();
-        }
-    }
+    // private void onLoadLocation_Complete(bool value, string response)
+    // {
+    //     if (!value)
+    //         ExitApplication();
+    //     
+    //     JObject LocationResponseObj = JObject.Parse(response);
+    //     if (LocationResponseObj != null)
+    //     {
+    //         string AreaData = LocationResponseObj["MapData"].ToString();
+    //         Debug.Log($"THIS IS AREA DATA {AreaData}");
+    //         int[] int_Area_data = AreaData.Split(',').Select(int.Parse).ToArray();
+    //         MapManager.Instance.LoadAreaData(int_Area_data);
+    //     }
+    //     else
+    //     {
+    //         ExitApplication();
+    //     }
+    // }
 
     private void ExitApplication()
     {
