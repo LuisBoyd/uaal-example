@@ -19,7 +19,7 @@ namespace WaterNavTiled.Editor.Jobs
             {
                 for (int y = ypos; y < height + ypos; y++)
                 {
-                    result[0] = TextureData[width * x + y].a == 0 ? 0 : 1;
+                    result[0] = TextureData[width * x + y].a != 0 ? 1 : 0;
                 }
             }
         }

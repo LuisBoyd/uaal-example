@@ -13,6 +13,7 @@ using UnityEngine.U2D;
 using WaterNavTiled.Data;
 using WaterNavTiled.Editor.Jobs;
 using Object = UnityEngine.Object;
+using UtitliesEditor = RCR.editor.EditorUtilities;
 
 namespace WaterNavTiled.Editor
 {
@@ -205,32 +206,51 @@ namespace WaterNavTiled.Editor
 
         private bool SaveSlicedAssetsToAtlas(string texturePath)
         {
-            map.AtlasAsset = SpriteAtlasAsset.Load("Assets/WaterNavTiled/MasterAtlas.spriteatlasv2");
-            if (map.AtlasAsset == null)
+            SerializedProperty AtlasAsset = serializedObject.FindProperty("AtlasAsset");
+            SpriteAtlasAsset spriteAtlasAsset = SpriteAtlasAsset.Load("Assets/WaterNavTiled/MasterAtlas.spriteatlasv2");
+
+            if (spriteAtlasAsset == null)
             {
-                map.AtlasAsset = new SpriteAtlasAsset();
+                spriteAtlasAsset = new SpriteAtlasAsset();
             }
-            SpriteAtlas spriteAtlas =
-                AssetDatabase.LoadAssetAtPath<SpriteAtlas>("Assets/WaterNavTiled/MasterAtlas.spriteatlas");
-            if (spriteAtlas == null)
-                return false;
-            if (!Equals(spriteAtlas, map.AtlasAsset.GetMasterAtlas()))
+
+            if (UtitliesEditor.SaveRefrenceValueToSerializedProperty(ref AtlasAsset, spriteAtlasAsset))
             {
-                map.AtlasAsset.SetMasterAtlas(spriteAtlas);
+                SpriteAtlas spriteAtlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>("Assets/WaterNavTiled/MasterAtlas.spriteatlas");
+                if (spriteAtlas == null)
+                    return false;
+                if (UtitliesEditor.IsSerializedPropertyX<SpriteAtlasAsset>(AtlasAsset, out spriteAtlasAsset))
+                {
+                    if (!Equals(spriteAtlas, spriteAtlasAsset.GetMasterAtlas()))
+                    {
+                        spriteAtlasAsset.SetMasterAtlas(spriteAtlas);
+                    }
+
+                    try
+                    {
+                        Object[] sprites = AssetDatabase.LoadAllAssetsAtPath(texturePath).OfType<Sprite>().ToArray();
+                        spriteAtlasAsset.Add(sprites);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogWarning(e.Message);
+                        return false;
+                    }
+                    
+                    if (!UtitliesEditor.SaveRefrenceValueToSerializedProperty(ref AtlasAsset, spriteAtlasAsset))
+                    {
+                        return false;
+                    }
+                    SpriteAtlasAsset.Save(spriteAtlasAsset,"Assets/WaterNavTiled/MasterAtlas.spriteatlasv2");
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            try
-            {
-                Object[] sprites = AssetDatabase.LoadAllAssetsAtPath(texturePath).OfType<Sprite>().ToArray();
-                map.AtlasAsset.Add(sprites);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning(e.Message);
-                return false;
-            }
-            
-            SpriteAtlasAsset.Save(map.AtlasAsset, "Assets/WaterNavTiled/MasterAtlas.spriteatlasv2");
-            return true;
+
+            return false;
         }
 
         private bool SliceSprite(string texturePath)
@@ -295,6 +315,8 @@ namespace WaterNavTiled.Editor
             TextureData.Dispose();
             Debug.Log($"Sliced {spriteMetaDatas.Count}");
             txImporter.spritesheet = spriteMetaDatas.ToArray(); //TODO the spritesheet does not seem to be saving which is why it's causing problems with the tile creation
+            EditorUtility.SetDirty(txImporter);
+            AssetDatabase.SaveAssets();
             AssetDatabase.ImportAsset(texturePath, ImportAssetOptions.ForceUpdate);
             return true;
         }

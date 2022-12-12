@@ -7,7 +7,7 @@ using DataStructures;
 using RCR.BaseClasses;
 using RCR.Enums;
 using RCR.Utilities;
-using Ruccho.Utilities;
+//using Ruccho.Utilities;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Tilemaps;
@@ -40,8 +40,8 @@ namespace RCR.Managers
            {"Assets/2D/Tiles/AutoTiles/AU_PathData.asset", TileType.PathTile}
         };
 
-        private Dictionary<TileType, AsyncOperationHandle<FangAutoTile>> m_tileHandles =
-            new Dictionary<TileType, AsyncOperationHandle<FangAutoTile>>();
+        // private Dictionary<TileType, AsyncOperationHandle<FangAutoTile>> m_tileHandles =
+        //     new Dictionary<TileType, AsyncOperationHandle<FangAutoTile>>();
 
         private TileType ConvertToTileType(byte data)
         {
@@ -72,17 +72,17 @@ namespace RCR.Managers
                     CancellationTokenSource source = new CancellationTokenSource();
                     CancellationToken token = source.Token;
 
-                    Task<AsyncOperationHandle<FangAutoTile>> task =
-                        AddressablesManager.LoadAssetAsync<FangAutoTile>(address);
+                    // Task<AsyncOperationHandle<FangAutoTile>> task =
+                    //     AddressablesManager.LoadAssetAsync<FangAutoTile>(address);
 
                     try
                     {
-                        await task;
-                        Debug.Log($"This IS THE TASK {task.Result.Result.TileType}");
-                        if (!task.IsCanceled && !m_tileHandles.ContainsKey(task.Result.Result.TileType))
-                        {
-                            m_tileHandles.Add(type, task.Result);
-                        }
+                        // await task;
+                        // Debug.Log($"This IS THE TASK {task.Result.Result.TileType}");
+                        // if (!task.IsCanceled && !m_tileHandles.ContainsKey(task.Result.Result.TileType))
+                        // {
+                        //     m_tileHandles.Add(type, task.Result);
+                        // }
                     }
                     catch (OperationCanceledException e)
                     {
@@ -107,14 +107,14 @@ namespace RCR.Managers
             for (int i = 0; i < returnValue.Length; i++)
             {
                 TileType type = ConvertToTileType(bytes[i]);
-                if (m_tileHandles.TryGetValue(type, out AsyncOperationHandle<FangAutoTile> value))
-                {
-                    returnValue[i] = value.Result;
-                }
-                else
-                {
-                    returnValue[i] = null;
-                }
+                // if (m_tileHandles.TryGetValue(type, out AsyncOperationHandle<FangAutoTile> value))
+                // {
+                //     returnValue[i] = value.Result;
+                // }
+                // else
+                // {
+                //     returnValue[i] = null;
+                // }
             }
 
             return returnValue;

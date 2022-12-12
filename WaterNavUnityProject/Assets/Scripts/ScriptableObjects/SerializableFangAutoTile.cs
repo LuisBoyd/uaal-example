@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using Ruccho.Fang;
+//using Ruccho.Fang;
 using UnityEngine;
 
 namespace RCR.ScriptableObjects
