@@ -69,5 +69,16 @@ namespace RCR.Utilities
             }
             return Tuple.Create(0,0);
         }
+
+        /// <summary>
+        /// If one value is a multiple of the other
+        /// </summary>
+        /// <param name="a">first number if this is a multiple of b</param>
+        /// <param name="b">second number if a is a multiple of this number</param>
+        /// <returns>is "a" multiple of "b"</returns>
+        public static bool IsXMultipleOfY(int a, int b)
+        {
+            return a % b == 0;
+        }
     }
 }
