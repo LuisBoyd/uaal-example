@@ -7,6 +7,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEditor;
 using UnityEditor.U2D;
+using UnityEditor.U2D.Sprites;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
@@ -259,27 +260,20 @@ namespace WaterNavTiled.Editor
             if (txImporter == null)
                 return false;
 
-            txImporter.textureType = TextureImporterType.Sprite;
-            txImporter.spriteImportMode = SpriteImportMode.Multiple;
-            txImporter.spritePixelsPerUnit = map.TileWidth;
-            txImporter.filterMode = FilterMode.Point;
-            txImporter.wrapMode = TextureWrapMode.Clamp;
-            txImporter.maxTextureSize = 2048;
-            txImporter.textureCompression = TextureImporterCompression.Uncompressed;
-            txImporter.crunchedCompression = false;
-            txImporter.compressionQuality = 100;
-            txImporter.isReadable = true;
-            txImporter.textureShape = TextureImporterShape.Texture2D;
-            txImporter.npotScale = TextureImporterNPOTScale.None;
-            
-            AssetDatabase.ImportAsset(texturePath, ImportAssetOptions.ForceUpdate);
-
+            var factory = new SpriteDataProviderFactories();
+            factory.Init();
+            var dataProvider = factory.GetSpriteEditorDataProviderFromObject(txImporter);
+            dataProvider.InitSpriteEditorDataProvider();
+            var SpriteNameFileIDDataProvider = dataProvider.GetDataProvider<ISpriteNameFileIdDataProvider>();
+            var spriteRects = dataProvider.GetSpriteRects().ToList();
+            var nameFileIdPairs = SpriteNameFileIDDataProvider.GetNameFileIdPairs().ToList();
+            spriteRects.Clear();
+            nameFileIdPairs.Clear();
             Texture2D sourceTexture =  AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
-
-            List<SpriteMetaData> spriteMetaDatas = new List<SpriteMetaData>();
             int frameNumber = 0;
             NativeArray<int> result = new NativeArray<int>(1, Allocator.TempJob);
             NativeArray<Color32> TextureData = sourceTexture.GetPixelData<Color32>(0);
+            
             for (int y = sourceTexture.height; y > 0; y -= map.TileWidth)
             {
                 for (int x = 0; x < sourceTexture.width; x += map.TileWidth)
@@ -297,27 +291,29 @@ namespace WaterNavTiled.Editor
                     
                     if (result[0] != 0)
                     {
-                        SpriteMetaData spriteMetaData = new SpriteMetaData()
+                        SpriteRect spriteRect = new SpriteRect()
                         {
                             name = $"{sourceTexture.name}_{frameNumber}",
                             rect = new Rect(new Vector2(x, y - map.TileWidth),
                                 new Vector2(map.TileWidth, map.TileWidth)),
                             alignment = 0,
-                            pivot = Vector2.zero
+                            pivot = Vector2.zero,
+                            spriteID = GUID.Generate()
                         };
-                        spriteMetaDatas.Add(spriteMetaData);
+                        //spriteMetaDatas.Add(spriteMetaData);
+                        nameFileIdPairs.Add(new SpriteNameFileIdPair(spriteRect.name, spriteRect.spriteID));
+                        spriteRects.Add(spriteRect);
                         frameNumber++;
                     }
                 }
             }
-
             result.Dispose();
             TextureData.Dispose();
-            Debug.Log($"Sliced {spriteMetaDatas.Count}");
-            txImporter.spritesheet = spriteMetaDatas.ToArray(); //TODO the spritesheet does not seem to be saving which is why it's causing problems with the tile creation
-            EditorUtility.SetDirty(txImporter);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.ImportAsset(texturePath, ImportAssetOptions.ForceUpdate);
+            SpriteNameFileIDDataProvider.SetNameFileIdPairs(nameFileIdPairs.ToArray());
+            dataProvider.SetSpriteRects(spriteRects.ToArray());
+            dataProvider.Apply();
+            var assetImporter = dataProvider.targetObject as AssetImporter;
+            assetImporter.SaveAndReimport();
             return true;
         }
 
