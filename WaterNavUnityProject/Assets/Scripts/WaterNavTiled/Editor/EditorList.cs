@@ -1,5 +1,7 @@
-﻿using UnityEditor;
+﻿using RCR.editor;
+using UnityEditor;
 using UnityEngine;
+using WaterNavTiled.Interfaces;
 
 namespace WaterNavTiled.Editor
 {
@@ -48,17 +50,42 @@ namespace WaterNavTiled.Editor
         private static void ShowButtons(SerializedProperty list, int index)
         {
             if (GUILayout.Button(moveButtonContent, EditorStyles.miniButtonLeft, miniButtonWidth))
+            {
+                IEditorListMoveHandler obj = null;
+                if (EditorUtilities.IsSerializedPropertyOfRefrenceType<IEditorListMoveHandler>(list.GetArrayElementAtIndex(index),
+                        out obj))
+                {
+                    obj.OnMove();
+                }
                 list.MoveArrayElement(index, index + 1);
-            
-            if( GUILayout.Button(duplicateButtonContent, EditorStyles.miniButtonMid, miniButtonWidth))
+            }
+
+
+            if (GUILayout.Button(duplicateButtonContent, EditorStyles.miniButtonMid, miniButtonWidth))
+            {
+                IEditorListDuplicateHandler obj = null;
+                if (EditorUtilities.IsSerializedPropertyOfRefrenceType<IEditorListDuplicateHandler>(list.GetArrayElementAtIndex(index),
+                        out obj))
+                {
+                    obj.OnDuplicate();
+                }
                 list.InsertArrayElementAtIndex(index);
+            }
 
             if (GUILayout.Button(deleteButtonContent, EditorStyles.miniButtonRight, miniButtonWidth))
             {
                 int oldSize = list.arraySize;
+                IEditorListDeleteHandler obj = null;
+                if (EditorUtilities.IsSerializedPropertyOfRefrenceType<IEditorListDeleteHandler>(list.GetArrayElementAtIndex(index),
+                        out obj))
+                {
+                    obj.OnDelete();
+                }
                 list.DeleteArrayElementAtIndex(index);
-                if(list.arraySize == oldSize)
+                if (list.arraySize == oldSize)
                     list.DeleteArrayElementAtIndex(index);
+                
+                   
             }
         }
 

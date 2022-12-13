@@ -22,6 +22,19 @@ namespace RCR.editor
             return false;
         }
 
+        public static bool IsSerializedPropertyOfRefrenceType<T>(SerializedProperty property, out T T_property)
+            where T : class
+        {
+            T_property = default;
+            if (property.boxedValue is T)
+            {
+                T_property = property.boxedValue as T;
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Takes in a serializedProperty and a obj refrence value and tries to assign the value to the serializedProperty
         ///

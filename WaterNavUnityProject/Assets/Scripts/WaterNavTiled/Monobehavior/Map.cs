@@ -24,8 +24,6 @@ namespace WaterNavTiled
         /// </summary>
         public int TileWidth;
 
-        public List<string> Active_FolderPaths = new List<string>();
-
 #if UNITY_EDITOR
         public SpriteAtlasAsset AtlasAsset;
 #endif

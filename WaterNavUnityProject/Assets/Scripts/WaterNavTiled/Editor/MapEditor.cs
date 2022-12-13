@@ -25,6 +25,8 @@ namespace WaterNavTiled.Editor
     {
         private Map map {get => target as Map;}
 
+        private int PathCount;
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -35,7 +37,7 @@ namespace WaterNavTiled.Editor
 
             EditorGUILayout.Space(25f);
             if (GUILayout.Button("TILESETS 2 UNITY"))
-                Tilesets2Unity(serializedObject.FindProperty("Active_FolderPaths"));
+                Tilesets2Unity();
                 
             EditorGUILayout.Space(25f);
             
@@ -47,11 +49,6 @@ namespace WaterNavTiled.Editor
             
             EditorList.Show(serializedObject.FindProperty("TileSets"), EditorListOption.Buttons);
             
-            EditorGUILayout.Space(25f);
-            
-            EditorList.Show(serializedObject.FindProperty("Active_FolderPaths"));
-
-
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -67,28 +64,8 @@ namespace WaterNavTiled.Editor
             
         }
 
-        private void Tilesets2Unity(SerializedProperty list)
+        private void Tilesets2Unity()
         {
-            //ForEach localTileSet
-            //Get That TileSetsImage
-            //Make sure its READ/WRITE
-            //Make Sure the TILESET is MULTIPLE of TileWidth
-            //Load the Texture into memory
-            //Itterate through all the tiles and store data
-            //store a array of sprites
-            //store a array of custom Tile (these tiles mainly will be the tile and then the GID in relation to this map).
-            //Save all the sprites and custom tiles to the assetDatabase.
-            //Create a new gameobject and add grid component to it.
-            //create a child object and add tilemap renderer and tilemap to it
-            //make sure the size of the tilemap is the same size as the length of the customTiles.
-            //load the array of tiles into the tilemap on the child object.
-            //save that gameobject to the database as a prefab.
-            //for each tileset try and put it in a different folder and then retain a record of that folder location.
-            //then if I try to clear this in the future I could just delete the entire folder.
-
-            if(!list.isArray)
-                return;
-
             int Counter = 0;
             foreach (LocalTileSet tileSet in map.TileSets)
             {
@@ -98,7 +75,7 @@ namespace WaterNavTiled.Editor
                     continue;
                 }
 
-                if (!TileSetTextureMultipleOfX(tileSet, out _))
+                if (!TileSetTextureMultipleOfX(tileSet))
                 {
                     continue;
                 }
@@ -116,53 +93,55 @@ namespace WaterNavTiled.Editor
                         continue;
                     }
                 }
-
-                AssetDatabase.SaveAssets(); //Might not need
-
-                if (!SliceSprite(newPath))
-                {
-                    Debug.LogWarning($"Failed to slice up {newPath} skipping");
-                    continue;
-                }
-
-                if (!SaveSlicedAssetsToAtlas(newPath))
-                {
-                    Debug.LogWarning($"Failed to save sliced up {newPath} to MasterAtlas skipping");
-                    continue;
-                }
                 int x = DivisionInto(tileSet.TileSetImage.width, map.TileWidth);
                 int y = DivisionInto(tileSet.TileSetImage.height, map.TileWidth);
-
-                if (GenerateTiles(t_path, tileSet.TileSetImage.name, x * y, tileSet.FirstGID, x, y,
-                        out TileBase[] tiles))
+                TileBase[] tiles = new TileBase[x * y];
+                if (GenerateTiles(t_path, tileSet.TileSetImage.name, newPath, tileSet.FirstGID,
+                        ref tiles))
                 {
-                    GameObject RootObj = new GameObject($"{tileSet.TileSetImage.name}_TilePalette");
-                    RootObj.AddComponent<UnityEngine.Grid>();
-                    GameObject childObj = new GameObject("Layer");
-                    childObj.transform.SetParent(RootObj.transform);
-                    Tilemap tilemap = childObj.AddComponent<Tilemap>();
-                    childObj.AddComponent<TilemapRenderer>();
-
-                    tilemap.size = new Vector3Int(x, y, 1);
-                    tilemap.origin = Vector3Int.zero;
-                    tilemap.SetTilesBlock(tilemap.cellBounds, tiles);
-                
-                    // AssetDatabase.CreateAsset(RootObj, $"{m_path}/{RootObj.name}.asset");
-                    bool prefabSuccess;
-                    PrefabUtility.SaveAsPrefabAssetAndConnect(RootObj, $"{m_path}/{RootObj.name}.prefab",
-                        InteractionMode.UserAction, out prefabSuccess);
-
-                    if (!prefabSuccess)
+                    if (!File.Exists(
+                            $"{Application.dataPath.Replace("Assets", "")}{m_path}/{tileSet.TileSetImage.name}_TilePalette.prefab"))
                     {
-                        Debug.LogWarning($"Failed to create {RootObj.name} prefab");
-                        Destroy(RootObj);
-                        continue;
+                        GameObject RootObj = new GameObject($"{tileSet.TileSetImage.name}_TilePalette");
+                        RootObj.AddComponent<UnityEngine.Grid>();
+                        GameObject childObj = new GameObject("Layer");
+                        childObj.transform.SetParent(RootObj.transform);
+                        Tilemap tilemap = childObj.AddComponent<Tilemap>();
+                        childObj.AddComponent<TilemapRenderer>();
+
+                        tilemap.size = new Vector3Int(x, y, 1);
+                        tilemap.origin = Vector3Int.zero;
+                        tilemap.SetTilesBlock(tilemap.cellBounds, tiles);
+                    
+                        bool prefabSuccess;
+                        PrefabUtility.SaveAsPrefabAssetAndConnect(RootObj, $"{m_path}/{RootObj.name}.prefab",
+                            InteractionMode.UserAction, out prefabSuccess);
+
+                        if (!prefabSuccess)
+                        {
+                            Debug.LogWarning($"Failed to create {RootObj.name} prefab");
+                            Destroy(RootObj);
+                            continue;
+                        }
                     }
-                
-                    //map.Active_FolderPaths.Add(m_path);
-                    list.InsertArrayElementAtIndex(Counter);
-                    list.GetArrayElementAtIndex(Counter).stringValue = m_path;
-                    Counter++;
+                    SerializedProperty localTileSet = serializedObject.FindProperty("TileSets");
+                    if (localTileSet != null && localTileSet.isArray)
+                    {
+                        SerializedProperty localTileSetPath = localTileSet.GetArrayElementAtIndex(Counter)
+                            .FindPropertyRelative("FilePath");
+                        // if (!PathExists && localTileSetPath != null)
+                        // {
+                        //     list.InsertArrayElementAtIndex(Counter);
+                        //     list.GetArrayElementAtIndex(Counter).stringValue = m_path;
+                        //     localTileSetPath.stringValue = m_path;
+                        //     Counter++;
+                        // }
+                        if (localTileSetPath != null)
+                        {
+                            localTileSetPath.stringValue = m_path;
+                            Counter++;
+                        }
+                    }
                 }
                 else
                 {
@@ -174,37 +153,77 @@ namespace WaterNavTiled.Editor
             
         }
 
-        private bool GenerateTiles(string Tilepath,string SourceTextureName,int length,int startingGID, int row, int column, out TileBase[] tiles)
+        private bool GenerateTiles(string Tilepath,string SourceTextureName,string TexPath,int startingGID, ref TileBase[] tiles)
         {
-            tiles = new TileBase[length];
-            SpriteAtlas atlas = map.AtlasAsset.GetMasterAtlas();
-            if (atlas == null)
-                return false;
-            int frame = 0;
-            for (int x = 0; x < row; x++)
+            // tiles = new TileBase[length];
+            // SpriteAtlas atlas = map.AtlasAsset.GetMasterAtlas();
+            // if (atlas == null)
+            //     return false;
+            // int frame = 0;
+            // for (int x = 0; x < row; x++)
+            // {
+            //     for (int y = 0; y < column; y++)
+            //     {
+            //         RecordedTile tile = ScriptableObject.CreateInstance<RecordedTile>();
+            //         tile.Gid = Convert.ToUInt16(startingGID);
+            //         Sprite TileSprite = atlas.GetSprite($"{SourceTextureName}_{frame}");
+            //         if (TileSprite == null)
+            //         {
+            //             frame++;
+            //             continue;
+            //         }
+            //
+            //         tile.Sprite = TileSprite;
+            //         tiles[row * x + y] = tile;
+            //         AssetDatabase.CreateAsset(tiles[row * x + y], $"{Tilepath}/{tile.Gid.ToString()}.asset");
+            //         frame++;
+            //         startingGID += 1;
+            //     }
+            // }
+            Sprite[] sprites = AssetDatabase.LoadAllAssetsAtPath(TexPath).OfType<Sprite>().ToArray();
+            if (sprites.Length <= 0)
             {
-                for (int y = 0; y < column; y++)
+                tiles = null;
+                return false;
+            }
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                UInt16 GID = Convert.ToUInt16(startingGID);
+                RecordedTile tile = null;
+                if (!File.Exists($"{Application.dataPath.Replace("Assets", "")}{Tilepath}/{GID.ToString()}.asset"))
                 {
-                    RecordedTile tile = ScriptableObject.CreateInstance<RecordedTile>();
-                    tile.Gid = Convert.ToUInt16(startingGID);
-                    Sprite TileSprite = atlas.GetSprite($"{SourceTextureName}_{frame}");
-                    if (TileSprite == null)
+                    if (sprites[i].rect.width > map.TileWidth || sprites[i].rect.height > map.TileWidth)
                     {
-                        frame++;
+                        Debug.LogWarning($"{sprites[i].name} sprite was width or height was larger than {map.TileWidth} \n Skipping Creating and registering this tile");
                         continue;
                     }
-
-                    tile.Sprite = TileSprite;
-                    tiles[row * x + y] = tile;
-                    AssetDatabase.CreateAsset(tiles[row * x + y], $"{Tilepath}/{tile.Gid.ToString()}.asset");
-                    frame++;
-                    startingGID += 1;
+                    tile = ScriptableObject.CreateInstance<RecordedTile>();
+                    tile.Gid = GID;
+                    tile.Sprite = sprites[i];
+                    AssetDatabase.CreateAsset(tile, $"{Tilepath}/{tile.Gid.ToString()}.asset");
                 }
+                else
+                {
+                    tile = AssetDatabase.LoadAssetAtPath<RecordedTile>($"{Tilepath}/{GID.ToString()}.asset");
+                    if (tile == null)
+                    {
+                        Debug.LogWarning($"Problem With Getting RecordedTile from AssetDatabase {Tilepath}/{GID.ToString()}.asset \n" +
+                                         $"Skipping registering this tile");
+                        continue;
+                    }else if (tile.Sprite.rect.width > map.TileWidth || tile.Sprite.rect.height > map.TileWidth)
+                    {
+                        Debug.LogWarning($"{tile.name} sprite was width or height was larger than {map.TileWidth} \n Skipping registering this tile");
+                        continue;
+                    }
+                }
+                tiles[i] = tile;
+                startingGID += 1;
             }
-
+            AssetDatabase.SaveAssets();
             return true;
         }
 
+        [Obsolete]
         private bool SaveSlicedAssetsToAtlas(string texturePath)
         {
             SerializedProperty AtlasAsset = serializedObject.FindProperty("AtlasAsset");
@@ -254,6 +273,7 @@ namespace WaterNavTiled.Editor
             return false;
         }
 
+        [Obsolete]
         private bool SliceSprite(string texturePath)
         {
             TextureImporter txImporter = AssetImporter.GetAtPath(texturePath) as TextureImporter;
@@ -271,7 +291,7 @@ namespace WaterNavTiled.Editor
             nameFileIdPairs.Clear();
             Texture2D sourceTexture =  AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
             int frameNumber = 0;
-            NativeArray<int> result = new NativeArray<int>(1, Allocator.TempJob);
+            NativeArray<int> result = new NativeArray<int>((map.TileWidth * map.TileWidth), Allocator.TempJob);
             NativeArray<Color32> TextureData = sourceTexture.GetPixelData<Color32>(0);
             
             for (int y = sourceTexture.height; y > 0; y -= map.TileWidth)
@@ -289,7 +309,7 @@ namespace WaterNavTiled.Editor
                     JobHandle handle = job.Schedule();
                     handle.Complete();
                     
-                    if (result[0] != 0)
+                    if (result.Any(z => z != 0))
                     {
                         SpriteRect spriteRect = new SpriteRect()
                         {
@@ -353,28 +373,24 @@ namespace WaterNavTiled.Editor
 
         private void ValidateTileSets(SerializedProperty list)
         {
-            //Go through each TileSet
-            //Grab that texture
-            //See if it has readvalue fine
-            //itterate how many Tilewidth X Tilewidth blocks can fit in that image size
-            //The NEXT First GID for the next Tileset is the last value + 1
-
             if (list.arraySize > 0)
             {
                 int nextFirstGID = 0;
 
                 for (int i = 0; i < list.arraySize; i++)
                 {
-                    object RefrenceValue = list.GetArrayElementAtIndex(i).FindPropertyRelative("TileSetImage")
-                        .objectReferenceValue;
+                    Texture2D texture2D = null;
+                    UtitliesEditor.IsSerializedPropertyX<Texture2D>(
+                        list.GetArrayElementAtIndex(i).FindPropertyRelative("TileSetImage"),
+                        out texture2D);
                     
-                    if (RefrenceValue ==
+                    if (texture2D ==
                         null)
                     {
                         continue;
                     }
                     list.GetArrayElementAtIndex(i).FindPropertyRelative("FirstGID").intValue = nextFirstGID;
-                    if (TileSetTextureMultipleOfX(RefrenceValue, out int largestLocalID))
+                    if (GetTileSetSpriteCount(texture2D, out int largestLocalID))
                     {
                         nextFirstGID += largestLocalID + 1;
                     }
@@ -383,48 +399,8 @@ namespace WaterNavTiled.Editor
                         break;
                     }
                 }
-                
-                // foreach (LocalTileSet tileSet in map.TileSets)
-                // {
-                //     if (tileSet.TileSetImage == null)
-                //     {
-                //         Counter++;
-                //         continue;
-                //     }
-                //     //tileSet.FirstGID = nextFirstGID;
-                //     list.GetArrayElementAtIndex(Counter).FindPropertyRelative("FirstGID").intValue = nextFirstGID;
-                //     if (TileSetTextureMultipleOfX(list.GetArrayElementAtIndex(Counter).objectReferenceValue, out int largestLocalID))
-                //     {
-                //         nextFirstGID += largestLocalID + 1;
-                //         Counter++;
-                //     }
-                //     else
-                //     {
-                //         Counter++;
-                //         break;
-                //     }
-                // }
             }
-            
-            // if (map.TileSets.Length > 0)
-            // {
-            //     int nextFirstGID = 0;
-            //     map.TileSets[0].FirstGID = 0;
-            //     foreach (LocalTileSet tileSet in map.TileSets)
-            //     {
-            //         if(tileSet.TileSetImage == null)
-            //             continue;
-            //         tileSet.FirstGID = nextFirstGID;
-            //         if (TileSetTextureMultipleOfX(tileSet, out int largestLocalID))
-            //         {
-            //             nextFirstGID += largestLocalID + 1;
-            //         }
-            //         else
-            //         {
-            //             break;
-            //         }
-            //     }
-            // }
+
         }
         
         private  int DivisionInto(int total, int divisionnumber)
@@ -436,9 +412,9 @@ namespace WaterNavTiled.Editor
             return a % b == 0;
         }
 
-        private bool TileSetTextureMultipleOfX(LocalTileSet tileSet, out int largestID)
+        private bool TileSetTextureMultipleOfX(LocalTileSet tileSet)
         {
-            largestID = 0;
+            
             if (!tileSet.TileSetImage.isReadable)
             {
                 Debug.LogWarning($"{tileSet.TileSetImage.name} is not readable");
@@ -451,13 +427,25 @@ namespace WaterNavTiled.Editor
                 Debug.LogWarning($"{tileSet.TileSetImage.name} is not a multiple of {map.TileWidth}");
                 return false;
             }
-              
-
-            int x = DivisionInto(tileSet.TileSetImage.width, map.TileWidth);
-            int y = DivisionInto(tileSet.TileSetImage.height, map.TileWidth);
-            largestID = (x * y) - QuantityofNullChunks(tileSet.TileSetImage, x, y);
             return true;
         }
+
+        private bool GetTileSetSpriteCount(Texture2D tex, out int quantity)
+        {
+            quantity = 0;
+            string TexPath = AssetDatabase.GetAssetPath(tex);
+            AssetImporter A_importer = AssetImporter.GetAtPath(TexPath);
+            if (A_importer == null)
+                return false;
+            var factory = new SpriteDataProviderFactories();
+            factory.Init();
+            var dataProvider = factory.GetSpriteEditorDataProviderFromObject(A_importer);
+            dataProvider.InitSpriteEditorDataProvider();
+            quantity = dataProvider.GetSpriteRects().Length;
+            return true;
+        }
+        
+        [Obsolete]
         private bool TileSetTextureMultipleOfX(object tileSet, out int largestID)
         {
             largestID = 0;
@@ -487,11 +475,12 @@ namespace WaterNavTiled.Editor
             return false;
         }
 
+        [Obsolete]
         private int QuantityofNullChunks(Texture2D tex, int RowCount, int ColumnCount)
         {
             int Quantity = 0;
             NativeArray<Color32> TextureData = tex.GetPixelData<Color32>(0);
-            NativeArray<int> result = new NativeArray<int>(1, Allocator.TempJob);
+            NativeArray<int> result = new NativeArray<int>((map.TileWidth * map.TileWidth), Allocator.TempJob);
             for (int x = 0; x < RowCount; x++)
             {
                 for (int y = 0; y < ColumnCount; y++)
@@ -506,7 +495,7 @@ namespace WaterNavTiled.Editor
 
                     JobHandle handle = job.Schedule();
                     handle.Complete();
-                    if (result[0] == 0)
+                    if (result.Any(z => z != 0))
                         Quantity += 1;
 
                 }
@@ -516,11 +505,6 @@ namespace WaterNavTiled.Editor
             result.Dispose();
             return Quantity;
         }
-
-        // private bool TextureRectNotTransparent(Texture2D tex, Rect area)
-        // {
-        //     
-        // }
     }
     
 #endif
