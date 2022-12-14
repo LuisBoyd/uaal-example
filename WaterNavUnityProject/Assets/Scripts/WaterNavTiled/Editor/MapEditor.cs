@@ -44,6 +44,7 @@ namespace WaterNavTiled.Editor
             //Map Settings
             EditorGUILayout.PropertyField(serializedObject.FindProperty("MapSize"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("TileWidth"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("Destination"));
             
             EditorGUILayout.Space(25f);
             
@@ -61,7 +62,7 @@ namespace WaterNavTiled.Editor
 
         private void SetUpMap()
         {
-            
+            map.SaveMap();
         }
 
         private void Tilesets2Unity()
@@ -95,9 +96,10 @@ namespace WaterNavTiled.Editor
                 }
                 int x = DivisionInto(tileSet.TileSetImage.width, map.TileWidth);
                 int y = DivisionInto(tileSet.TileSetImage.height, map.TileWidth);
+                SerializedProperty localTileSet = serializedObject.FindProperty("TileSets");
                 TileBase[] tiles = new TileBase[x * y];
                 if (GenerateTiles(t_path, tileSet.TileSetImage.name, newPath, tileSet.FirstGID,
-                        ref tiles))
+                        localTileSet.GetArrayElementAtIndex(Counter).FindPropertyRelative("RecordedTiles"),ref tiles))
                 {
                     if (!File.Exists(
                             $"{Application.dataPath.Replace("Assets", "")}{m_path}/{tileSet.TileSetImage.name}_TilePalette.prefab"))
@@ -124,7 +126,6 @@ namespace WaterNavTiled.Editor
                             continue;
                         }
                     }
-                    SerializedProperty localTileSet = serializedObject.FindProperty("TileSets");
                     if (localTileSet != null && localTileSet.isArray)
                     {
                         SerializedProperty localTileSetPath = localTileSet.GetArrayElementAtIndex(Counter)
@@ -153,7 +154,7 @@ namespace WaterNavTiled.Editor
             
         }
 
-        private bool GenerateTiles(string Tilepath,string SourceTextureName,string TexPath,int startingGID, ref TileBase[] tiles)
+        private bool GenerateTiles(string Tilepath,string SourceTextureName,string TexPath,int startingGID,SerializedProperty set, ref TileBase[] tiles)
         {
             // tiles = new TileBase[length];
             // SpriteAtlas atlas = map.AtlasAsset.GetMasterAtlas();
@@ -186,6 +187,17 @@ namespace WaterNavTiled.Editor
                 tiles = null;
                 return false;
             }
+
+            if (!set.isArray)
+            {
+                Debug.LogWarning($"{set.name} is not an array, saving recorded tiles to associated tilesets will not happen");
+                return false;
+            }
+
+            for (int i = 0; i < set.arraySize; i++)
+            {
+                set.DeleteArrayElementAtIndex(i);
+            }
             for (int i = 0; i < sprites.Length; i++)
             {
                 UInt16 GID = Convert.ToUInt16(startingGID);
@@ -216,6 +228,8 @@ namespace WaterNavTiled.Editor
                         continue;
                     }
                 }
+                set.InsertArrayElementAtIndex(i);
+                set.GetArrayElementAtIndex(i).objectReferenceValue = tile;
                 tiles[i] = tile;
                 startingGID += 1;
             }
@@ -375,7 +389,7 @@ namespace WaterNavTiled.Editor
         {
             if (list.arraySize > 0)
             {
-                int nextFirstGID = 0;
+                int nextFirstGID = 1;
 
                 for (int i = 0; i < list.arraySize; i++)
                 {

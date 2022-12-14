@@ -1,10 +1,12 @@
-﻿using WaterNavTiled.Data;
+﻿using System.IO;
+using Newtonsoft.Json.Bson;
+using WaterNavTiled.Data;
 
 namespace WaterNavTiled.Interfaces
 {
     public interface IJsonSerializable : ISerializable
     {
-        public void GetObjectData(ref JsonSerializationInfo info);
+        public void GetObjectData(BsonDataWriter info);
 
     }
 }

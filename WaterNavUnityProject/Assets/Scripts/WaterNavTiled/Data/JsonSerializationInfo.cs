@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace WaterNavTiled.Data
 {
+    [Obsolete]
     public class JsonSerializationInfo : IDisposable
     {
         private Dictionary<string, Tuple<object, Type>> m_store;
