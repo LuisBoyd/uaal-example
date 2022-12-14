@@ -178,7 +178,7 @@ MonoBehaviour:
   Visible: 0
   layers:
   - {fileID: 359394431}
-  - {fileID: 0}
+  - {fileID: 716316006}
 --- !u!612988286 &122852424
 SpriteAtlasAsset:
   m_ObjectHideFlags: 0
