@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -52,7 +53,7 @@ namespace RCR.Tiled
         {
         }
 
-        public void GetObjectData(BsonDataWriter info)
+        public void GetObjectData(JsonWriter info)
         {
             info.WriteStartObject();
             
@@ -84,6 +85,16 @@ namespace RCR.Tiled
             info.WriteEndArray();
             
             info.WriteEndObject();
+        }
+
+        public void ReciveObjectData(JsonTextReader info)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReciveObjectData(BsonDataReader info)
+        {
+            throw new NotImplementedException();
         }
     }
 }

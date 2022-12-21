@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace WaterNavTiled
     {
         [SerializeField] private Layer[] layers;
 
-        public override void GetObjectData(BsonDataWriter info)
+        public override void GetObjectData(JsonWriter info)
         {
             info.WriteStartObject();
             info.WritePropertyName("Classname");

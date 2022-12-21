@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Bson;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using UnityEngine;
 
 namespace WaterNavTiled
@@ -10,7 +11,7 @@ namespace WaterNavTiled
         [SerializeField] private bool repeatY;
         [SerializeField] private string transparentColor;
 
-        public override void GetObjectData(BsonDataWriter info)
+        public override void GetObjectData(JsonWriter info)
         {
             info.WriteStartObject();
             info.WritePropertyName("Classname");

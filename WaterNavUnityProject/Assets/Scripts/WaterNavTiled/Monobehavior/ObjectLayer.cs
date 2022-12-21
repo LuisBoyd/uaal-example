@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Bson;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using UnityEngine;
 
 namespace WaterNavTiled
@@ -8,7 +9,7 @@ namespace WaterNavTiled
         //Array of Objects
        [SerializeField] private string DrawOrder; //Could be represented with enum
 
-       public override void GetObjectData(BsonDataWriter info)
+       public override void GetObjectData(JsonWriter info)
        {
            info.WriteStartObject();
            info.WritePropertyName("Classname");

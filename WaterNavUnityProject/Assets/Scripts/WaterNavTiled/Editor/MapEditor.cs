@@ -40,6 +40,9 @@ namespace WaterNavTiled.Editor
                 Tilesets2Unity();
                 
             EditorGUILayout.Space(25f);
+            if (GUILayout.Button("Parse"))
+                ParseTilemap();
+            EditorGUILayout.Space(25f);
             
             //Map Settings
             EditorGUILayout.PropertyField(serializedObject.FindProperty("MapSize"));
@@ -58,6 +61,11 @@ namespace WaterNavTiled.Editor
             }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void ParseTilemap()
+        {
+            map.ParseMap();
         }
 
         private void SetUpMap()

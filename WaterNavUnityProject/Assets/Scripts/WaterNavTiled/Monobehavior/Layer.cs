@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -18,7 +19,7 @@ namespace WaterNavTiled
         //Array of properties??
         [SerializeField] protected string Type; //Could replace with an enum for Tilelayer, ObjectGrouplayer, ImageLayer or just group
         [SerializeField] protected bool Visible;
-        public virtual void GetObjectData(BsonDataWriter info)
+        public virtual void GetObjectData(JsonWriter info)
         {
             info.WritePropertyName("Layer");
             info.WriteStartObject();
@@ -37,6 +38,16 @@ namespace WaterNavTiled
             info.WritePropertyName("Visible");
             info.WriteValue(Visible);
             info.WriteEndObject();
+        }
+
+        public void ReciveObjectData(JsonTextReader info)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public virtual void ReciveObjectData(BsonDataReader info)
+        {
+            throw new System.NotImplementedException();
         }
 
         public abstract void CollectMonoData();

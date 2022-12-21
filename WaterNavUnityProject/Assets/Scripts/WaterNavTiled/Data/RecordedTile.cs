@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -21,7 +22,7 @@ namespace WaterNavTiled.Data
             tileData.sprite = Sprite;
         }
 
-        public void GetObjectData(BsonDataWriter info)
+        public void GetObjectData(JsonWriter info)
         {
             info.WriteStartObject();
             info.WritePropertyName("Gid");
@@ -37,6 +38,16 @@ namespace WaterNavTiled.Data
             info.WriteValue(Sprite.rect.height);
             
             info.WriteEndObject();
+        }
+
+        public void ReciveObjectData(JsonTextReader info)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReciveObjectData(BsonDataReader info)
+        {
+            throw new NotImplementedException();
         }
     }
 }
