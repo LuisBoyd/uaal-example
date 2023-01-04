@@ -5,6 +5,7 @@ using DataStructures;
 using DG.Tweening;
 using DG.Tweening.Plugins.Core.PathCore;
 using RCR.Patterns;
+using RCR.Utilities;
 using UnityEngine;
 
 namespace BuildingComponents
@@ -44,8 +45,9 @@ namespace BuildingComponents
             {
                 if (Controller.AddCustomerToQueue(renderer))
                 {
-                    var tween = renderer.transform.DOPath(GetPathToDestination(GetNextFreeSpot()), 3.5f,
-                        PathType.Linear,
+                    var tween = renderer.transform.DOPath(MathUtils.BezierCurvePointPath(renderer.transform,QueuePath.PointsLocal
+                            ).ToArray(), 3.5f,
+                        PathType.CubicBezier,
                         PathMode.TopDown2D, 10, Color.blue);
                 }
                 //TODO: move customer into queue visually
@@ -118,7 +120,8 @@ namespace BuildingComponents
             Model.CurrentQueue.Clear();
             for (int i = 0; i < Bodies.Length; i++)
             {
-                var tween = Bodies[i].DOPath(GetPathToDestination2D(GetNextFreeSpot()), 3.5f, PathType.Linear,
+                var tween = Bodies[i].DOPath(MathUtils.BezierCurvePointPath2D(Bodies[i].transform,QueuePath.PointsLocal,
+                        MathUtils.Normalize(0.0f, 1.0f, Model.LengthOfQueueUpgrade.Queue_Capcity)).ToArray(), 3.5f, PathType.CubicBezier,
                     PathMode.TopDown2D, 10, Color.blue);
                 Model.CurrentQueue.Enqueue(Bodies[i]);
             }

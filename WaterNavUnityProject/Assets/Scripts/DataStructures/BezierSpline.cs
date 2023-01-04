@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RCR.Enums;
 using RCR.Utilities;
 using UnityEngine;
@@ -9,6 +10,47 @@ namespace DataStructures
     {
         [SerializeField]
         public Vector2[] points;
+
+        public List<Vector2> Points2D
+        {
+            get
+            {
+                List<Vector2> p = new List<Vector2>();
+                for (int i = 0; i < points.Length; i++)
+                {
+                    p.Add(points[i]);
+                }
+
+                return p;
+            }
+        }
+
+        public List<Vector3> Points
+        {
+            get
+            {
+                List<Vector3> p = new List<Vector3>();
+                for (int i = 0; i < points.Length; i++)
+                {
+                    p.Add(points[i]);
+                }
+
+                return p;
+            }
+        }
+        public List<Vector3> PointsLocal
+        {
+            get
+            {
+                List<Vector3> p = new List<Vector3>();
+                for (int i = 0; i < points.Length; i++)
+                {
+                    p.Add(transform.TransformPoint(points[i]));
+                }
+
+                return p;
+            }
+        }
 
         [SerializeField] private BezierControlPointMode[] Modes;
 
@@ -53,6 +95,7 @@ namespace DataStructures
             // return transform.TransformPoint(Bezier.GetPoint(
             //     points[0], points[1], points[2], points[3], t));
 
+            
             int i;
             if (t >= 1f)
             {
@@ -70,6 +113,31 @@ namespace DataStructures
             return transform.TransformPoint(Bezier.GetPoint(
                 points[i], points[i + 1], points[i + 2], points[i + 3],
                 t));
+        }
+
+        public Vector2[] GetPath2D()
+        {
+            List<Vector2> path = new List<Vector2>();
+            for (int i = 3; i < points.Length; i+= 3)
+            {
+                path.Add(transform.TransformPoint(points[i]));
+                path.Add(transform.TransformPoint(points[i - 2]));
+                path.Add(transform.TransformPoint(points[i - 1]));
+            }
+
+            return path.ToArray();
+        }
+        public Vector3[] GetPath()
+        {
+            List<Vector3> path = new List<Vector3>();
+            for (int i = 3; i < points.Length; i+= 3)
+            {
+                path.Add(transform.TransformPoint(points[i]));
+                path.Add(transform.TransformPoint(points[i - 2]));
+                path.Add(transform.TransformPoint(points[i - 1]));
+            }
+
+            return path.ToArray();
         }
 
         public Vector2 GetVelocity(float t)
