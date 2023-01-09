@@ -11,46 +11,8 @@ namespace DataStructures
         [SerializeField]
         public Vector2[] points;
 
-        public List<Vector2> Points2D
-        {
-            get
-            {
-                List<Vector2> p = new List<Vector2>();
-                for (int i = 0; i < points.Length; i++)
-                {
-                    p.Add(points[i]);
-                }
+        public Vector3[] segmentedWaypoints;
 
-                return p;
-            }
-        }
-
-        public List<Vector3> Points
-        {
-            get
-            {
-                List<Vector3> p = new List<Vector3>();
-                for (int i = 0; i < points.Length; i++)
-                {
-                    p.Add(points[i]);
-                }
-
-                return p;
-            }
-        }
-        public List<Vector3> PointsLocal
-        {
-            get
-            {
-                List<Vector3> p = new List<Vector3>();
-                for (int i = 0; i < points.Length; i++)
-                {
-                    p.Add(transform.TransformPoint(points[i]));
-                }
-
-                return p;
-            }
-        }
 
         [SerializeField] private BezierControlPointMode[] Modes;
 
@@ -92,10 +54,6 @@ namespace DataStructures
 
         public Vector2 GetPoint(float t)
         {
-            // return transform.TransformPoint(Bezier.GetPoint(
-            //     points[0], points[1], points[2], points[3], t));
-
-            
             int i;
             if (t >= 1f)
             {
@@ -114,32 +72,7 @@ namespace DataStructures
                 points[i], points[i + 1], points[i + 2], points[i + 3],
                 t));
         }
-
-        public Vector2[] GetPath2D()
-        {
-            List<Vector2> path = new List<Vector2>();
-            for (int i = 3; i < points.Length; i+= 3)
-            {
-                path.Add(transform.TransformPoint(points[i]));
-                path.Add(transform.TransformPoint(points[i - 2]));
-                path.Add(transform.TransformPoint(points[i - 1]));
-            }
-
-            return path.ToArray();
-        }
-        public Vector3[] GetPath()
-        {
-            List<Vector3> path = new List<Vector3>();
-            for (int i = 3; i < points.Length; i+= 3)
-            {
-                path.Add(transform.TransformPoint(points[i]));
-                path.Add(transform.TransformPoint(points[i - 2]));
-                path.Add(transform.TransformPoint(points[i - 1]));
-            }
-
-            return path.ToArray();
-        }
-
+        
         public Vector2 GetVelocity(float t)
         {
             // return transform.TransformPoint(Bezier.GetFirstDerivative(
@@ -163,9 +96,28 @@ namespace DataStructures
                 t)) - transform.position;
         }
 
+        public Vector2 GetLinearVelocity(Vector3 a, Vector3 b, float t)
+        {
+            if (t >= 1f)
+            {
+                t = 1f;
+            }
+            else
+            {
+                t = Mathf.Clamp01(t);
+            }
+
+            return transform.TransformPoint(Bezier.GetPoint(a, b, t) - transform.position);
+        }
+
         public Vector2 GetDirection(float t)
         {
             return GetVelocity(t).normalized;
+        }
+
+        public Vector2 GetLinearDirection(Vector3 a, Vector3 b, float t)
+        {
+            return GetLinearVelocity(a,b,t).normalized;
         }
 
         public void AddCurve()
@@ -214,6 +166,21 @@ namespace DataStructures
             
             EnforceMode(index);
         }
+
+        /// <summary>
+        /// Generate's x points along the entire spline useful for example of making waypoints along the spline
+        /// </summary>
+        /// <param name="x"></param>
+        public void GenerateXPointsAlongSpline(int x) //TODO In regards to The Queue capacity whenever the QUEUE Length changes this function should be called
+        {
+            segmentedWaypoints = new Vector3[x];
+            for (int i = 0; i < segmentedWaypoints.Length; i++)
+            {
+                float normalized = MathUtils.Normalize(0.0f, (float) x, (float) (i + 1));
+                segmentedWaypoints[i] = GetPoint(normalized);
+            }
+        }
+        
 
         public Vector3 GetControlPoint(int index)
         {

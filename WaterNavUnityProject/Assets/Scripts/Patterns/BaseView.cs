@@ -10,13 +10,13 @@ namespace RCR.Patterns
         protected C Controller;
 
         /// <summary>
-        /// Set To True if there are any problems in which case it can be handled
+        /// Set To false if there are any problems in which case it can be handled
         /// </summary>
         protected bool IsValid;
 
         protected virtual void Awake()
         {
-            IsValid = false;
+            IsValid = true;
             Controller = new C();
             Model = new M();
             Controller.Setup(Model);

@@ -8,7 +8,7 @@ namespace BuildingComponents
         {
             get
             {
-                return m_upgradeLevel - GameSettings.Base_Service_speed;
+                return GameSettings.Base_Service_speed - m_upgradeLevel;
             }
         }
         

@@ -309,6 +309,21 @@ namespace RCR.Utilities
         //         p[i] = (controlPoints[i] + controlPoints[i + 1]) / 2; //Get the basePoint and the next one and work out the midpoint
         //     return p;
         // }
+
+        /// <summary>
+        /// Linear interpolate between 2 points by t
+        /// </summary>
+        /// <param name="a">Point A the start of the line</param>
+        /// <param name="b">Point B the end of the line</param>
+        /// <param name="t">the percentage in-between the two points value between 0 and 1</param>
+        /// <returns>the vector that is t * B from A (the vector that lies in between the 2 points)</returns>
+        public static Vector3 LinerInterpolation(Vector3 a, Vector3 b, float t)
+        {
+            t = Mathf.Clamp01(t);
+            float oneMinusT = 1f - t;
+            return oneMinusT * a + t * b;
+        }
+        
         
     }
 }

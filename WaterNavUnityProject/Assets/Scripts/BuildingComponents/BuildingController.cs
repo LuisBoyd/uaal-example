@@ -1,33 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using RCR.Patterns;
+using RCR.Settings.AI;
 using UnityEngine;
 
 namespace BuildingComponents
 {
     public class BuildingController : BaseController<BuildingModel>
     {
+        public void AddCustomerToQueue(IQueue customer) => Model.CurrentQueue.Enqueue(customer);
         
-        public bool AddCustomerToQueue(Rigidbody2D customer) //At the moment work under the assumption that people will not leave the queue
-        {
-            if (Model.CurrentQueue.Count >= Model.LengthOfQueueUpgrade.Queue_Capcity)
-            {
-                return false;
-            }
-            Model.CurrentQueue.Enqueue(customer);
-            return true;
-        }
 
-        public void ConsumeCustomersFromQueue()
+            public void ConsumeCustomersFromQueue()
         {
-            Model.Customers_Currently_Servicing.Clear();
-            List<Rigidbody2D> customers_consumed = new List<Rigidbody2D>();
-            for (int i = 0; i < Model.LengthOfQueueUpgrade.Queue_Capcity; i++)
+            Model.Customers_Currently_Servicing.Clear(); //Might be redundant
+            List<IQueue> customers_consumed = new List<IQueue>();
+            for (int i = 0; i < Model.CapcityUpgrade.ServiceCapacity; i++)
             {
-                if (Model.CurrentQueue.TryDequeue(out Rigidbody2D result))
+                if (Model.CurrentQueue.TryDequeue(out IQueue result))
+                {
+                    result.ProgressThroughQueue = 0f;
                     customers_consumed.Add(result);
+                    result.GameObject.SetActive(false);
+                }
                 else
+                {
                     break;
+                }
             }
             if(customers_consumed.Count <= 0)
                 return;
@@ -47,10 +46,13 @@ namespace BuildingComponents
 
         public void release_Customers()
         {
-            //TODO: release the customers
-            throw new NotImplementedException();
+            foreach (IQueue customer in Model.Customers_Currently_Servicing)
+            {
+                customer.GameObject.transform.position = Model.WorldPos_buildingExitPoint;
+                customer.GameObject.SetActive(true); //TODO remember I am turning the game object off and on when they are serviced
+                Model.Customers_Currently_Leaving.Add(customer);
+                Model.Customers_Currently_Servicing.Remove(customer);
+            }
         }
-        
-        
     }
 }

@@ -8,7 +8,8 @@ namespace BuildingComponents
         {
             get
             {
-                return m_upgradeLevel * GameSettings.Base_Queue_Length;
+                return GameSettings.Base_Queue_Length + (m_upgradeLevel * 2) +
+                       (m_prestigelevel * GameSettings.Base_Queue_Length);
             }
         }
         
