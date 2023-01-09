@@ -1,4 +1,5 @@
-﻿using DataStructures;
+﻿using System;
+using DataStructures;
 using UnityEngine;
 
 namespace RCR.Settings.AI
@@ -7,13 +8,20 @@ namespace RCR.Settings.AI
     {
 
         public BezierSpline QueuePath { get; set; }
+        
+       
         public float Duration { get; set; }
+        
+        public float TimeInQueue { get; set; }
         
         public bool StopPathProgression { get; set; }
         
         public bool EnteredQueue { get; set; }
         public bool LeftQueue { get; set; }
         
+        public bool HasBeenServiced_LeavingQueue { get; set; }
+        public event EventHandler<IQueue> on_LeftQueue; 
+
         public GameObject GameObject { get; }
         public float ProgressThroughQueue { get; set; }
         
@@ -23,8 +31,9 @@ namespace RCR.Settings.AI
 
         public void On_QueueEntered(BezierSpline queue, float speed_of_queue);
 
-        public void on_QueueBusy();
-        
-        public void on_QueueCompleted();
+        public void LeaveQueue_Serviced();
+
+        public void LeaveQueue();
+
     }
 }

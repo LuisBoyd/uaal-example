@@ -124,6 +124,7 @@ namespace RCR.Utilities
             return builder.ToString();
         }
         
+        
         public static int[][] PascalTriangleLookUpTable = new int[][]
         {
             new int[] { 1 }, //n = 0
@@ -323,6 +324,7 @@ namespace RCR.Utilities
             float oneMinusT = 1f - t;
             return oneMinusT * a + t * b;
         }
+        
         
         
     }

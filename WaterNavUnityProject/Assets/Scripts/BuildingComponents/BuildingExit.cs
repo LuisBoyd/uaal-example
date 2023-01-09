@@ -26,7 +26,7 @@ namespace BuildingComponents
         {
             if (col.TryGetComponent<IQueue>(out IQueue customer))
             {
-                m_buildingView.RemoveCustomerFromBuilding(customer);
+                //m_buildingView.RemoveCustomerFromBuilding(customer);
                 m_lookup.Add(col, customer);
             }
         }
@@ -47,7 +47,7 @@ namespace BuildingComponents
         {
             if (m_lookup.ContainsKey(other))
             {
-                m_lookup[other].on_QueueCompleted();
+                //m_lookup[other].on_QueueCompleted();
                 m_lookup.Remove(other);
             }
         }

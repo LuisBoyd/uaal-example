@@ -1,21 +1,33 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using DataStructures;
 using DG.Tweening;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace RCR.Settings.AI
 {
     public class CustomerBrain : DynamicArtificalIntelligentBrain, IQueue
     {
+        [SerializeField] 
+        private Transform RayCastHelper;
 
+        public bool TestMove;
+        private float x;
         private Rigidbody2D rb;
         private Collider2D m_collider2D;
         private float RayDistance;
         public BezierSpline QueuePath { get; set; }
+        public Action on_CompletedCallback { get; set; }
         public float Duration { get; set; }
+        public float TimeInQueue { get; set; }
         public bool StopPathProgression { get; set; }
         public bool EnteredQueue { get; set; }
         public bool LeftQueue { get; set; }
+        public bool HasBeenServiced_LeavingQueue { get; set; }
+        public event EventHandler<IQueue> on_LeftQueue;
+
         public GameObject GameObject
         {
             get => this.gameObject;
@@ -52,30 +64,48 @@ namespace RCR.Settings.AI
             rb = GetComponent<Rigidbody2D>();
             m_collider2D = GetComponent<Collider2D>();
             startpos = transform.position;
-            RayDistance = m_collider2D.bounds.extents.x > m_collider2D.bounds.extents.y
-                ? m_collider2D.bounds.extents.x
-                : m_collider2D.bounds.extents.y;
+            x = transform.position.x;
+        }
+
+        private void Update()
+        {
+            if (TestMove && QueuePath == null)
+            {
+                x += Time.deltaTime / 1f;
+                transform.position = new Vector3(x, transform.position.y);
+            }
+               
         }
 
         public void MoveThroughQueue()
         {
-            CheckForQueueBarriers();
-            if(StopPathProgression)
-                return;
-            
+            if (!HasBeenServiced_LeavingQueue)
+            {
+                CheckForTimeInQueue();
+                CheckForQueueBarriers();
+                if (StopPathProgression)
+                    return;
+            }
+
             ProgressThroughQueue += Time.deltaTime / Duration;
             if (ProgressThroughQueue > 1f)
+            {
                 ProgressThroughQueue = 1f;
-
-            Vector2 position = QueuePath.GetPoint(ProgressThroughQueue);
+            }
+            Vector3 position = QueuePath.GetPoint(ProgressThroughQueue);
+            float angle = Vector2.SignedAngle(Vector2.right, (position - transform.position));
             transform.localPosition = position;
-            transform.LookAt(position + QueuePath.GetDirection(ProgressThroughQueue));
+            transform.eulerAngles = new Vector3(0, 0, angle);
         }
+        
+
+      
 
         private void CheckForQueueBarriers()
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward,
-                RayDistance);
+            int layerMask = 1 << 6;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right,
+                m_collider2D.bounds.extents.x, layerMask);
             if (hit.collider != null)
             {
                 StopPathProgression = true;
@@ -86,39 +116,62 @@ namespace RCR.Settings.AI
             }
         }
 
+        private void CheckForTimeInQueue()
+        {
+            //TODO implement checking the time a customer is in the queue to then boot them out of it if they have spent to much time
+        }
+
         public void On_QueueEntered(BezierSpline queue, float speed_of_queue)
         {
+            ResetValues();
             QueuePath = queue;
             Duration = speed_of_queue;
+            rb.isKinematic = true;
+            //Turn off A* Movement flag
+        }
+
+        private IEnumerator leaveQueue_Serviced()
+        {
+            while (ProgressThroughQueue < 1f)
+            {
+                ProgressThroughQueue += Time.deltaTime / Duration;
+                Vector3 position = QueuePath.GetPoint(ProgressThroughQueue);
+                float angle = Vector2.SignedAngle(Vector2.right, (position - transform.position));
+                transform.localPosition = position;
+                transform.eulerAngles = new Vector3(0, 0, angle);
+                yield return null;
+            }
+            LeaveQueue();
+        }
+
+        public void LeaveQueue_Serviced()
+        {
+            StartCoroutine(leaveQueue_Serviced());
         }
 
         public void on_QueueBusy()
         {
             transform.position = startpos;
-            ProgressThroughQueue = 0.0f;
-            CollidedInQueue = false;
-            EnteredQueue = false;
+            ResetValues();
         }
-        
 
-        public void on_QueueCompleted()
+        public void LeaveQueue()
         {
+            rb.isKinematic = false;
             transform.position = startpos;
-            ProgressThroughQueue = 0.0f;
-            CollidedInQueue = false;
-            EnteredQueue = false;
+            TestMove = false;
+            ResetValues();
         }
 
-        private void OnCollisionEnter2D(Collision2D col)
+        private void ResetValues()
         {
-            if (EnteredQueue)
-            {
-                CollidedInQueue = true;
-            }
-            else
-            {
-                CollidedInQueue = false;
-            }
+            ProgressThroughQueue = 0.0f;
+            TimeInQueue = 0.0f;
+            StopPathProgression = false;
+            QueuePath = null;
+            Duration = 0.0f;
+            LeftQueue = false;
+            on_CompletedCallback = null;
         }
     }
 }

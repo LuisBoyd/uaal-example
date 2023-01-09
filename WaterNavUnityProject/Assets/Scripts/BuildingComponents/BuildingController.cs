@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataStructures;
 using RCR.Patterns;
 using RCR.Settings.AI;
 using UnityEngine;
@@ -11,9 +12,10 @@ namespace BuildingComponents
         public void AddCustomerToQueue(IQueue customer) => Model.CurrentQueue.Enqueue(customer);
         
 
-            public void ConsumeCustomersFromQueue()
+        public void ConsumeCustomersFromQueue()
         {
-            Model.Customers_Currently_Servicing.Clear(); //Might be redundant
+            if (!CheckIfCanConsume())
+                return;
             List<IQueue> customers_consumed = new List<IQueue>();
             for (int i = 0; i < Model.CapcityUpgrade.ServiceCapacity; i++)
             {
@@ -32,6 +34,14 @@ namespace BuildingComponents
                 return;
             Model.Customers_Currently_Servicing = customers_consumed;
         }
+
+        private bool CheckIfCanConsume()
+        {
+            if (Model.CurrentQueue.TryPeek(out IQueue customer))
+                return customer.StopPathProgression;
+
+            return false;
+        }
         
         public float Output()
         {
@@ -44,15 +54,16 @@ namespace BuildingComponents
             return Model.m_storedMoney;
         }
 
-        public void release_Customers()
+        public void release_Customers(BezierSpline spline, float duration)
         {
             foreach (IQueue customer in Model.Customers_Currently_Servicing)
             {
                 customer.GameObject.transform.position = Model.WorldPos_buildingExitPoint;
                 customer.GameObject.SetActive(true); //TODO remember I am turning the game object off and on when they are serviced
-                Model.Customers_Currently_Leaving.Add(customer);
-                Model.Customers_Currently_Servicing.Remove(customer);
+                customer.On_QueueEntered(spline, duration);
+                customer.LeaveQueue_Serviced();
             }
+            Model.Customers_Currently_Servicing.Clear();
         }
     }
 }

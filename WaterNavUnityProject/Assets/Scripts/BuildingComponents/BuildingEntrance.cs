@@ -86,7 +86,7 @@ namespace BuildingComponents
             {
                 m_lookup[col].ProgressThroughQueue = 0.0f;
                 m_lookup[col].EnteredQueue = true;
-                m_buildingView.AddCustomerToQueue(m_lookup[col]);
+                //m_buildingView.AddCustomerToQueue(m_lookup[col]);
             }
         }
 
@@ -110,7 +110,7 @@ namespace BuildingComponents
             {
                 if (!m_lookup[collider2D].EnteredQueue)
                 {
-                    m_lookup[collider2D].on_QueueBusy();
+                    //m_lookup[collider2D].on_QueueBusy();
                     m_lookup.Remove(collider2D);
                 }
             }

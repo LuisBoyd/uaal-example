@@ -23,6 +23,8 @@ namespace BuildingComponents
 
         [SerializeField] 
         private Transform QueueBarrier;
+
+        private BoxCollider2D EntranceCollider;
         
         /// <summary>
         /// if true the Entrance to this building force will be applied in the right direction if
@@ -33,7 +35,11 @@ namespace BuildingComponents
         private Vector2 m_queueEndPoint;
 
         private bool EndOfQueueOccupied = false;
+        
+        private Dictionary<Collider2D, IQueue> m_lookup;
 
+        public static float PushForce = 0.5f;
+        public static float TimeToFail = 3.5f;
         public event EventHandler on_TakenInNewCustomers;
         public event EventHandler on_endOfQueueOccupied;
 
@@ -42,14 +48,18 @@ namespace BuildingComponents
         private Vector2 StartOfLineSegment = Vector2.zero;
         private Vector2 EndOfLineSegment = Vector2.zero;
         private float t = 0.0f;
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            m_lookup = new Dictionary<Collider2D, IQueue>();
+            EntranceCollider = GetComponent<BoxCollider2D>();
+        }
+
         private void Start()
         {
-            //StartCoroutine(Service());
-            //DOTween.defaultAutoPlay = AutoPlay.All;
             if(!InitQueue())
                 return; //Maybe Set the entire Object Inactive
-
             StartCoroutine(Service());
 
         }
@@ -59,33 +69,37 @@ namespace BuildingComponents
         /// </summary>
         private void OnTriggerEnter2D(Collider2D col)
         {
-            EndOfQueueOccupied = true;
-            StartCoroutine(CheckEndOfQueue());
+            if (col.TryGetComponent<IQueue>(out IQueue customer))
+            {
+                m_lookup.Add(col, customer);
+                customer.On_QueueEntered(QueuePath, Queue_Duration);
+                StartCoroutine(QueueEntranceTimer(col));
+            }
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            EndOfQueueOccupied = false;
-        }
-
-        private IEnumerator CheckEndOfQueue()
-        {
-            yield return new WaitForSecondsRealtime(0.3f);
-            if (EndOfQueueOccupied)
+            if (m_lookup.ContainsKey(other))
             {
-                on_endOfQueueOccupied?.Invoke(this,EventArgs.Empty);
+                Controller.AddCustomerToQueue(m_lookup[other]);
+                m_lookup.Remove(other);
             }
         }
 
-        public void AddCustomerToQueue(IQueue customer) => Controller.AddCustomerToQueue(customer);
-
-        public void RemoveCustomerFromBuilding(IQueue customer)
+        private IEnumerator QueueEntranceTimer(Collider2D collider2D)
         {
-            if (Model.Customers_Currently_Leaving.Contains(customer))
+            yield return new WaitForSecondsRealtime(TimeToFail);
+            if (m_lookup.ContainsKey(collider2D))
             {
-                Model.Customers_Currently_Leaving.Remove(customer);
+                if (EntranceCollider.OverlapPoint(collider2D.transform.position))
+                {
+                    m_lookup[collider2D].LeaveQueue();
+                    m_lookup.Remove(collider2D);
+                }
             }
         }
+        
+      
 
         private IEnumerator Service()
         {
@@ -95,24 +109,14 @@ namespace BuildingComponents
                 on_TakenInNewCustomers?.Invoke(this,EventArgs.Empty);
                 yield return new WaitForSecondsRealtime(Model.SpeedOfServiceUpgrade.SpeedOfService);
                 //TODO: call Output event on model
-                Controller.release_Customers();
+                Controller.release_Customers(ExitPath, Queue_Duration);
             }
         }
         
-        // private void MoveCustomers()
-        // {
-        //     var Bodies = Model.CurrentQueue.ToArray();
-        //     Model.CurrentQueue.Clear();
-        //     for (int i = 0; i < Bodies.Length; i++)
-        //     {
-        //         Bodies[i].MoveToNextWayPoint();
-        //         Model.CurrentQueue.Enqueue(Bodies[i]);
-        //     }
-        // }
 
         private bool InitQueue()
         {
-            if (QueuePath.CurveCount > GameSettings.Max_Prestige)
+            if (QueuePath.CurveCount - 1 > GameSettings.Max_Prestige)
             {
                 Debug.LogWarning($"The queue path curve line should not exceed the max prestige {GameSettings.Max_Prestige}\n" +
                                  $"aborting initialization of queue {this.gameObject.name}");
@@ -140,7 +144,7 @@ namespace BuildingComponents
                 return false;
             }
 
-            Model.WorldPos_buildingExitPoint = ExitPath.GetControlPoint(0);
+            Model.WorldPos_buildingExitPoint = transform.TransformPoint(ExitPath.GetControlPoint(0));
             QueueBarrier.gameObject.SetActive(true);
             MoveQueueBarrier();
             return true;
@@ -148,22 +152,27 @@ namespace BuildingComponents
 
         private void MoveQueueBarrier()
         {
-            Vector2 prestiageQueueStartPoint = Model.Prestige == 0 ? QueuePath.GetControlPoint(0) : 
-                QueuePath.GetControlPoint((Model.Prestige * 3) - 3); //Get the QueueStartPoint Based on the prestiage of the Building e.g prestiage 1 (starts at 0) will be the start of the 2nd bezier curve on the spline.
+            Vector2 prestiageQueueStartPoint = Model.Prestige == 0 ? QueuePath.GetControlPoint(3) : 
+                QueuePath.GetControlPoint((Model.Prestige * 3)); //Get the QueueStartPoint Based on the prestiage of the Building e.g prestiage 1 (starts at 0) will be the start of the 2nd bezier curve on the spline.
             Vector2 prestiageQueueEndPoint = Model.Prestige == 0
-                ? QueuePath.GetControlPoint(3)
-                : QueuePath.GetControlPoint(Model.Prestige * 3);//Get the QueueEndPoint Based on the prestiage of the Building e.g prestiage 1 (starts at 0) will be the End of the 2nd bezier curve on the spline.
+                ? QueuePath.GetControlPoint(6)
+                : QueuePath.GetControlPoint((Model.Prestige * 3) + 3);//Get the QueueEndPoint Based on the prestiage of the Building e.g prestiage 1 (starts at 0) will be the End of the 2nd bezier curve on the spline.
             
             
-             t = MathUtils.Normalize(0.0f, (float) GameSettings.Max_QueueUpgradeLevel,
-                (float) Model.LengthOfQueueUpgrade.UpgradeLevel); //Get the Normalized Value of the current Upgrade level e.g Could be 4 Between the values of 0 and 5 (Max_QueueUpgradeLevel is a const with value 5)
-
+             // t = MathUtils.Normalize(0.0f, (float) GameSettings.Max_QueueUpgradeLevel,
+             //    (float) Model.LengthOfQueueUpgrade.UpgradeLevel); //Get the Normalized Value of the current Upgrade level e.g Could be 4 Between the values of 0 and 5 (Max_QueueUpgradeLevel is a const with value 5)
+             
+             
             Vector2 queueDirection = QueuePath.GetLinearDirection(prestiageQueueStartPoint, prestiageQueueEndPoint, t);
             
             StartOfLineSegment = transform.TransformPoint(prestiageQueueStartPoint);
             EndOfLineSegment = transform.TransformPoint(prestiageQueueEndPoint);
             
-            m_queueEndPoint = MathUtils.LinerInterpolation(StartOfLineSegment, EndOfLineSegment, t);
+            // m_queueEndPoint = MathUtils.LinerInterpolation(StartOfLineSegment, EndOfLineSegment, t);
+            t = MathUtils.Normalize(0, (GameSettings.Max_QueueUpgradeLevel * GameSettings.Max_Prestige) + GameSettings.Max_QueueUpgradeLevel,
+                (Model.LengthOfQueueUpgrade.UpgradeLevel + Model.LengthOfQueueUpgrade.Prestigelevel) + GameSettings.Max_QueueUpgradeLevel);
+            m_queueEndPoint =
+                QueuePath.GetPoint(t);
             //Find the Vector lying in between prestiageQueueStartPoint and prestiageQueueEndPoint with the percentage of t and assign that as the queue's current endpoint
             QueueBarrier.position = m_queueEndPoint;
             QueueBarrier.rotation = Quaternion.Euler(queueDirection);
@@ -171,25 +180,12 @@ namespace BuildingComponents
 
         private void Update()
         {
-            foreach (IQueue customer in Model.CurrentQueue.Where(x => !x.CollidedInQueue && x.GameObject.activeSelf))
-            {
-                customer.ProgressThroughQueue += Time.deltaTime / Queue_Duration;
-                if (customer.ProgressThroughQueue > 1f)
-                    customer.ProgressThroughQueue = 1f;
+            foreach (var KeyPairValue in m_lookup)
+                KeyPairValue.Value.MoveThroughQueue();
+            
+            foreach (IQueue customer in Model.CurrentQueue)
+                customer.MoveThroughQueue();
 
-                // customer.ProgressThroughQueue = MathUtils.Normalize(0.0f, t, customer.ProgressThroughQueue);
-
-                customer.GameObject.transform.position = QueuePath.GetPoint(customer.ProgressThroughQueue);
-            }
-
-            foreach (IQueue customer in Model.Customers_Currently_Leaving)
-            {
-                customer.ProgressThroughQueue += Time.deltaTime / Queue_Duration;
-                if (customer.ProgressThroughQueue > 1f)
-                    customer.ProgressThroughQueue = 1f;
-
-                customer.GameObject.transform.position = ExitPath.GetPoint(customer.ProgressThroughQueue);
-            }
         }
     }
 }
