@@ -10,52 +10,20 @@ namespace RCR.Settings.AI
 {
     public class CustomerBrain : DynamicArtificalIntelligentBrain, IQueue
     {
-        [SerializeField] 
-        private Transform RayCastHelper;
-
+        #region TestCode
         public bool TestMove;
         private float x;
+        #endregion
+
         private Rigidbody2D rb;
         private Collider2D m_collider2D;
-        private float RayDistance;
         public BezierSpline QueuePath { get; set; }
-        public Action on_CompletedCallback { get; set; }
         public float Duration { get; set; }
         public float TimeInQueue { get; set; }
         public bool StopPathProgression { get; set; }
         public bool EnteredQueue { get; set; }
         public bool LeftQueue { get; set; }
-        public bool HasBeenServiced_LeavingQueue { get; set; }
-        public event EventHandler<IQueue> on_LeftQueue;
-
-        public GameObject GameObject
-        {
-            get => this.gameObject;
-        }
-
         public float ProgressThroughQueue { get; set; }
-
-        public bool CollidedInQueue
-        {
-            get
-            {
-                return m_collidedInQueue;
-            }
-            set
-            {
-                if (value)
-                {
-                    rb.velocity = Vector2.zero;
-                    rb.angularVelocity = 0.0f;
-                }
-
-                m_collidedInQueue = value;
-            }
-        }
-
-        private bool m_collidedInQueue = false;
-        public int QueueMaxLength { get; set; }
-        public int QueuePosition { get; set; }
 
         public Vector3 startpos;
 
@@ -63,30 +31,33 @@ namespace RCR.Settings.AI
         {
             rb = GetComponent<Rigidbody2D>();
             m_collider2D = GetComponent<Collider2D>();
+            #region debugCode
             startpos = transform.position;
             x = transform.position.x;
+            #endregion
+            
         }
 
         private void Update()
         {
+            #region DebugCode
+
             if (TestMove && QueuePath == null)
             {
                 x += Time.deltaTime / 1f;
                 transform.position = new Vector3(x, transform.position.y);
             }
-               
+
+            #endregion
+            
         }
 
         public void MoveThroughQueue()
         {
-            if (!HasBeenServiced_LeavingQueue)
-            {
-                CheckForTimeInQueue();
-                CheckForQueueBarriers();
-                if (StopPathProgression)
-                    return;
-            }
-
+            CheckForTimeInQueue();
+            CheckForQueueBarriers();
+            if (StopPathProgression)
+                return;
             ProgressThroughQueue += Time.deltaTime / Duration;
             if (ProgressThroughQueue > 1f)
             {
@@ -98,9 +69,6 @@ namespace RCR.Settings.AI
             transform.eulerAngles = new Vector3(0, 0, angle);
         }
         
-
-      
-
         private void CheckForQueueBarriers()
         {
             int layerMask = 1 << 6;
@@ -144,23 +112,32 @@ namespace RCR.Settings.AI
             LeaveQueue();
         }
 
-        public void LeaveQueue_Serviced()
+        public void LeaveQueue_Serviced(Vector3 LeavingPoint)
         {
+            transform.position = LeavingPoint;
+            gameObject.SetActive(true);
             StartCoroutine(leaveQueue_Serviced());
         }
-
-        public void on_QueueBusy()
-        {
-            transform.position = startpos;
-            ResetValues();
-        }
+        
 
         public void LeaveQueue()
         {
             rb.isKinematic = false;
+            LeftQueue = true;
             transform.position = startpos;
             TestMove = false;
+        }
+
+        public void EnterService()
+        {
+            gameObject.SetActive(false);
             ResetValues();
+        }
+
+        public void LeaveService(Vector3 LeavingPoint)
+        { 
+            transform.position = LeavingPoint;
+            gameObject.SetActive(true);
         }
 
         private void ResetValues()
@@ -171,7 +148,6 @@ namespace RCR.Settings.AI
             QueuePath = null;
             Duration = 0.0f;
             LeftQueue = false;
-            on_CompletedCallback = null;
         }
     }
 }

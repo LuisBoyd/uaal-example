@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DataStructures;
 using RCR.Patterns;
@@ -21,9 +22,8 @@ namespace BuildingComponents
             {
                 if (Model.CurrentQueue.TryDequeue(out IQueue result))
                 {
-                    result.ProgressThroughQueue = 0f;
                     customers_consumed.Add(result);
-                    result.GameObject.SetActive(false);
+                    result.EnterService();
                 }
                 else
                 {
@@ -54,14 +54,14 @@ namespace BuildingComponents
             return Model.m_storedMoney;
         }
 
-        public void release_Customers(BezierSpline spline, float duration)
+        public IEnumerator release_Customers(BezierSpline spline, float duration)
         {
             foreach (IQueue customer in Model.Customers_Currently_Servicing)
             {
-                customer.GameObject.transform.position = Model.WorldPos_buildingExitPoint;
-                customer.GameObject.SetActive(true); //TODO remember I am turning the game object off and on when they are serviced
+               //TODO remember I am turning the game object off and on when they are serviced
                 customer.On_QueueEntered(spline, duration);
-                customer.LeaveQueue_Serviced();
+                customer.LeaveQueue_Serviced(Model.WorldPos_buildingExitPoint);
+                yield return new WaitForSecondsRealtime(0.3f);
             }
             Model.Customers_Currently_Servicing.Clear();
         }

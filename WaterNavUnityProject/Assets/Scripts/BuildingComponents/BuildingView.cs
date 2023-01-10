@@ -40,9 +40,6 @@ namespace BuildingComponents
 
         public static float PushForce = 0.5f;
         public static float TimeToFail = 3.5f;
-        public event EventHandler on_TakenInNewCustomers;
-        public event EventHandler on_endOfQueueOccupied;
-
         private static float Queue_Duration = 10f;
 
         private Vector2 StartOfLineSegment = Vector2.zero;
@@ -92,10 +89,12 @@ namespace BuildingComponents
             if (m_lookup.ContainsKey(collider2D))
             {
                 if (EntranceCollider.OverlapPoint(collider2D.transform.position))
-                {
                     m_lookup[collider2D].LeaveQueue();
-                    m_lookup.Remove(collider2D);
-                }
+                
+                if(!m_lookup[collider2D].LeftQueue)
+                    Controller.AddCustomerToQueue(m_lookup[collider2D]);
+
+                m_lookup.Remove(collider2D);
             }
         }
         
@@ -106,10 +105,9 @@ namespace BuildingComponents
             while (isActiveAndEnabled && IsValid)
             {
                 Controller.ConsumeCustomersFromQueue();
-                on_TakenInNewCustomers?.Invoke(this,EventArgs.Empty);
                 yield return new WaitForSecondsRealtime(Model.SpeedOfServiceUpgrade.SpeedOfService);
                 //TODO: call Output event on model
-                Controller.release_Customers(ExitPath, Queue_Duration);
+                yield return Controller.release_Customers(ExitPath, Queue_Duration);
             }
         }
         
