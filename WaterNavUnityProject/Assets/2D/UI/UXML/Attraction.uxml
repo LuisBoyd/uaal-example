@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd">
+    <Style src="project://database/Assets/2D/UI/Uss/Attraction.uss?fileID=7433441132597879392&amp;guid=8b2b18532da119943b2472649d71dc06&amp;type=3#Attraction" />
+    <ui:VisualElement name="Background" class="Attraction-Background" style="background-color: rgb(255, 255, 255); border-top-left-radius: 25px; border-bottom-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px;">
+        <ui:VisualElement name="Tittle" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); max-width: initial; max-height: 10%; min-height: 20%;" />
+    </ui:VisualElement>
+</ui:UXML>
