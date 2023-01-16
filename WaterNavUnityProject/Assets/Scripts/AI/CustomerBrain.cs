@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DataStructures;
 using DG.Tweening;
+using Events.Library.Models;
+using Events.Library.Models.TestEvents;
+using NewManagers;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -32,6 +36,8 @@ namespace RCR.Settings.AI
             rb = GetComponent<Rigidbody2D>();
             m_collider2D = GetComponent<Collider2D>();
             #region debugCode
+
+            GameManager_2_0.Instance.EventBus.Subscribe<UnityEditorClickedBool>(On_UnityClickedEditorBoolEvent);
             startpos = transform.position;
             x = transform.position.x;
             #endregion
@@ -149,5 +155,16 @@ namespace RCR.Settings.AI
             Duration = 0.0f;
             LeftQueue = false;
         }
+
+        private IEnumerator On_UnityClickedEditorBoolEvent(UnityEditorClickedBool evnt, EventArgs args)
+        {
+            Debug.Log($"{this.gameObject.name} Ran an event");
+            yield return null;
+        }
+        // private Task On_UnityClickedEditorBoolEvent<TEvent>(TEvent arg1, EventArgs arg2) where TEvent : BaseEvent
+        // {
+        //     Debug.Log($"{this.gameObject.name} Ran an event");
+        //     return null;
+        // }
     }
 }

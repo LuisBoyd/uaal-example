@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using BuildingComponents.ScriptableObjects;
 using DataStructures;
 using RCR.Patterns;
 using RCR.Settings.AI;
@@ -64,6 +65,11 @@ namespace BuildingComponents
                 yield return new WaitForSecondsRealtime(0.3f);
             }
             Model.Customers_Currently_Servicing.Clear();
+        }
+
+        public void SetConcreteBuildingType(ConcreteBuildingObject obj)
+        {
+            Model.ConcreteBuildingObject = obj;
         }
     }
 }

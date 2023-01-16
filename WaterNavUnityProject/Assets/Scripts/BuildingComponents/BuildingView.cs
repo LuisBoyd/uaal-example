@@ -2,9 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DataStructures;
 using DG.Tweening;
 using DG.Tweening.Plugins.Core.PathCore;
+using Events.Library.Models.BuildingEvents;
+using Events.Library.Models.TestEvents;
+using NewManagers;
 using RCR.Patterns;
 using RCR.Settings;
 using RCR.Settings.AI;
@@ -24,33 +28,36 @@ namespace BuildingComponents
         [SerializeField] 
         private Transform QueueBarrier;
 
+        public Vector3 ProgressUIOffset;
+
         private BoxCollider2D EntranceCollider;
-        
-        /// <summary>
-        /// if true the Entrance to this building force will be applied in the right direction if
-        /// not then the left and the exit force will be always be the opposite.
-        /// </summary>
-        public bool ApplyEntranceForceRight;
+
+        private bool IsReady = false;
 
         private Vector2 m_queueEndPoint;
 
         private bool EndOfQueueOccupied = false;
         
         private Dictionary<Collider2D, IQueue> m_lookup;
-
-        public static float PushForce = 0.5f;
         public static float TimeToFail = 3.5f;
         private static float Queue_Duration = 10f;
 
         private Vector2 StartOfLineSegment = Vector2.zero;
         private Vector2 EndOfLineSegment = Vector2.zero;
         private float t = 0.0f;
+        public bool TriggerEvent;
 
         protected override void Awake()
         {
             base.Awake();
             m_lookup = new Dictionary<Collider2D, IQueue>();
             EntranceCollider = GetComponent<BoxCollider2D>();
+
+            #region EventPreperation
+
+            GameManager_2_0.Instance.EventBus.Subscribe<ConcreteBuildingSetEvent>(On_ConcreteBuildingSet);
+
+            #endregion
         }
 
         private void Start()
@@ -61,12 +68,31 @@ namespace BuildingComponents
 
         }
 
+        private IEnumerator On_ConcreteBuildingSet(ConcreteBuildingSetEvent evnt, EventArgs args)
+        {
+            /*TODO
+             1.Try and Cast the args to the correctType
+             1.Set the ConcreteBuildingType so it's avalible
+             2.Start the Initial Building with progress Updates
+             3.5. Wait Until Construction Is Done......!!!!
+             3.Can Try To Initialise the queue and then report any Problems
+             4.Set the service Corutine to start up.
+             5.When all that is done I can turn IsReady = true
+             */
+            ConcreteBuildingSetArgs casted = null;
+            if (!LBUtilities.Cast<ConcreteBuildingSetArgs>(args, out casted))
+                yield return null;
+
+            Model.ConcreteBuildingObject = casted.ConcreteBuildingObject;
+
+        }
+        
         /// <summary>
         /// A collider has touched the Queue Trigger
         /// </summary>
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (col.TryGetComponent<IQueue>(out IQueue customer))
+            if (IsReady && col.TryGetComponent<IQueue>(out IQueue customer))
             {
                 m_lookup.Add(col, customer);
                 customer.On_QueueEntered(QueuePath, Queue_Duration);
@@ -76,7 +102,7 @@ namespace BuildingComponents
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (m_lookup.ContainsKey(other))
+            if (IsReady && m_lookup.ContainsKey(other))
             {
                 Controller.AddCustomerToQueue(m_lookup[other]);
                 m_lookup.Remove(other);
@@ -184,6 +210,14 @@ namespace BuildingComponents
             foreach (IQueue customer in Model.CurrentQueue)
                 customer.MoveThroughQueue();
 
+            if (TriggerEvent)
+            {
+                StartCoroutine(
+                    GameManager_2_0.Instance.EventBus.Publish(new UnityEditorClickedBool(), EventArgs.Empty));
+                TriggerEvent = false;
+            }
+
         }
+        
     }
 }

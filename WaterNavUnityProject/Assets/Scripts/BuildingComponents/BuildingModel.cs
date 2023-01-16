@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using BuildingComponents.ScriptableObjects;
 using RCR.Patterns;
 using RCR.Settings.AI;
+using RCR.Utilities;
 using UnityEngine;
 
 namespace BuildingComponents
@@ -13,12 +15,16 @@ namespace BuildingComponents
         public SpeedOfServiceUpgrade SpeedOfServiceUpgrade;
         public TicketPriceUpgrade TicketPriceUpgrade;
         public Vector3 WorldPos_buildingExitPoint;
-
         public float m_storedMoney;
 
+        public ConcreteBuildingObject ConcreteBuildingObject;
+        
+        
         public Queue<IQueue> CurrentQueue; //TODO: change to Customer Type
         public List<IQueue> Customers_Currently_Servicing;
         public List<IQueue> Customers_Currently_Leaving;
+        
+        //TODO Event stuff 
 
         public int CurrentlyServicingQuantity
         {
@@ -37,6 +43,7 @@ namespace BuildingComponents
             Customers_Currently_Servicing = new List<IQueue>();
             Customers_Currently_Leaving = new List<IQueue>();
             WorldPos_buildingExitPoint = Vector3.zero;
+            ConcreteBuildingObject = null;
         }
     }
 }

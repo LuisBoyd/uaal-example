@@ -324,7 +324,32 @@ namespace RCR.Utilities
             float oneMinusT = 1f - t;
             return oneMinusT * a + t * b;
         }
-        
+
+        /// <summary>
+        /// Will Compare 2 floating point values with a margin of 0.001% difference
+        /// In which cas it's most likely they are equal
+        /// </summary>
+        /// <returns></returns>
+        public static bool FloatingPointComparision(double a, double b)
+        {
+            double diffrence = Math.Abs(a * 0.00001);
+            if (Math.Abs(a - b) <= diffrence)
+                return true;
+            return false;
+        }
+        /// <summary>
+        /// Will Compare 2 floating point values with a margin of 0.001% difference
+        /// In which cas it's most likely they are equal
+        /// </summary>
+        /// <returns></returns>
+        public static bool FloatingPointComparision(float a, float b)
+        {
+            float diffrence = MathF.Abs(a * 0.00001f);
+            if (MathF.Abs(a - b) <= diffrence)
+                return true;
+
+            return false;
+        }
         
         
     }
