@@ -96,5 +96,43 @@ namespace RCR.Utilities
                 yield return new WaitUntil((() => task.IsCompleted));
             }
         }
+
+        public static Sprite SpriteFromTexture(Texture2D texture)
+        {
+            if (!IsPower(texture.width, 2.0f) || !IsPower(texture.height, 2.0f))
+            {
+                Debug.LogWarning($"{texture.name} is not power of 2");
+                return null;
+            }
+            
+            
+            return Sprite.Create(texture, new Rect(Vector2.zero,
+                    new Vector2(texture.width, texture.height)),
+                new Vector2((float)texture.width / 2, (float)texture.height / 2),
+                (float)texture.width / 2);
+        }
+
+        public static bool IsPower(float a, float b)
+        {
+            double res1 = Math.Log(b) / Math.Log(a);
+            double res2 = Math.Log(b) / Math.Log(a);
+
+            return (FloatingPointComparision(res1, res2));
+        }
+        public static bool FloatingPointComparision(double a, double b)
+        {
+            double diffrence = Math.Abs(a * 0.00001);
+            if (Math.Abs(a - b) <= diffrence)
+                return true;
+            return false;
+        }
+        public static bool FloatingPointComparision(float a, float b)
+        {
+            float diffrence = MathF.Abs(a * 0.00001f);
+            if (MathF.Abs(a - b) <= diffrence)
+                return true;
+
+            return false;
+        }
     }
 }

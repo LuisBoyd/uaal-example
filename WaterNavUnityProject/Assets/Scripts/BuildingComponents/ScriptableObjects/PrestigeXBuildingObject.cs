@@ -16,6 +16,7 @@ namespace BuildingComponents.ScriptableObjects
         private Texture2D[] buildingAnimation;
 
         public string Name;
+        public int Cost;
         [TextArea] 
         public string Description;
 
