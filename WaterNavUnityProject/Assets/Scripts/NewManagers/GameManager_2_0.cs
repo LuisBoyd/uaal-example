@@ -1,4 +1,7 @@
-﻿using Events.Library;
+﻿using System;
+using System.Collections;
+using Events.Library;
+using Events.Library.Models.SystemEvents;
 using Events.Library.Unity;
 using Events.Library.Utils;
 using RCR.BaseClasses;
@@ -17,6 +20,11 @@ namespace NewManagers
             EventBus = new UnityEventBus(new TokenUtils());
         }
 
+        private IEnumerator Start()
+        {
+           yield return EventBus.Publish(new LoadRequestEvent(), EventArgs.Empty);
+        }
+
         #region EventBusStuff
         
         #endregion
@@ -26,6 +34,15 @@ namespace NewManagers
         public GameObject Clone(GameObject obj) => Instantiate(obj);
 
         #endregion
+
+        #region OnEnable
+        #endregion
+        
+        #region OnDisable
+        
+
+        #endregion
+        
 
     }
 }
