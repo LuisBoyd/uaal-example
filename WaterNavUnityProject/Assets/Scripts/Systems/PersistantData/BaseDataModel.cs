@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Systems.PersistantData
@@ -19,6 +20,8 @@ namespace Systems.PersistantData
 
         private FieldInfo _currentField;
 
+        protected JsonSerializer _serializer;
+
         public virtual string FileLocation
         {
             get => _fileLocation;
@@ -31,18 +34,10 @@ namespace Systems.PersistantData
                                                                               | BindingFlags.NonPublic)
                 .Where(x => x.GetCustomAttributes(typeof(JsonRequiredAttribute), false).Length > 0);
             _fileLocation = "DefaultData.json";
-            _JsonTokenlookup = new Dictionary<JsonToken, Action<JsonReader>>()
-            {
-                {JsonToken.None, JsonNone},
-                {JsonToken.StartArray, JsonArray},
-                {JsonToken.Boolean, JsonPrimitive},
-                {JsonToken.Bytes, JsonPrimitive},
-                {JsonToken.Date, JsonPrimitive},
-                {JsonToken.String, JsonPrimitive},
-                {JsonToken.Float, JsonPrimitive},
-                {JsonToken.Integer, JsonPrimitive},
-                {JsonToken.PropertyName, JsonProperty}
-            };
+            if (JsonConvert.DefaultSettings != null) 
+                _serializer = JsonSerializer.Create(JsonConvert.DefaultSettings());
+            if(_serializer == null)
+                Debug.LogError($"serializer was not created so loading and saving can't occur");
         }
         public virtual void Save(JsonWriter writer)
         {
@@ -86,103 +81,27 @@ namespace Systems.PersistantData
                 }
             }
         }
-        private bool CheckJSONtokenType(JsonToken token)
-        {
-            return token is JsonToken.Boolean or JsonToken.Bytes or JsonToken.Date
-                or JsonToken.String or JsonToken.Float or JsonToken.Integer;
-
-        }
+        
         public virtual async Task LoadAsync(JsonReader reader)
         {
-            while (await reader.ReadAsync())
+            JToken token = _serializer.Deserialize<JToken>(reader);
+            foreach (FieldInfo fieldInfo in fields)
             {
-                // if (reader.Value != null)
-                // {
-                //     Debug.Log($"Token: {reader.TokenType}, Value: {reader.Value}");
-                // }
-                // else
-                // {
-                //     Debug.Log($"Token: {reader.TokenType}");
-                // }
-                if (_JsonTokenlookup.ContainsKey(reader.TokenType))
-                {
-                    _JsonTokenlookup[reader.TokenType](reader);
-                }
+                if(token[fieldInfo.Name] != null)
+                    fieldInfo.SetValue(this,token[fieldInfo.Name].ToObject(fieldInfo.FieldType));
             }
         }
         public virtual async Task SaveAsync(JsonWriter writer)
         {
-            FieldInfo[] fields = this.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance
-                                                                              | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
             foreach (FieldInfo fieldInfo in fields)
             {
-                object[] attributes = fieldInfo.GetCustomAttributes(typeof(JsonRequiredAttribute), false);
-                if (attributes.Length > 0)
-                {
-                    if (fieldInfo.FieldType.IsArray)
-                    {
-                        await writer.WritePropertyNameAsync(fieldInfo.Name);
-                        await writer.WriteStartArrayAsync();
-                        Array a = (Array) fieldInfo.GetValue(this);
-                        for (int i = 0; i < a.Length; i++)
-                            await writer.WriteValueAsync(JsonConvert.SerializeObject(a.GetValue(i)));
-                        await writer.WriteEndAsync();
-                    }
-                    else if (fieldInfo.FieldType.IsPrimitive || fieldInfo.FieldType == typeof(string))
-                    {
-                        await writer.WritePropertyNameAsync(fieldInfo.Name);
-                        await writer.WriteValueAsync(fieldInfo.GetValue(this));
-                    }
-                    else
-                    {
-                        string jsonValue = JsonConvert.SerializeObject(fieldInfo.GetValue(this));
-                        await writer.WritePropertyNameAsync(fieldInfo.Name);
-                        await writer.WriteValueAsync(jsonValue);
-                    }
-                }
+                await writer.WritePropertyNameAsync(fieldInfo.Name);
+                _serializer.Serialize(writer, fieldInfo.GetValue(this), fieldInfo.FieldType);
             }
         }
         public virtual void On_FailedLoad()
         {
          
-        }
-        
-        private void JsonNone(JsonReader obj)
-        {
-           
-        }
-        
-        private void JsonArray(JsonReader reader)
-        {
-            List<string> readValues = new List<string>();
-            while (reader.Read() && reader.TokenType != JsonToken.EndArray)
-            {
-                if (CheckJSONtokenType(reader.TokenType))
-                {
-                    readValues.Add((string)reader.Value);
-                }
-            }
-            var json = JsonConvert.SerializeObject(readValues);
-            var converted = JsonConvert.DeserializeObject(json, _currentField.FieldType);
-            if (converted != null)
-            {
-                _currentField.SetValue(this, converted);
-            }
-        }
-
-        private void JsonPrimitive(JsonReader reader)
-        {
-            if (reader.Value != null)
-            {
-                var converted = JsonConvert.DeserializeObject(reader.Value.ToString(), _currentField.FieldType);
-                if(converted != null)
-                    _currentField.SetValue(this, converted);
-            }
-        }
-
-        private void JsonProperty(JsonReader reader)
-        {
-            _currentField = fields.First(x => x.Name == (string)reader.Value);
         }
     }
 }
