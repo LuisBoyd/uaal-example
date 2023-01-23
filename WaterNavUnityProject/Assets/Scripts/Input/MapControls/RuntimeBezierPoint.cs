@@ -1,29 +1,32 @@
-﻿using UnityEngine;
+﻿using Input;
+using PathCreation;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace RCR.Input.MapControls
+namespace Input.MapControls
 {
-    public class RuntimeBezierPoint : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, IPointerMoveHandler, IPointerClickHandler
+    public class RuntimeBezierPoint : InteractableWorldObject
     {
-        public void OnPointerUp(PointerEventData eventData)
+        
+        public BezierPath Path { get; set; }
+        public int Index { get; set; }
+
+        public override void OnPointerUp(PointerEventData eventData)
         {
             Debug.Log($"{name} was pointerUP");
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public override void OnPointerDown(PointerEventData eventData)
         {
             Debug.Log($"{name} was pointerDown");
         }
 
-        public void OnPointerMove(PointerEventData eventData)
+        public override void OnDrag(PointerEventData eventData)
         {
-            Debug.Log($"{name} was pointerMove");
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            Debug.Log($"{name} was Clicked");
-
+            Vector3 updatedPosition = transform.localPosition + new Vector3(eventData.delta.x, eventData.delta.y);
+            Debug.Log(eventData.delta);
+            //Debug.Log(updatedPosition);
+            Path.MovePoint(Index, updatedPosition);
         }
     }
 }

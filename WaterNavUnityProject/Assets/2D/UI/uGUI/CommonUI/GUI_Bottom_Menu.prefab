@@ -196,7 +196,6 @@ GameObject:
   - component: {fileID: 8896834880461660010}
   - component: {fileID: 8896834880461660011}
   - component: {fileID: 8042662291232789906}
-  - component: {fileID: 2221011622540349156}
   m_Layer: 5
   m_Name: GUI_Bottom_Menu
   m_TagString: Untagged
@@ -276,18 +275,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Match_Height: 0
   Match_Width: 1
---- !u!114 &2221011622540349156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8896834880461660009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da829fe0fd4b4db8853cc8e8a926b903, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3353417188197718567
 PrefabInstance:
   m_ObjectHideFlags: 0

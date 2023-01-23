@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using PathCreation;
 using PathCreation.Utility;
-using RCR.Input.MapControls;
+using Input.MapControls;
 using UnityEngine;
 
 namespace Mesh.Bezier
@@ -59,7 +59,9 @@ namespace Mesh.Bezier
                 Transform point = new GameObject($"Point_{i}").transform;
                 point.SetParent(this.transform);
                 SpriteRenderer spriteRenderer = point.gameObject.AddComponent<SpriteRenderer>();
-                point.gameObject.AddComponent<RuntimeBezierPoint>();
+                RuntimeBezierPoint runtimeBezierPoint = point.gameObject.AddComponent<RuntimeBezierPoint>();
+                runtimeBezierPoint.Index = i;
+                runtimeBezierPoint.Path = bezierPath;
                 point.gameObject.AddComponent<CircleCollider2D>();
                 spriteRenderer.sprite = _ControlPoint;
                 spriteRenderer.sortingOrder = 1;
@@ -72,10 +74,10 @@ namespace Mesh.Bezier
                 {
                     point.name = $"ControlPoint_{i}";
                     spriteRenderer.color = Color.blue;
-                    // LineRenderer lineRenderer = point.gameObject.AddComponent<LineRenderer>();
-                    // lineRenderer.widthMultiplier = 0.1f; 
-                    // lineRenderer.SetMaterials(new List<Material>(){spriteRenderer.sharedMaterial});
-                    // _lineRenders.Add(point, lineRenderer);
+                    LineRenderer lineRenderer = point.gameObject.AddComponent<LineRenderer>();
+                    lineRenderer.widthMultiplier = 0.03f; 
+                    lineRenderer.SetMaterials(new List<Material>(){spriteRenderer.sharedMaterial});
+                    _lineRenders.Add(point, lineRenderer);
                 }
                 _ControlPointtransforms.Add(point);
             }
@@ -113,8 +115,8 @@ namespace Mesh.Bezier
                     //Draw line between control Points
                     if (displayControlPoints)
                     {
-                        // DrawLineRenderer(Transforms[1], Transforms[0]);
-                        // DrawLineRenderer(Transforms[2], Transforms[3]);
+                        DrawLineRenderer(Transforms[1], Transforms[0]);
+                        DrawLineRenderer(Transforms[2], Transforms[3]);
                     }
                     
                     //DrawPath

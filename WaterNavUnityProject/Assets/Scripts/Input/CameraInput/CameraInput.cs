@@ -1,4 +1,5 @@
 ﻿using System;
+using RCR.Utilities;
 using UI.uGUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,6 +14,10 @@ namespace Input.CameraInput
     {
         private Camera m_camera;
         private Physics2DRaycaster m_physics2DRaycaster;
+        private Vector2 _lastFramePosition = Vector2.zero;
+
+        [SerializeField]
+        private float selectionRadius = 0.1f;
 
         public LayerMask layerMask;
 
@@ -85,7 +90,7 @@ namespace Input.CameraInput
             data.PointerEvent.mouse = mouse;
             data.PointerEvent.position = mouse.position.ReadValue();
 #endif
-            data.PointerEvent.delta = Vector2.zero;
+            data.PointerEvent.delta = mouse.delta.ReadValue() * Time.deltaTime;
             
             
             //Trigger a RayCast
@@ -216,18 +221,23 @@ namespace Input.CameraInput
                     ExecuteEvents.updateSelectedHandler);
             }
 
+            //_lastFramePosition = data.PointerEvent.position;
+
         }
 
         private GameObject SendWorldRaycast(Vector2 screenPos)
         {
-            Vector2 location = m_camera.ScreenToWorldPoint(screenPos); //Maybe Clipping Plane????? TODO clipping plane
-            var hit2D = Physics2D.Raycast(location, Vector3.forward);
+            Vector2 location = m_camera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y)); //Maybe Clipping Plane????? TODO clipping plane
+            var hit2D = Physics2D.OverlapCircle(location, selectionRadius); //TODO layermask if I wanted
 #if UNITY_EDITOR
-            Debug.DrawRay(location, Vector3.forward, Color.red, 2.5f);
+            LBUtilities.DrawCircle(location, selectionRadius, 8, Color.red, 2f);
 #endif
-            if (hit2D.collider != null)
+            if (hit2D != null)
             {
-                return hit2D.collider.gameObject;
+#if UNITY_EDITOR
+               Debug.Log($"{hit2D.name} was hit");
+#endif
+                return hit2D.gameObject;
             }
 
             return null;
