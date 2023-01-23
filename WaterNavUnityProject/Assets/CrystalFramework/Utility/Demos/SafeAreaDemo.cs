@@ -19,8 +19,8 @@ namespace Crystal
 
         void Update ()
         {
-            if (Input.GetKeyDown (KeySafeArea))
-                ToggleSafeArea ();
+            // if (Input.GetKeyDown (KeySafeArea))
+            //     ToggleSafeArea ();
         }
 
         /// <summary>

@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 8240291924990135876}
   - component: {fileID: 2830189649427036371}
   - component: {fileID: 386217099025295565}
+  - component: {fileID: 1660141154387985732}
   m_Layer: 5
   m_Name: Button_WaterNav_Style
   m_TagString: Untagged
@@ -242,6 +243,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 3
   m_AspectRatio: 1.1764706
+--- !u!114 &1660141154387985732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276431635293655739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da829fe0fd4b4db8853cc8e8a926b903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4100151296903586822
 GameObject:
   m_ObjectHideFlags: 0

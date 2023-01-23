@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2998828915333438055}
   - component: {fileID: 7994362645704297614}
   - component: {fileID: 8782077056300385316}
+  - component: {fileID: 5242075918097827354}
   m_Layer: 5
   m_Name: Attraction
   m_TagString: Untagged
@@ -111,6 +112,18 @@ MonoBehaviour:
   _costText: {fileID: 8476823750790753716}
   _currency: {fileID: 7068302121483381448}
   _display: {fileID: 9038663964027907430}
+--- !u!114 &5242075918097827354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881859658829382711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da829fe0fd4b4db8853cc8e8a926b903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1739714132044384863
 GameObject:
   m_ObjectHideFlags: 0
