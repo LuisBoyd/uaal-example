@@ -20,10 +20,10 @@ namespace NewManagers
             EventBus = new UnityEventBus(new TokenUtils());
         }
 
-        private IEnumerator Start()
-        {
-           yield return EventBus.Publish(new LoadRequestEvent(), EventArgs.Empty);
-        }
+        // private IEnumerator Start()
+        // {
+        //    //yield return EventBus.Publish(new LoadRequestEvent(), EventArgs.Empty);
+        // }
 
         #region EventBusStuff
         
