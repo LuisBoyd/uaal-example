@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Mesh
 {
-    // [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
+    [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
     public struct BezierJob <G,S> : IJobFor
     where G : struct, IBezierGenerator
     where S : struct, IMeshStreams

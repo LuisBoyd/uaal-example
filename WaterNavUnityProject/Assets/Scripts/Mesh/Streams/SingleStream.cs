@@ -38,7 +38,6 @@ namespace Mesh.Streams
             descriptor.Dispose();
             
             meshData.SetIndexBufferParams(indexCount, IndexFormat.UInt16);
-
             meshData.subMeshCount = 1;
             meshData.SetSubMesh(
                 0, new SubMeshDescriptor(0, indexCount)
@@ -53,32 +52,32 @@ namespace Mesh.Streams
             triangles = meshData.GetIndexData<ushort>().Reinterpret<TriangleUInt16>(2);
         }
 
-        private void reinturpt<T,U>(int expectedSize, int lengthnative) where U : struct
-        where T : struct
-        {
-            long tSize = UnsafeUtility.SizeOf<T>();
-            long uSize = UnsafeUtility.SizeOf<U>();
-
-            long byteLen = ((long)lengthnative) * tSize;
-            long uLen = byteLen / uSize;
-            
-            CheckReinterpretSize<U>(tSize, uSize, expectedSize, byteLen,
-                uLen);
-        }
-
-        private void CheckReinterpretSize<U>(long tsize, long usize, int expectedsize,
-            long bytesize, long ulen)
-        {
-            if (tsize != expectedsize)
-            {
-                Debug.Log("Problem ");
-            }
-
-            if (ulen * usize != bytesize)
-            {
-                Debug.Log("Extra problem");
-            }
-        }
+        // private void reinturpt<T,U>(int expectedSize, int lengthnative) where U : struct
+        // where T : struct
+        // {
+        //     long tSize = UnsafeUtility.SizeOf<T>();
+        //     long uSize = UnsafeUtility.SizeOf<U>();
+        //
+        //     long byteLen = ((long)lengthnative) * tSize;
+        //     long uLen = byteLen / uSize;
+        //     
+        //     CheckReinterpretSize<U>(tSize, uSize, expectedSize, byteLen,
+        //         uLen);
+        // }
+        //
+        // private void CheckReinterpretSize<U>(long tsize, long usize, int expectedsize,
+        //     long bytesize, long ulen)
+        // {
+        //     if (tsize != expectedsize)
+        //     {
+        //         Debug.Log("Problem ");
+        //     }
+        //
+        //     if (ulen * usize != bytesize)
+        //     {
+        //         Debug.Log("Extra problem");
+        //     }
+        // }
     
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

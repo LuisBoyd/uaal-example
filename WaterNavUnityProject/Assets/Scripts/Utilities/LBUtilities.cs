@@ -111,6 +111,21 @@ namespace RCR.Utilities
                 new Vector2((float)texture.width / 2, (float)texture.height / 2),
                 (float)texture.width / 2);
         }
+        
+        public static Sprite SpriteFromTexture(Texture2D texture, float pixelsPerUnit)
+        {
+            if (!IsPower(texture.width, 2.0f) || !IsPower(texture.height, 2.0f))
+            {
+                Debug.LogWarning($"{texture.name} is not power of 2");
+                return null;
+            }
+            
+            
+            return Sprite.Create(texture, new Rect(Vector2.zero,
+                    new Vector2(texture.width, texture.height)),
+                new Vector2((float)texture.width / 2, (float)texture.height / 2),
+                pixelsPerUnit);
+        }
 
         public static bool IsPower(float a, float b)
         {
