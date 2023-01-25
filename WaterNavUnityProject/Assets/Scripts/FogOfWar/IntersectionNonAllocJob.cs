@@ -51,8 +51,8 @@ namespace RCR.Settings.FogOfWar
         private bool LineIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
         {
             float2 cmp = float2(c.x - a.x, c.y - a.y);
-            float2 r = float2(b.x - a.x, b.y - a.y);
-            float2 s = float2(d.x - c.x, d.y - c.y);
+            float2 r = float2(b.x - a.x, b.y - a.y); //  r is the end point of
+            float2 s = float2(d.x - c.x, d.y - c.y); // s end point
 
             float cmPxr = cmp.x * r.y - cmp.y * r.x;
             float cmPxs = cmp.x * s.y - cmp.y * s.x;
