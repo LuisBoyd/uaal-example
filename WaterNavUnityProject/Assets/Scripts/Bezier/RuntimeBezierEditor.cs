@@ -5,7 +5,7 @@ using PathCreation.Utility;
 using Input.MapControls;
 using UnityEngine;
 
-namespace Mesh.Bezier
+namespace Bezier
 {
     [RequireComponent(typeof(PathCreator))]
     public class RuntimeBezierEditor : MonoBehaviour
