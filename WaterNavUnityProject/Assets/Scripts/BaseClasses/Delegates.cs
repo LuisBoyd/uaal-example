@@ -28,8 +28,7 @@ namespace RCR.BaseClasses
     public delegate void OnVerificationResult(bool result);
 
     public delegate void OnQuit();
-
-    public delegate void OnGameModeSwitched(GameMode mode);
+    
 
     public delegate void OnObservableValueChanged<P, C>(P previousValue, C currentValue);
     

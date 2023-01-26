@@ -6,6 +6,7 @@ using DataStructures;
 using RCR.Patterns;
 using RCR.Settings.AI;
 using UnityEngine;
+using Bezier;
 
 namespace BuildingComponents
 {
@@ -55,17 +56,17 @@ namespace BuildingComponents
             return Model.m_storedMoney;
         }
 
-        public IEnumerator release_Customers(BezierSpline spline, float duration)
-        {
-            foreach (IQueue customer in Model.Customers_Currently_Servicing)
-            {
-               //TODO remember I am turning the game object off and on when they are serviced
-                customer.On_QueueEntered(spline, duration);
-                customer.LeaveQueue_Serviced(Model.WorldPos_buildingExitPoint);
-                yield return new WaitForSecondsRealtime(0.3f);
-            }
-            Model.Customers_Currently_Servicing.Clear();
-        }
+        // public IEnumerator release_Customers(BezierSpline spline, float duration)
+        // {
+        //     foreach (IQueue customer in Model.Customers_Currently_Servicing)
+        //     {
+        //        //TODO remember I am turning the game object off and on when they are serviced
+        //         customer.On_QueueEntered(spline, duration);
+        //         customer.LeaveQueue_Serviced(Model.WorldPos_buildingExitPoint);
+        //         yield return new WaitForSecondsRealtime(0.3f);
+        //     }
+        //     Model.Customers_Currently_Servicing.Clear();
+        // }
 
         public void SetConcreteBuildingType(ConcreteBuildingObject obj)
         {

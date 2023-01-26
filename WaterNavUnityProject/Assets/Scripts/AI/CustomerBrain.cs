@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace RCR.Settings.AI
 {
-    public class CustomerBrain : DynamicArtificalIntelligentBrain, IQueue
+    public class CustomerBrain : DynamicArtificalIntelligentBrain//, IQueue
     {
         #region TestCode
         public bool TestMove;
@@ -21,7 +21,7 @@ namespace RCR.Settings.AI
 
         private Rigidbody2D rb;
         private Collider2D m_collider2D;
-        public BezierSpline QueuePath { get; set; }
+        //public BezierSpline QueuePath { get; set; }
         public float Duration { get; set; }
         public float TimeInQueue { get; set; }
         public bool StopPathProgression { get; set; }
@@ -46,15 +46,15 @@ namespace RCR.Settings.AI
 
         private void Update()
         {
-            #region DebugCode
-
-            if (TestMove && QueuePath == null)
-            {
-                x += Time.deltaTime / 1f;
-                transform.position = new Vector3(x, transform.position.y);
-            }
-
-            #endregion
+            // #region DebugCode
+            //
+            // if (TestMove && QueuePath == null)
+            // {
+            //     x += Time.deltaTime / 1f;
+            //     transform.position = new Vector3(x, transform.position.y);
+            // }
+            //
+            // #endregion
             
         }
 
@@ -69,10 +69,10 @@ namespace RCR.Settings.AI
             {
                 ProgressThroughQueue = 1f;
             }
-            Vector3 position = QueuePath.GetPoint(ProgressThroughQueue);
-            float angle = Vector2.SignedAngle(Vector2.right, (position - transform.position));
-            transform.localPosition = position;
-            transform.eulerAngles = new Vector3(0, 0, angle);
+            //Vector3 position = QueuePath.GetPoint(ProgressThroughQueue);
+            // float angle = Vector2.SignedAngle(Vector2.right, (position - transform.position));
+            // transform.localPosition = position;
+            //transform.eulerAngles = new Vector3(0, 0, angle);
         }
         
         private void CheckForQueueBarriers()
@@ -95,27 +95,28 @@ namespace RCR.Settings.AI
             //TODO implement checking the time a customer is in the queue to then boot them out of it if they have spent to much time
         }
 
-        public void On_QueueEntered(BezierSpline queue, float speed_of_queue)
+        public void On_QueueEntered(float speed_of_queue)
         {
-            ResetValues();
-            QueuePath = queue;
-            Duration = speed_of_queue;
-            rb.isKinematic = true;
-            //Turn off A* Movement flag
+            // ResetValues();
+            // QueuePath = queue;
+            // Duration = speed_of_queue;
+            // rb.isKinematic = true;
+            // //Turn off A* Movement flag
         }
 
         private IEnumerator leaveQueue_Serviced()
         {
             while (ProgressThroughQueue < 1f)
             {
-                ProgressThroughQueue += Time.deltaTime / Duration;
-                Vector3 position = QueuePath.GetPoint(ProgressThroughQueue);
-                float angle = Vector2.SignedAngle(Vector2.right, (position - transform.position));
-                transform.localPosition = position;
-                transform.eulerAngles = new Vector3(0, 0, angle);
-                yield return null;
+                // ProgressThroughQueue += Time.deltaTime / Duration;
+                // Vector3 position = QueuePath.GetPoint(ProgressThroughQueue);
+                // float angle = Vector2.SignedAngle(Vector2.right, (position - transform.position));
+                // transform.localPosition = position;
+                // transform.eulerAngles = new Vector3(0, 0, angle);
+                // yield return null;
             }
             LeaveQueue();
+            yield return null;
         }
 
         public void LeaveQueue_Serviced(Vector3 LeavingPoint)
@@ -148,12 +149,12 @@ namespace RCR.Settings.AI
 
         private void ResetValues()
         {
-            ProgressThroughQueue = 0.0f;
-            TimeInQueue = 0.0f;
-            StopPathProgression = false;
-            QueuePath = null;
-            Duration = 0.0f;
-            LeftQueue = false;
+            // ProgressThroughQueue = 0.0f;
+            // TimeInQueue = 0.0f;
+            // StopPathProgression = false;
+            // QueuePath = null;
+            // Duration = 0.0f;
+            // LeftQueue = false;
         }
 
         private IEnumerator On_UnityClickedEditorBoolEvent(UnityEditorClickedBool evnt, EventArgs args)
