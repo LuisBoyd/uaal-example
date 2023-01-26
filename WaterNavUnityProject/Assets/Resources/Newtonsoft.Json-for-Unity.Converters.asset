@@ -13,26 +13,8 @@ MonoBehaviour:
   m_Name: Newtonsoft.Json-for-Unity.Converters
   m_EditorClassIdentifier: 
   useUnityContractResolver: 1
-  useAllOutsideConverters: 0
-  outsideConverters:
-  - enabled: 1
-    converterName: WaterNavTiled.CustomConverters.ChunkLayerJsonConverter
-    settings: []
-  - enabled: 1
-    converterName: WaterNavTiled.CustomConverters.GroupLayerJsonConverter
-    settings: []
-  - enabled: 1
-    converterName: WaterNavTiled.CustomConverters.ImageLayerJsonConverter
-    settings: []
-  - enabled: 1
-    converterName: WaterNavTiled.CustomConverters.MapWrapperJsonConverter
-    settings: []
-  - enabled: 1
-    converterName: WaterNavTiled.CustomConverters.ObjectLayerJsonConverter
-    settings: []
-  - enabled: 1
-    converterName: WaterNavTiled.CustomConverters.TileLayerJsonConverter
-    settings: []
+  useAllOutsideConverters: 1
+  outsideConverters: []
   useAllUnityConverters: 1
   unityConverters:
   - enabled: 1
