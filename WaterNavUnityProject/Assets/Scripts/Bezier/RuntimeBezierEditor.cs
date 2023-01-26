@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using PathCreation;
 using PathCreation.Utility;
-using Input.MapControls;
 using UnityEngine;
 
 namespace Bezier
@@ -60,8 +59,8 @@ namespace Bezier
                 point.SetParent(this.transform);
                 SpriteRenderer spriteRenderer = point.gameObject.AddComponent<SpriteRenderer>();
                 RuntimeBezierPoint runtimeBezierPoint = point.gameObject.AddComponent<RuntimeBezierPoint>();
-                runtimeBezierPoint.Index = i;
-                runtimeBezierPoint.Path = bezierPath;
+                //runtimeBezierPoint.Index = i;
+                //runtimeBezierPoint.Path = bezierPath;
                 point.gameObject.AddComponent<CircleCollider2D>();
                 spriteRenderer.sprite = _ControlPoint;
                 spriteRenderer.sortingOrder = 1;

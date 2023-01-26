@@ -150,6 +150,30 @@ namespace RCR.Utilities
             return false;
         }
 
+        #region Maths-Floats
+
+        /// <summary>
+        /// Round a float value by however many DP (decimal places) default is 2
+        /// </summary>
+        public static float Round(float value, int dp = 2)
+        {
+            float mult = Mathf.Pow(10.0f, (float) dp);
+            return Mathf.Round(value * mult) / mult;
+        }
+
+        public static Vector3 Round(Vector3 v)
+        {
+            v.x = Round(v.x);
+            v.y = Round(v.y);
+            if (v.z == 0)
+                return v;
+            v.z = Round(v.z);
+            return v;
+        }
+        
+        #endregion
+        
+
         #region DrawingShapes
 
         public static void DrawCircle(Vector3 position, float radius, int segments, Color color, float time = 1f)

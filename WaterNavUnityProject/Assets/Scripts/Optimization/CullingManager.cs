@@ -41,11 +41,16 @@ namespace RCR.Settings.Optimization
             Max_BoundingSpheres = new BoundingSphere[PreWarm_Count];
             Max_CullingComponents = new CullingComponent[PreWarm_Count];
             
-            localCullingGroup.SetBoundingSphereCount(PreWarm_Count);
             localCullingGroup.SetBoundingSpheres(Max_BoundingSpheres);
+            localCullingGroup.SetBoundingSphereCount(PreWarm_Count);
             //this will be the centre of the camera
             localCullingGroup.SetDistanceReferencePoint(Camera.main.transform); 
             
+        }
+
+        private void OnDisable()
+        {
+            localCullingGroup.Dispose();
         }
 
         private void FixedUpdate()
@@ -88,7 +93,7 @@ namespace RCR.Settings.Optimization
         {
             for (int i = 0; i < Max_CullingComponents.Length; i++)
             {
-                if (!LBUtilities.AssertNull(Max_CullingComponents[i]))
+                if (LBUtilities.AssertNull(Max_CullingComponents[i]))
                 {
                     Max_BoundingSpheres[i] = Max_CullingComponents[i].BoundingSphere;
                 }
