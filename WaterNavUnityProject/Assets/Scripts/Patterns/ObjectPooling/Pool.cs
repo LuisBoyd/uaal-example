@@ -38,7 +38,7 @@ namespace Patterns.ObjectPooling
         
         public virtual T Request()
         {
-            return Avalible.Count > 0 ? Avalible.Pop() : Create();
+            return Avalible.Count > 0 ? Avalible.Pop() : Factory.Create();
         }
 
         public virtual IEnumerable<T> Request(int num = 1)
