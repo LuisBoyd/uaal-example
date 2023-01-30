@@ -1,6 +1,7 @@
 ﻿using Patterns.ObjectPooling;
 using Patterns.ObjectPooling.Model;
 using RCR.Patterns;
+using RCR.Settings.NewScripts.Geometry;
 using UnityEngine;
 
 namespace NewScripts.Model
@@ -8,7 +9,7 @@ namespace NewScripts.Model
     public class Chunk : BaseModel
     {
         #region Varibles
-        public int ID; //Just in order the are instantiated in
+        // public int ID; //Just in order the are instantiated in
         public Tile[,] tiles;
         public int Width;
         public int Height;
@@ -16,14 +17,21 @@ namespace NewScripts.Model
         public int OriginX;
         public int OriginY;
 
-        public int TileOriginX => (Width * OriginX)/2; 
-        public int TileOriginY => (Height * OriginY)/2; 
+        public Vector2Int MatrixID;
         
         public IPool<Tile> TilePool;
+
+        public Line[] Edges;
 
         public World World;
 
         public bool HasBeenInitialized = false;
+
+        /// <summary>
+        /// Active Means the chunk currently has any Tiles or anything inside it. does not mean it's currently visible on screen (could be culled)
+        /// </summary>
+        public bool Active = false;
+        
         #endregion
 
         #region Properties

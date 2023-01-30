@@ -7,6 +7,8 @@ namespace Events.Library.Unity
     public interface IUnitySubscription
     {
         Token Token { get; }
-        IEnumerator Publish(BaseEvent evnt, EventArgs args);
+        IEnumerator Publish_Coroutine(BaseEvent evnt, EventArgs args);
+
+        void Publish(BaseEvent evnt, EventArgs args);
     }
 }

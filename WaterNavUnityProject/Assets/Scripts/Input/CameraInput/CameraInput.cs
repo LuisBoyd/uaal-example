@@ -1,4 +1,7 @@
 ﻿using System;
+using Events.Library.Models.InputEvent;
+using NewManagers;
+using RCR.Settings.NewScripts.Camera;
 using RCR.Utilities;
 using UI.uGUI;
 using UnityEngine;
@@ -15,6 +18,8 @@ namespace Input.CameraInput
         private Camera m_camera;
         private Physics2DRaycaster m_physics2DRaycaster;
         private Vector2 _lastFramePosition = Vector2.zero;
+        public GameCamera _gameCamera;
+        public bool IgnoreProcess = false;
 
         [SerializeField]
         private float selectionRadius = 0.1f;
@@ -69,6 +74,9 @@ namespace Input.CameraInput
 
         public override void Process()
         {
+            if(IgnoreProcess)
+                return;
+            
             m_physics2DRaycaster.eventMask = layerMask; //TODO set layer mask
 #if UNITY_ANDROID || UNITY_IOS
             Touch touch = input.touchCount > 0 ? input.GetTouch(0) : default;
@@ -117,16 +125,19 @@ namespace Input.CameraInput
             base.HandlePointerExitAndEnter(data.PointerEvent, data.CurrentPoint);
             bool didClickThisFrame = false;
             bool DidClickUpThisFrame = false;
+            bool CurrentlyPressedThisFrame = false;
 
 #if UNITY_ANDROID || UNITY_IOS
-                        if (input.touchCount > 0)
+             if (input.touchCount > 0)
             {
                 didClickThisFrame = touch.phase == TouchPhase.Began ? true : false;
                 DidClickUpThisFrame = touch.phase == TouchPhase.Ended ? true : false;
+                CurrentlyPressedThisFrame = touch.phase == TouchPhase.Moved ? true : false;
             }
 #elif UNITY_EDITOR || UNITY_STANDALONE
             didClickThisFrame = mouse.leftButton.wasPressedThisFrame;
             DidClickUpThisFrame = mouse.leftButton.wasReleasedThisFrame;
+            CurrentlyPressedThisFrame = mouse.leftButton.isPressed;
 #endif
             
             if (didClickThisFrame)
@@ -172,10 +183,9 @@ namespace Input.CameraInput
                         data.CurrentPressed = newPressed;
                         Select(data.CurrentPressed);
                     }
-
+                    
                     ExecuteEvents.Execute(data.CurrentPressed, data.PointerEvent, ExecuteEvents.beginDragHandler);
                     //ExecuteEvents.Execute(Controll.gameobject, data.PointerEvent, ExecuteEvents.beginDragHandler); this is to execute an event on some controller if it implements the required interface
-
                     data.PointerEvent.pointerDrag = data.CurrentPressed;
                     data.CurrentDragging = data.CurrentPressed;
                 }
@@ -212,6 +222,11 @@ namespace Input.CameraInput
                 data.PointerEvent.Current = data.CurrentPressed;
                 ExecuteEvents.Execute(data.CurrentDragging, data.PointerEvent, ExecuteEvents.dragHandler);
                 //ExecuteEvents.Execute(Controller.gameobject, data.PointerEvent, ExecuteEvents.dragHandler);
+            }
+
+            if (data.CurrentDragging == null && CurrentlyPressedThisFrame)
+            {
+                ExecuteEvents.Execute(_gameCamera.gameObject, data.PointerEvent, ExecuteEvents.dragHandler);
             }
 
             if (base.eventSystem.currentSelectedGameObject != null)

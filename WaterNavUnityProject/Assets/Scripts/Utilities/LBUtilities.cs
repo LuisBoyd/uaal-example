@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace RCR.Utilities
 {
@@ -172,7 +173,6 @@ namespace RCR.Utilities
         }
         
         #endregion
-        
 
         #region DrawingShapes
 
@@ -206,6 +206,108 @@ namespace RCR.Utilities
             }
         }
 
+        #endregion
+
+        #region Convertes
+
+        public static Vector2 Vector3_To_Vecto2(Vector3 vector)
+        {
+            return new Vector2(vector.x,vector.y);
+        }
+        
+        #endregion
+
+        /// <summary>
+        /// Get which way a slope is going clockwise or counter clockwise (and collinear if it's straight)
+        /// </summary>
+        /// <returns>
+        ///  1 if the slope a -> b -> c is CounterClockWise,
+        ///  0 if the slope a -> b -> c is Collinear,
+        ///  -1 if the slope a -> b -> c is ClockWise,
+        ///
+        ///  -2 if something has gone wrong
+        /// </returns>
+        public static int SlopeOrientation(Vector2 a, Vector2 b, Vector2 c)
+        {
+            float d = (c.y - b.y) * (b.x - a.x) - (b.y - a.y) * (c.x - b.x);
+            if (d > 0)
+                return 1;
+            if (d < 0)
+                return -1;
+            else
+            {
+                return 0;
+            }
+        }
+
+        #region Topology
+
+        public static Vector2[] graham_Scan(Vector2[] points)
+        {
+            Vector2 P0 = points.OrderBy(p => p.y).ThenBy(p => p.x).First();
+            points = points.OrderBy(p => Mathf.Atan2(p.y - P0.y, p.x - P0.x)).ToArray();
+            List<Vector2> hull = new List<Vector2>();
+            for (int i = 0; i < points.Length; i++)
+            {
+                while (hull.Count >= 2 && SlopeOrientation(hull[^2], hull[^1], points[i]) != 1)
+                {
+                    hull.RemoveAt(hull.Count - 1);
+                }
+                hull.Add(points[i]);
+            }
+            return hull.ToArray();
+        }
+        //Check The order of Vectors and the Slope Orientation
+        #endregion
+
+        #region Sorting
+
+        public static T[] HeapSort<T>(T[] array , int size) where T : IComparable
+        {
+            if (size <= 1)
+                return array;
+
+            for (int i = size / 2 - 1; i >= 0; i--)
+            {
+                Heapify(array, size, i);
+            }
+
+            for (int i = size - 1; i >= 0; i--)
+            {
+                (array[0], array[i]) = (array[i], array[0]);
+                //Same as this
+                /*  var tempVar = array[0];
+                    array[0] = array[i];
+                    array[i] = tempVar;
+                 */
+                Heapify(array, i, 0);
+            }
+
+            return array;
+        }
+
+        private static void Heapify<T>(T[] array, int size, int index) where T : IComparable
+        {
+            var largestIndex = index;
+            var leftChild = 2 * index + 1;
+            var rightChild = 2 * index + 2;
+
+            if (leftChild < size && array[leftChild].CompareTo(array[largestIndex]) > 0)
+                largestIndex = leftChild;
+
+            if (rightChild < size && array[rightChild].CompareTo(array[largestIndex]) > 0)
+                largestIndex = rightChild;
+
+            if (largestIndex != index)
+            {
+                var tempvar = array[index];
+                array[index] = array[largestIndex];
+                array[largestIndex] = tempvar;
+                
+                Heapify<T>(array,size,largestIndex);
+            }
+        }
+        
         #endregion
     }
 }

@@ -11,14 +11,14 @@ namespace Bezier
     {
         public override void OnPointerUp(PointerEventData eventData)
         {
-            StartCoroutine(  GameManager_2_0.Instance.EventBus.Publish<On_BezierPointInteraction>(new On_BezierPointInteraction(),
+            StartCoroutine(  GameManager_2_0.Instance.EventBus.Publish_Coroutine<On_BezierPointInteraction>(new On_BezierPointInteraction(),
                 new On_BezierPointInteractionArgs(BezierPointState.Dropped)));
         }
 
         public override void OnPointerDown(PointerEventData eventData)
         {
             
-           StartCoroutine( GameManager_2_0.Instance.EventBus.Publish<On_BezierPointInteraction>(new On_BezierPointInteraction(),
+           StartCoroutine( GameManager_2_0.Instance.EventBus.Publish_Coroutine<On_BezierPointInteraction>(new On_BezierPointInteraction(),
                 new On_BezierPointInteractionArgs(BezierPointState.PickedUp)));
         }
 

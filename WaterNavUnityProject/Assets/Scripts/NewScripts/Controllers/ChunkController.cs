@@ -1,7 +1,12 @@
-﻿using NewScripts.Model;
+﻿using System;
+using Events.Library.Models.WorldEvents;
+using NewManagers;
+using NewScripts.Model;
 using RCR.Patterns;
+using RCR.Settings.NewScripts.Geometry;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 namespace RCR.Settings.NewScripts.Controllers
 {
@@ -12,9 +17,20 @@ namespace RCR.Settings.NewScripts.Controllers
         public ChunkController()
         {
             Setup(new Chunk());
+#if UNITY_EDITOR
+            DebugColor = Random.ColorHSV();
+#endif
         }
+        
+        #endregion
+#if UNITY_EDITOR
+        
+        #region DebugData
+
+        public Color DebugColor;
 
         #endregion
+#endif
         
         #region Public Methods
 
@@ -31,9 +47,16 @@ namespace RCR.Settings.NewScripts.Controllers
             Model.Width = width;
             Model.Height = height;
             Model.HasBeenInitialized = true;
+            Model.Edges = new Line[4]
+            {
+                new Line(new Vector2(Xorgin, Yorigin), new Vector2(Xorgin, Yorigin + height)), //1 - 2
+                new Line(new Vector2(Xorgin, Yorigin + height), new Vector2(Xorgin + width, Yorigin + height)), //2 - 3
+                new Line(new Vector2(Xorgin + width, Yorigin + height), new Vector2(Xorgin + width, Yorigin)), //3 - 4
+                new Line(new Vector2(Xorgin + width, Yorigin), new Vector2(Xorgin, Yorigin)), //4 - 1
+            };
         }
 
-        public bool SetChunkVisuals(ref Tilemap tilemap , Tilemap toCopy)
+        public bool SetChunkVisuals(ref Tilemap tilemap , ref Tilemap toCopy)
         {
             if (!Model.HasBeenInitialized)
             {
@@ -49,9 +72,12 @@ namespace RCR.Settings.NewScripts.Controllers
                 Model.OriginY, 1), new Vector3Int(Model.Width, Model.Height, 1));
             
             tilemap.SetTilesBlock(bounds, tiles);
+            Model.Active = true;
+            GameManager_2_0.Instance.EventBus.Publish(new WorldBoundsChanged(),
+                new WorldBoundsChangedArgs(Model));
             return true;
         }
-        public bool SetChunkVisuals(ref Tilemap tilemap, Tilemap toCopy, BoundsInt areaTocopy)
+        public bool SetChunkVisuals(ref Tilemap tilemap, ref Tilemap toCopy, BoundsInt areaTocopy)
         {
             if (!Model.HasBeenInitialized)
             {
@@ -65,9 +91,12 @@ namespace RCR.Settings.NewScripts.Controllers
             BoundsInt bounds = new BoundsInt(new Vector3Int(Model.OriginX,
                 Model.OriginY, 1), new Vector3Int(Model.Width, Model.Height, 1));
             tilemap.SetTilesBlock(bounds,tiles);
+            Model.Active = true;
+            GameManager_2_0.Instance.EventBus.Publish(new WorldBoundsChanged(),
+                new WorldBoundsChangedArgs(Model));
             return true;
         }
-        public bool SetChunkVisuals(ref Tilemap tilemap, Tilemap toCopy, BoundsInt areaTocopy,
+        public bool SetChunkVisuals(ref Tilemap tilemap,ref Tilemap toCopy, BoundsInt areaTocopy,
             BoundsInt areaToPaste)
         {
             if (!Model.HasBeenInitialized)
@@ -83,12 +112,45 @@ namespace RCR.Settings.NewScripts.Controllers
             if (tiles == null)
                 return false;
             tilemap.SetTilesBlock(areaToPaste,tiles);
+            Model.Active = true;
+            GameManager_2_0.Instance.EventBus.Publish(new WorldBoundsChanged(), new WorldBoundsChangedArgs(
+                Model));
             return true;
         }
 
+        public void ClearChunkVisuals(ref Tilemap tilemap)
+        {
+            if (!Model.HasBeenInitialized)
+            {
+                Debug.LogWarning($"This Chunk has not yet been Initialized");
+                return;
+            }
+            TileBase[] Null_tiles = new TileBase[Model.Width * Model.Height];
+            tilemap.SetTilesBlock(GetChunksBoundsInt(), Null_tiles);
+            Model.Active = false;
+            GameManager_2_0.Instance.EventBus.Publish(new WorldBoundsChanged(), new WorldBoundsChangedArgs(
+                Model));
+        }
+
         public Chunk GetChunk() => Model;
+        public Line[] GetChunkEdges() => Model.Edges;
+
+        public bool IsChunkActive() => Model.Active;
 
         public void PreWarmTiles(int num) => Model.TilePool.PreWarm(num);
+
+        public Bounds GetChunkBounds()
+        {
+            return new Bounds(new Vector3(Model.OriginX + (Model.Width / 2),
+                Model.OriginY + (Model.Height / 2)), new Vector3(Model.Width, Model.Height));
+        }
+
+        public BoundsInt GetChunksBoundsInt()
+        {
+            return new BoundsInt(new Vector3Int(Model.OriginX + (Model.Width / 2),
+                Model.OriginY + (Model.Height / 2)), new Vector3Int(Model.Width, Model.Height));
+        }
+        
         #endregion
 
         #region privateMethods

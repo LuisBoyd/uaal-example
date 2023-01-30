@@ -1,6 +1,8 @@
-﻿using Patterns.ObjectPooling;
+﻿using System;
+using Patterns.ObjectPooling;
 using Patterns.ObjectPooling.Model;
 using RCR.Patterns;
+using RCR.Settings.Collections;
 using UnityEngine;
 
 namespace NewScripts.Model
@@ -10,7 +12,7 @@ namespace NewScripts.Model
 
         #region varibles
 
-        public Chunk[,] Chunks;
+        public AdjacencyMatrix<Chunk> Chunks;
         /// <summary>
         /// The Width of the world in Chunks
         /// </summary>

@@ -148,14 +148,14 @@ namespace Bezier
             m_Sc = GetComponent<SpriteShapeController>();
             m_Ssr = GetComponent<SpriteShapeRenderer>();
             m_Points = new List<AnchorPoint>();
-            BezierInteractionToken = GameManager_2_0.Instance.EventBus.Subscribe<On_BezierPointInteraction>(On_BezierPointInteraction);
+            //BezierInteractionToken = GameManager_2_0.Instance.EventBus.Subscribe<On_BezierPointInteraction>(On_BezierPointInteraction);
             mainCamera = Camera.main;
             InitPoints();
         }
 
         private void OnDisable()
         {
-            GameManager_2_0.Instance.EventBus.UnSubscribe<On_BezierPointInteraction>(BezierInteractionToken.TokenId);
+            //GameManager_2_0.Instance.EventBus.UnSubscribe<On_BezierPointInteraction>(BezierInteractionToken.TokenId);
         }
 
 

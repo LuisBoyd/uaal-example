@@ -27,8 +27,8 @@ namespace NewManagers
 
         private void OnDisable()
         {
-            GameManager_2_0.Instance.EventBus.UnSubscribe<SaveRequestEvent>(_SaveRequestEvent.TokenId);
-            GameManager_2_0.Instance.EventBus.UnSubscribe<LoadRequestEvent>(_LoadRequestEvent.TokenId);
+            GameManager_2_0.Instance.EventBus.UnSubscribe_Coroutine<SaveRequestEvent>(_SaveRequestEvent.TokenId);
+            GameManager_2_0.Instance.EventBus.UnSubscribe_Coroutine<LoadRequestEvent>(_LoadRequestEvent.TokenId);
             _persistantDatas = null;
         }
 

@@ -1,7 +1,16 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Events.Library.Models;
+using Events.Library.Models.WorldEvents;
+using NewManagers;
 using NewScripts.Model;
 using RCR.Patterns;
+using RCR.Settings.Collections.Sorting;
 using RCR.Settings.NewScripts.Controllers;
+using RCR.Settings.NewScripts.Geometry;
+using RCR.Utilities;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -47,14 +56,15 @@ namespace RCR.Settings.NewScripts.View
         [SerializeField] [Tooltip("Width and height in Chunks")]
         private WorldSize World_Size;
         private Tilemap worldTilemap;
-
+        private static PolygonCollider2D worldCollider;
+        private TilemapCollider2D TilemapCollider2D;
+        private Token WorldBoundsChangedToken;
         [SerializeField] 
         private Tilemap TestTilemap;
-        #endregion
 
-        #region Controllers
-        private ChunkController Chunkcontroller;
+        private List<Vector2> BoundingPoints;
         #endregion
+        
 
         #region properties
         /// <summary>
@@ -86,23 +96,40 @@ namespace RCR.Settings.NewScripts.View
             WorldSize.x12 => 12,
             _ => 0
         };
+
+        public static PolygonCollider2D WorldBoundsCollider
+        {
+            get => worldCollider;
+        }
         #endregion
 
         #region Unity Functions
 
+        #region private methods
+
+        private void On_WorldBoundsChanged(WorldBoundsChanged evnt, EventArgs args) => Controller.UpdateWorldBoundries(
+            ref worldTilemap, ref worldCollider);
+
+
+
+        #endregion
+        
         protected override void Awake()
         {
             base.Awake();
+            BoundingPoints = new List<Vector2>();
             worldTilemap = Controller.SetWorldSize(GetWorldSize, GetWorldSize,
                 GetChunkSize);
+            TilemapCollider2D = worldTilemap.GetComponent<TilemapCollider2D>();
+            worldCollider = worldTilemap.GetComponent<PolygonCollider2D>();
             worldTilemap.transform.SetParent(this.transform);
+            //if there is problems later on like any physics movement could be because the tilemap collider
+            WorldBoundsChangedToken = GameManager_2_0.Instance.EventBus.Subscribe<WorldBoundsChanged>(On_WorldBoundsChanged);
+        }
 
-#if UNITY_EDITOR
-            ChunkColors = new Color[Model.Chunks.Length];
-            for (int i = 0; i < ChunkColors.Length; i++)
-                ChunkColors[i] = Random.ColorHSV();
-
-#endif
+        private void OnDisable()
+        {
+            GameManager_2_0.Instance.EventBus.UnSubscribe<WorldBoundsChanged>(WorldBoundsChangedToken.TokenId);
         }
 
         private void OnEnable()
@@ -112,9 +139,17 @@ namespace RCR.Settings.NewScripts.View
 #endif
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
-            Controller.GetCunkController((GetWorldSize-1)/2, (GetWorldSize-1)/2).SetChunkVisuals(ref worldTilemap, TestTilemap);
+            Controller.GetChunkController((GetWorldSize-1)/2, (GetWorldSize-1)/2).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
+            yield return new WaitForSecondsRealtime(4.0f);
+            Controller.GetChunkController(1, 0).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
+            yield return new WaitForSecondsRealtime(7.0f);
+            Controller.GetChunkController(0, 1).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
+            yield return new WaitForSecondsRealtime(7.0f);
+            Controller.GetChunkController(1, 2).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
+            yield return new WaitForSecondsRealtime(7.0f);
+            Controller.GetChunkController(0, 2).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
         }
 
         #endregion
@@ -127,16 +162,16 @@ namespace RCR.Settings.NewScripts.View
 
         [SerializeField] 
         private Vector3 DebugCubeOffset;
-
-        private Color[] ChunkColors;
+        
         
         private void OnDrawGizmosSelected()
         {
             if (Application.isPlaying)
             {
-                foreach (Chunk chunk in Model.Chunks)
+                foreach (ChunkController chunkController in Controller.GetChunkControllers())
                 {
-                    Gizmos.color = ChunkColors[chunk.ID];
+                    Chunk chunk = chunkController.GetChunk();
+                    Gizmos.color = chunkController.DebugColor;
                     Gizmos.DrawCube(new Vector3(chunk.OriginX, chunk.OriginY) + transform.position + DebugCubeOffset,
                         DebugCubeSize); //Min
                     Gizmos.DrawCube(
