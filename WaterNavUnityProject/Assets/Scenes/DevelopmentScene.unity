@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Chunk_Size: 6
   World_Size: 1
-  TestTilemap: {fileID: 1618941142230517103, guid: 0bf68008c7f99884a8d3bb7efee67bfa, type: 3}
+  TestTilemap: {fileID: 1618941142230517103, guid: 0dfd775b08483f64bb701b4a7c01e400, type: 3}
   DebugCubeSize: {x: 0.5, y: 0.5, z: 0.5}
   DebugCubeOffset: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!156049354 &174206000

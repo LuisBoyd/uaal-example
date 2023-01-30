@@ -130,14 +130,15 @@ namespace RCR.Settings.NewScripts.View
         private IEnumerator Start()
         {
             Controller.GetChunkController((GetWorldSize-1)/2, (GetWorldSize-1)/2).SetChunkVisuals( ref TestTilemap);
-            yield return new WaitForSecondsRealtime(4.0f);
-            Controller.GetChunkController(1, 0).SetChunkVisuals(ref TestTilemap);
-            yield return new WaitForSecondsRealtime(7.0f);
-            Controller.GetChunkController(0, 1).SetChunkVisuals(ref TestTilemap);
-            yield return new WaitForSecondsRealtime(7.0f);
-            Controller.GetChunkController(1, 2).SetChunkVisuals(ref TestTilemap);
-            yield return new WaitForSecondsRealtime(7.0f);
-            Controller.GetChunkController(0, 2).SetChunkVisuals(ref TestTilemap);
+            // yield return new WaitForSecondsRealtime(4.0f);
+            // Controller.GetChunkController(1, 0).SetChunkVisuals(ref TestTilemap);
+            // yield return new WaitForSecondsRealtime(7.0f);
+            // Controller.GetChunkController(0, 1).SetChunkVisuals(ref TestTilemap);
+            // yield return new WaitForSecondsRealtime(7.0f);
+            // Controller.GetChunkController(1, 2).SetChunkVisuals(ref TestTilemap);
+            // yield return new WaitForSecondsRealtime(7.0f);
+            // Controller.GetChunkController(0, 2).SetChunkVisuals(ref TestTilemap);
+            yield return null;
         }
 
         #endregion
