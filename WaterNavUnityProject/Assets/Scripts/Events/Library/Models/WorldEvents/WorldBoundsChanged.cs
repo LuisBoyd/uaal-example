@@ -10,16 +10,16 @@ namespace Events.Library.Models.WorldEvents
 
     public class WorldBoundsChangedArgs : EventArgs
     {
-        public Chunk UpdatedChunk;
-        public Bounds ChunkBounds;
-        public bool Add;
+        public Vector2[] Points;
+        public bool SnapCameraToPoint;
+        public Vector2 CameraSnapPoint;
 
-        public WorldBoundsChangedArgs(Chunk chunk, bool subtract = false)
+        public WorldBoundsChangedArgs(Vector2[] points, bool SnapCameraToPoint = false, Vector2 cameraSnapPoint = default)
         {
-            UpdatedChunk = chunk;
-            ChunkBounds = new Bounds(new Vector3(chunk.OriginX + (chunk.Width / 2),
-                chunk.OriginY + (chunk.Height / 2)), new Vector3(chunk.Width, chunk.Height));
-            Add = !subtract;
+            Points = points;
+            this.SnapCameraToPoint = SnapCameraToPoint;
+            CameraSnapPoint = cameraSnapPoint;
+
         }
     }
 }

@@ -17,6 +17,8 @@ namespace NewScripts.Model
         public int OriginX;
         public int OriginY;
 
+        public Vector2Int ChunkPlayerStartingPoint;
+        
         public Vector2Int MatrixID;
         
         public IPool<Tile> TilePool;

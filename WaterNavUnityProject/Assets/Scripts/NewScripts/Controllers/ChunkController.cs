@@ -1,4 +1,5 @@
 ﻿using System;
+using Events.Library.Models;
 using Events.Library.Models.WorldEvents;
 using NewManagers;
 using NewScripts.Model;
@@ -20,6 +21,12 @@ namespace RCR.Settings.NewScripts.Controllers
 #if UNITY_EDITOR
             DebugColor = Random.ColorHSV();
 #endif
+            OnTilemapChanged = GameManager_2_0.Instance.EventBus.Subscribe<TilemapChanged>(On_WorldTilemapChanged);
+        }
+
+        ~ChunkController()
+        {
+            GameManager_2_0.Instance.EventBus.UnSubscribe<TilemapChanged>(OnTilemapChanged.TokenId);
         }
         
         #endregion
@@ -31,10 +38,17 @@ namespace RCR.Settings.NewScripts.Controllers
 
         #endregion
 #endif
+
+        #region Varibles
+
+        private TilemapController tilemapController;
+        private Token OnTilemapChanged;
+        #endregion
         
         #region Public Methods
 
-        public void SetChunkData(World OwningWorld ,int Xorgin, int Yorigin, int width, int height)
+        public void SetChunkData(World OwningWorld ,int Xorgin, int Yorigin, int width, int height,
+            ref TilemapController tilemapController)
         {
             Model.World = OwningWorld;
             if (!ValidateChunkPosition(new Vector2Int(Xorgin, Yorigin),
@@ -46,6 +60,7 @@ namespace RCR.Settings.NewScripts.Controllers
             Model.OriginY = Yorigin;
             Model.Width = width;
             Model.Height = height;
+            Model.ChunkPlayerStartingPoint = new Vector2Int(Xorgin + (width/2), Yorigin + (height/2));
             Model.HasBeenInitialized = true;
             Model.Edges = new Line[4]
             {
@@ -54,9 +69,10 @@ namespace RCR.Settings.NewScripts.Controllers
                 new Line(new Vector2(Xorgin + width, Yorigin + height), new Vector2(Xorgin + width, Yorigin)), //3 - 4
                 new Line(new Vector2(Xorgin + width, Yorigin), new Vector2(Xorgin, Yorigin)), //4 - 1
             };
+            this.tilemapController = tilemapController;
         }
 
-        public bool SetChunkVisuals(ref Tilemap tilemap , ref Tilemap toCopy)
+        public bool SetChunkVisuals(ref Tilemap toCopy)
         {
             if (!Model.HasBeenInitialized)
             {
@@ -71,13 +87,18 @@ namespace RCR.Settings.NewScripts.Controllers
             BoundsInt bounds = new BoundsInt(new Vector3Int(Model.OriginX,
                 Model.OriginY, 1), new Vector3Int(Model.Width, Model.Height, 1));
             
-            tilemap.SetTilesBlock(bounds, tiles);
+            tilemapController.SetTilesBlock(bounds, tiles);
             Model.Active = true;
-            GameManager_2_0.Instance.EventBus.Publish(new WorldBoundsChanged(),
-                new WorldBoundsChangedArgs(Model));
+            if (!Model.World.setWorldPoint)
+            {
+                Model.World.WorldPlayerStartPoint = Model.ChunkPlayerStartingPoint;
+                Model.World.setWorldPoint = true;
+            }
+            GameManager_2_0.Instance.EventBus.Publish(new ChunkChanged(),
+                EventArgs.Empty);
             return true;
         }
-        public bool SetChunkVisuals(ref Tilemap tilemap, ref Tilemap toCopy, BoundsInt areaTocopy)
+        public bool SetChunkVisuals(ref Tilemap toCopy, BoundsInt areaTocopy)
         {
             if (!Model.HasBeenInitialized)
             {
@@ -90,13 +111,18 @@ namespace RCR.Settings.NewScripts.Controllers
                 return false;
             BoundsInt bounds = new BoundsInt(new Vector3Int(Model.OriginX,
                 Model.OriginY, 1), new Vector3Int(Model.Width, Model.Height, 1));
-            tilemap.SetTilesBlock(bounds,tiles);
+            tilemapController.SetTilesBlock(bounds,tiles);
             Model.Active = true;
-            GameManager_2_0.Instance.EventBus.Publish(new WorldBoundsChanged(),
-                new WorldBoundsChangedArgs(Model));
+            if (!Model.World.setWorldPoint)
+            {
+                Model.World.WorldPlayerStartPoint = Model.ChunkPlayerStartingPoint;
+                Model.World.setWorldPoint = true;
+            }
+            GameManager_2_0.Instance.EventBus.Publish(new ChunkChanged(),
+                EventArgs.Empty);
             return true;
         }
-        public bool SetChunkVisuals(ref Tilemap tilemap,ref Tilemap toCopy, BoundsInt areaTocopy,
+        public bool SetChunkVisuals(ref Tilemap toCopy, BoundsInt areaTocopy,
             BoundsInt areaToPaste)
         {
             if (!Model.HasBeenInitialized)
@@ -111,14 +137,19 @@ namespace RCR.Settings.NewScripts.Controllers
             TileBase[] tiles = ReadChunk(toCopy, areaTocopy);
             if (tiles == null)
                 return false;
-            tilemap.SetTilesBlock(areaToPaste,tiles);
+            tilemapController.SetTilesBlock(areaToPaste,tiles);
             Model.Active = true;
-            GameManager_2_0.Instance.EventBus.Publish(new WorldBoundsChanged(), new WorldBoundsChangedArgs(
-                Model));
+            if (!Model.World.setWorldPoint)
+            {
+                Model.World.WorldPlayerStartPoint = Model.ChunkPlayerStartingPoint;
+                Model.World.setWorldPoint = true;
+            }
+            GameManager_2_0.Instance.EventBus.Publish(new ChunkChanged(),
+                EventArgs.Empty);
             return true;
         }
 
-        public void ClearChunkVisuals(ref Tilemap tilemap)
+        public void ClearChunkVisuals()
         {
             if (!Model.HasBeenInitialized)
             {
@@ -126,14 +157,16 @@ namespace RCR.Settings.NewScripts.Controllers
                 return;
             }
             TileBase[] Null_tiles = new TileBase[Model.Width * Model.Height];
-            tilemap.SetTilesBlock(GetChunksBoundsInt(), Null_tiles);
+            tilemapController.SetTilesBlock(GetChunksBoundsInt(), Null_tiles);
             Model.Active = false;
-            GameManager_2_0.Instance.EventBus.Publish(new WorldBoundsChanged(), new WorldBoundsChangedArgs(
-                Model));
+            GameManager_2_0.Instance.EventBus.Publish(new ChunkChanged(),
+                EventArgs.Empty);
         }
 
         public Chunk GetChunk() => Model;
         public Line[] GetChunkEdges() => Model.Edges;
+
+        public Vector2Int GetChunkPlayerStartPosition() => Model.ChunkPlayerStartingPoint;
 
         public bool IsChunkActive() => Model.Active;
 
@@ -205,6 +238,16 @@ namespace RCR.Settings.NewScripts.Controllers
                                                      (bounds.position.y
                                                          + bounds.size.y < Model.Height);
         }
+
+        private bool PointInChunk(Vector3 point)
+        {
+            return GetChunkBounds().Contains(point);
+        }
+        private bool PointInChunk(Vector2 point)
+        {
+            return GetChunkBounds().Contains(point);
+        }
+        
         private TileBase[] ReadChunk(Tilemap tilemap)
         {
             if (!ValidateChunkSize(tilemap.size))
@@ -232,6 +275,13 @@ namespace RCR.Settings.NewScripts.Controllers
                 return null;
 
             return tileBases;
+        }
+
+        private void On_WorldTilemapChanged(TilemapChanged evnt, EventArgs args)
+        {
+            if (!ValidateAreaInChunk(evnt.Args.Bounds))
+                return; //Means it's not our chunk that this event is calling upon
+            
         }
         #endregion
     }

@@ -30,6 +30,8 @@ namespace RCR.Settings.NewScripts.Camera
         public float ZoomSensitivty = 1;
         
         public float Sensitivity = 1;
+
+        private PolygonCollider2D CameraBounds;
         
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
         [SerializeField] 
@@ -45,8 +47,9 @@ namespace RCR.Settings.NewScripts.Camera
             CameraInput = UnityEngine.Camera.main.GetComponent<CameraInput>();
             CameraInput._gameCamera = this;
             helper = new GameObject($"{VirtualCamera.name}_helper").transform;
+            CameraBounds = new GameObject($"{VirtualCamera.name}_VirtualBounds").AddComponent<PolygonCollider2D>();
             //helper.SetParent(VirtualCamera.transform);
-            
+            Confiner2D.m_BoundingShape2D = CameraBounds;
              VirtualCamera.Follow = helper;
              VirtualCamera.m_Lens.OrthographicSize = ZoomOutMax; 
              BoundsUpdatedtoken = GameManager_2_0.Instance.EventBus.Subscribe<WorldBoundsChanged>(Update_CameraBounds);
@@ -75,13 +78,18 @@ namespace RCR.Settings.NewScripts.Camera
             WorldBoundsChangedArgs worldBoundsChangedArgs;
             if (!LBUtilities.Cast<WorldBoundsChangedArgs>(args, out worldBoundsChangedArgs))
                 return;
-
-            Confiner2D.m_BoundingShape2D = WorldView.WorldBoundsCollider;
+            CameraBounds.SetPath(0, worldBoundsChangedArgs.Points);
             Confiner2D.InvalidateCache();
             if (!Confiner2D.m_BoundingShape2D.OverlapPoint(helper.position))
             {
                 Vector3 prevPosition = helper.position;
-                helper.position = worldBoundsChangedArgs.ChunkBounds.center;
+                helper.position = worldBoundsChangedArgs.CameraSnapPoint;
+                var delta = helper.position - prevPosition;
+                VirtualCamera.OnTargetObjectWarped(helper, delta);
+            }else if (worldBoundsChangedArgs.SnapCameraToPoint)
+            {
+                Vector3 prevPosition = helper.position;
+                helper.position = worldBoundsChangedArgs.CameraSnapPoint;
                 var delta = helper.position - prevPosition;
                 VirtualCamera.OnTargetObjectWarped(helper, delta);
             }
@@ -91,7 +99,7 @@ namespace RCR.Settings.NewScripts.Camera
         private void UpdateCamera_Pointer(PointerEventData eventData)
         {
             Vector3 NewPosition = helper.localPosition + new Vector3(eventData.delta.x, eventData.delta.y) * Sensitivity;
-            if(!Confiner2D.m_BoundingShape2D.OverlapPoint(NewPosition))
+            if(!CameraBounds.OverlapPoint(NewPosition))
                 return;
             helper.localPosition += new Vector3(eventData.delta.x, eventData.delta.y) * Sensitivity;
             Debug.Log(helper.localPosition);

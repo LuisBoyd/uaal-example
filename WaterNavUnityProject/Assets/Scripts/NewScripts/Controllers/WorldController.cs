@@ -6,6 +6,9 @@ using RCR.Patterns;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Linq;
+using Events.Library.Models;
+using Events.Library.Models.WorldEvents;
+using NewManagers;
 using RCR.Settings.Collections;
 using RCR.Settings.Collections.Sorting;
 using RCR.Settings.NewScripts.Geometry;
@@ -18,13 +21,26 @@ namespace RCR.Settings.NewScripts.Controllers
     {
 
         private AdjacencyMatrix<ChunkController> m_chunkControllers;
-        
+
+        private TilemapController m_TilemapController;
+        private Token ChunkChangedToken;
+
         #region Public Methods
         public override void Setup(World model)
         {
             base.Setup(model);
         }
-        public Tilemap SetWorldSize(int width, int height, int chunkSize)
+
+        public WorldController()
+        {
+            ChunkChangedToken = GameManager_2_0.Instance.EventBus.Subscribe<ChunkChanged>(On_ChunkChanged);
+        }
+
+        ~WorldController()
+        {
+            GameManager_2_0.Instance.EventBus.UnSubscribe<ChunkChanged>(ChunkChangedToken.TokenId);
+        }
+        public void SetWorldSize(int width, int height, int chunkSize, Transform optionalParent = null)
         {
             m_chunkControllers = new AdjacencyMatrix<ChunkController>(width,height);
             Model.Chunks = new AdjacencyMatrix<Chunk>(width, height);
@@ -48,24 +64,13 @@ namespace RCR.Settings.NewScripts.Controllers
                     // Model.Chunks[x, y].ID = (x * height) + y;
                 }
             }
-            
+            SetUpTilemap(width,height,chunkSize, optionalParent);
             SetChunkPositionUniform(chunkSize);
             if (CheckIfAnyChunksOverlap())
             {
                 Debug.LogError("Some Chunks Overlap");
-                return null;
+                return;
             }
-            
-            TilemapRenderer tilemapRenderer = new GameObject("_Tilemap_world").AddComponent<TilemapRenderer>();
-            Tilemap tilemapGamObject = tilemapRenderer.gameObject.GetComponent<Tilemap>();
-            PolygonCollider2D compositeCollider2D = tilemapGamObject.gameObject.AddComponent<PolygonCollider2D>();
-            TilemapCollider2D collider2D = tilemapRenderer.gameObject.AddComponent<TilemapCollider2D>();
-            //collider2D.usedByComposite = true;
-            tilemapRenderer.mode = TilemapRenderer.Mode.Chunk;
-            tilemapGamObject.origin = Vector3Int.zero;
-            tilemapGamObject.size = new Vector3Int(width * chunkSize, height * chunkSize, 1);
-            tilemapGamObject.ResizeBounds();
-            return tilemapGamObject;
         }
 
         /// <summary>
@@ -108,7 +113,7 @@ namespace RCR.Settings.NewScripts.Controllers
         public void CopyTilesToChunk(int x, int y, ref Tilemap tilemap, ref Tilemap ToCopy)
         {
             ChunkController cc = m_chunkControllers.GetNode(x, y);
-            if(!cc.SetChunkVisuals(ref tilemap, ref ToCopy))
+            if(!cc.SetChunkVisuals( ref ToCopy))
                 return;
             TryToSetPaths(x,y);
         }
@@ -116,7 +121,7 @@ namespace RCR.Settings.NewScripts.Controllers
             BoundsInt areaToCopy)
         {
             ChunkController cc = m_chunkControllers.GetNode(x, y);
-            if(!cc.SetChunkVisuals(ref tilemap, ref ToCopy, areaToCopy))
+            if(!cc.SetChunkVisuals(ref ToCopy, areaToCopy))
                 return;
             TryToSetPaths(x,y);
         }
@@ -124,15 +129,15 @@ namespace RCR.Settings.NewScripts.Controllers
             BoundsInt areaToCopy, BoundsInt areaToPaste)
         {
             ChunkController cc = m_chunkControllers.GetNode(x, y);
-            if(!cc.SetChunkVisuals(ref tilemap, ref ToCopy, areaToCopy, areaToPaste))
+            if(!cc.SetChunkVisuals(ref ToCopy, areaToCopy, areaToPaste))
                 return;
             TryToSetPaths(x,y);
         }
 
-        public void UpdateWorldBoundries(ref Tilemap tilemap, ref PolygonCollider2D worldBoundries)
+        public void UpdateWorldBoundries()
         {
-            tilemap.CompressBounds();
-            tilemap.ResizeBounds();
+            m_TilemapController.CompressBounds();
+            m_TilemapController.ResizeBounds();
             var adjacent_chunks = GetChunkControllers();
             HashSet<Line> edges = new HashSet<Line>(new LineEqualityComparer());
             List<Line> edges_l = new List<Line>(); 
@@ -189,7 +194,9 @@ namespace RCR.Settings.NewScripts.Controllers
             // Vector2[] LineStartPoints = orderBy.Select(l => l.StartPosition).ToArray();
             // worldBoundries.SetPath(0, LineStartPoints);
             //Vector2[] shape = LBUtilities.graham_Scan(edges.Select(l => l.StartPosition).ToArray());
-            worldBoundries.SetPath(0,path.ToArray());
+            GameManager_2_0.Instance.EventBus.Publish<WorldBoundsChanged>(
+                new WorldBoundsChanged(), new WorldBoundsChangedArgs(
+                    path.ToArray(), false,Model.WorldPlayerStartPoint));
             path = null;
             edges_l.Clear();
             edges_l = null;
@@ -253,9 +260,9 @@ namespace RCR.Settings.NewScripts.Controllers
             {
                 for (int y = 0; y < m_chunkControllers.GetLength(1); y++)
                 {
-                    if (m_chunkControllers.CheckOtherNodes(x, y, CheckIfChunkOverlap))
+                    if (!m_chunkControllers.CheckOtherNodes(x, y, CheckIfChunkOverlap))
                     {
-                        
+                        return true;
                     }
                 }
             }
@@ -272,7 +279,8 @@ namespace RCR.Settings.NewScripts.Controllers
                     // m_chunkControllers[x,y].SetChunkData(Model,x * chunkSize,
                     //     y * chunkSize, chunkSize, chunkSize);
                     m_chunkControllers.GetNode(x,y).SetChunkData(Model, x * chunkSize,
-                        y * chunkSize, chunkSize, chunkSize);
+                        y * chunkSize, chunkSize, chunkSize,
+                        ref m_TilemapController);
                 }
             }
         }
@@ -296,6 +304,24 @@ namespace RCR.Settings.NewScripts.Controllers
         {
             return a.GetChunk().Active && b.GetChunk().Active;
         }
+
+        private void SetUpTilemap(int width, int height, int chunkSize,Transform optionalParent = null)
+        {
+            GameObject TilemapGameObject = new GameObject("_Tilemap_world");
+            TilemapGameObject.transform.SetParent(optionalParent);
+            TilemapRenderer tilemapRenderer = TilemapGameObject.AddComponent<TilemapRenderer>();
+            Tilemap tilemap = TilemapGameObject.gameObject.GetComponent<Tilemap>();
+            //collider2D.usedByComposite = true;
+            tilemapRenderer.mode = TilemapRenderer.Mode.Chunk;
+            tilemap.origin = Vector3Int.zero;
+            tilemap.size = new Vector3Int(width * chunkSize, height * chunkSize, 1);
+            tilemap.ResizeBounds();
+
+            m_TilemapController = new TilemapController();
+            m_TilemapController.SetTilemapData(tilemap);
+        } 
+        
+        private void On_ChunkChanged(ChunkChanged evnt, EventArgs args) => UpdateWorldBoundries();
         
         #endregion
     }

@@ -35,6 +35,10 @@ namespace NewScripts.Model
         /// The height of the world in Tiles
         /// </summary>
         public int TileHeight => ChunkSize * height;
+
+        public Vector2Int WorldPlayerStartPoint;
+        
+        public bool setWorldPoint = false;
         #endregion
 
         #region properties

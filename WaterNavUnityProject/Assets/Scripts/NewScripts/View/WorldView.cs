@@ -58,7 +58,6 @@ namespace RCR.Settings.NewScripts.View
         private Tilemap worldTilemap;
         private static PolygonCollider2D worldCollider;
         private TilemapCollider2D TilemapCollider2D;
-        private Token WorldBoundsChangedToken;
         [SerializeField] 
         private Tilemap TestTilemap;
 
@@ -106,9 +105,7 @@ namespace RCR.Settings.NewScripts.View
         #region Unity Functions
 
         #region private methods
-
-        private void On_WorldBoundsChanged(WorldBoundsChanged evnt, EventArgs args) => Controller.UpdateWorldBoundries(
-            ref worldTilemap, ref worldCollider);
+        
 
 
 
@@ -118,19 +115,10 @@ namespace RCR.Settings.NewScripts.View
         {
             base.Awake();
             BoundingPoints = new List<Vector2>();
-            worldTilemap = Controller.SetWorldSize(GetWorldSize, GetWorldSize,
-                GetChunkSize);
-            TilemapCollider2D = worldTilemap.GetComponent<TilemapCollider2D>();
-            worldCollider = worldTilemap.GetComponent<PolygonCollider2D>();
-            worldTilemap.transform.SetParent(this.transform);
-            //if there is problems later on like any physics movement could be because the tilemap collider
-            WorldBoundsChangedToken = GameManager_2_0.Instance.EventBus.Subscribe<WorldBoundsChanged>(On_WorldBoundsChanged);
+           Controller.SetWorldSize(GetWorldSize, GetWorldSize,
+                GetChunkSize, this.transform);
         }
-
-        private void OnDisable()
-        {
-            GameManager_2_0.Instance.EventBus.UnSubscribe<WorldBoundsChanged>(WorldBoundsChangedToken.TokenId);
-        }
+        
 
         private void OnEnable()
         {
@@ -141,15 +129,15 @@ namespace RCR.Settings.NewScripts.View
 
         private IEnumerator Start()
         {
-            Controller.GetChunkController((GetWorldSize-1)/2, (GetWorldSize-1)/2).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
+            Controller.GetChunkController((GetWorldSize-1)/2, (GetWorldSize-1)/2).SetChunkVisuals( ref TestTilemap);
             yield return new WaitForSecondsRealtime(4.0f);
-            Controller.GetChunkController(1, 0).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
+            Controller.GetChunkController(1, 0).SetChunkVisuals(ref TestTilemap);
             yield return new WaitForSecondsRealtime(7.0f);
-            Controller.GetChunkController(0, 1).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
+            Controller.GetChunkController(0, 1).SetChunkVisuals(ref TestTilemap);
             yield return new WaitForSecondsRealtime(7.0f);
-            Controller.GetChunkController(1, 2).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
+            Controller.GetChunkController(1, 2).SetChunkVisuals(ref TestTilemap);
             yield return new WaitForSecondsRealtime(7.0f);
-            Controller.GetChunkController(0, 2).SetChunkVisuals(ref worldTilemap, ref TestTilemap);
+            Controller.GetChunkController(0, 2).SetChunkVisuals(ref TestTilemap);
         }
 
         #endregion
