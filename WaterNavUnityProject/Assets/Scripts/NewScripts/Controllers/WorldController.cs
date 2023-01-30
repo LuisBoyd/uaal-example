@@ -136,6 +136,9 @@ namespace RCR.Settings.NewScripts.Controllers
             var adjacent_chunks = GetChunkControllers();
             HashSet<Line> edges = new HashSet<Line>(new LineEqualityComparer());
             List<Line> edges_l = new List<Line>(); 
+            
+            //Algorithm Idea https://stackoverflow.com/questions/33472951/outline-circumference-polygon-extraction-from-geometry-constructed-from-equal
+            
             foreach (var chunkController in adjacent_chunks)
             {
                 if(!chunkController.IsChunkActive())
