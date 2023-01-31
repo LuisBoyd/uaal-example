@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Events.Library.Models;
 using NewScripts.Model;
@@ -16,13 +17,13 @@ namespace RCR.Settings.NewScripts.Controllers
         #endregion
 
         #region values
-        private Hashtable logicTiles;
+        private Dictionary<Vector3Int, PureLogicTile> logicTiles;
         #endregion
 
         public TilemapController()
         {
             Setup(new TilemapData());
-            logicTiles = new Hashtable();
+            logicTiles = new Dictionary<Vector3Int, PureLogicTile>();
         }
 
         #region Public Methods
@@ -89,6 +90,17 @@ namespace RCR.Settings.NewScripts.Controllers
                 return;
             Model.tilemap.ResizeBounds();
         }
+
+        public PureLogicTile[] GetLogicTiles(BoundsInt bounds)
+        {
+            if(!Model.HasBeenInitialized)
+                return null;
+            return logicTiles.Values.Where(lt => lt.location.x <= bounds.max.x
+                                                 && lt.location.y <= bounds.max.y &&
+                                                 lt.location.x >= bounds.min.x &&
+                                                 lt.location.y >= bounds.min.y).ToArray();
+        }
+        
         #endregion
 
         #region private methods
@@ -96,12 +108,11 @@ namespace RCR.Settings.NewScripts.Controllers
         {
             foreach (var vector3Int in bounds.allPositionsWithin)
             {
-                LogicTile logicTile = Model.tilemap.GetTile<LogicTile>(vector3Int);
-                if(logicTile == null)
+                TileBase logicTile = Model.tilemap.GetTile(vector3Int);
+                if(logicTile is not LogicTile)
                     continue;
-                PureLogicTile pureLogicTile = new PureLogicTile(logicTile);
-                if(pureLogicTile.Controller == null)
-                    continue;
+                PureLogicTile pureLogicTile = new PureLogicTile(logicTile as LogicTile,
+                    new Vector2Int(vector3Int.x, vector3Int.y));
                 RegisterTileLogic(vector3Int, pureLogicTile);
             }
         }
@@ -112,7 +123,7 @@ namespace RCR.Settings.NewScripts.Controllers
             LogicTile logicTile = Model.tilemap.GetTile<LogicTile>(point);
             if(logicTile == null)
                 return;
-            PureLogicTile pureLogicTile = new PureLogicTile(logicTile);
+            PureLogicTile pureLogicTile = new PureLogicTile(logicTile, new Vector2Int(point.x,point.y));
             RegisterTileLogic(point, pureLogicTile);
         }
 
@@ -125,7 +136,7 @@ namespace RCR.Settings.NewScripts.Controllers
         }
         private void RemoveTilePlaced(Vector3Int point)
         {
-            if (logicTiles.Contains(point))
+            if (logicTiles.ContainsKey(point))
             {
                 UnRegisterTileLogic(point);
             }
@@ -137,7 +148,7 @@ namespace RCR.Settings.NewScripts.Controllers
             {
                 logicTiles.Add(point, logicTile);
                 TileInfo info = new TileInfo(new Vector2Int(point.x, point.y), ref Model.tilemap);
-                logicTile.Controller.Start(info);
+                //logicTile.Controller.Start(info);
             }
             catch (ArgumentException argumentException)
             {
@@ -155,7 +166,7 @@ namespace RCR.Settings.NewScripts.Controllers
             {
                 if (logicTiles[point] is PureLogicTile)
                 {
-                    (logicTiles[point] as PureLogicTile).Controller.End();
+                    //(logicTiles[point] as PureLogicTile).Controller.End();
                 }
             }
             catch (ArgumentNullException e)
@@ -170,7 +181,7 @@ namespace RCR.Settings.NewScripts.Controllers
             {
                 if (logicTiles[point] is PureLogicTile)
                 {
-                    (logicTiles[point] as PureLogicTile).Controller.Process();
+                    //(logicTiles[point] as PureLogicTile).Controller.Process();
                 }
             }
             catch (ArgumentNullException e)
@@ -178,8 +189,6 @@ namespace RCR.Settings.NewScripts.Controllers
                 Debug.LogError($"The Entered key was Null");
             }
         }
-        
-        
         #endregion
     }
 }

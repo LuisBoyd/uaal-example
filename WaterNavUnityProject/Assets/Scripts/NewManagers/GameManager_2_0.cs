@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Events.Library;
 using Events.Library.Models.SystemEvents;
 using Events.Library.Unity;
 using Events.Library.Utils;
+using Patterns.ObjectPooling.Model;
 using RCR.BaseClasses;
+using RCR.Settings.NewScripts.Entity;
 using UnityEngine;
 
 namespace NewManagers
@@ -12,8 +15,18 @@ namespace NewManagers
     [DefaultExecutionOrder(-100)]
     public class GameManager_2_0 : Singelton<GameManager_2_0>
     {
-        public IUnityEventBus EventBus;
+        #region SerilizedFields
+        [SerializeField] 
+        private Sprite BoatTexture;
+        [SerializeField] 
+        private Sprite CustomerTexture;
+        #endregion
 
+        #region Values
+        public IUnityEventBus EventBus;
+        public readonly Dictionary<Type, Sprite> SpriteDicitonary = new Dictionary<Type, Sprite>();
+        #endregion
+        
         protected override void Awake()
         {
             base.Awake();

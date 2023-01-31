@@ -6,6 +6,7 @@ using Events.Library.Models;
 using Events.Library.Models.WorldEvents;
 using NewManagers;
 using NewScripts.Model;
+using Patterns.ObjectPooling.Model;
 using RCR.Patterns;
 using RCR.Settings.Collections.Sorting;
 using RCR.Settings.NewScripts.Controllers;
@@ -21,6 +22,7 @@ using Random = UnityEngine.Random;
 
 namespace RCR.Settings.NewScripts.View
 {
+    [RequireComponent(typeof(EntityPool))]
     [RequireComponent(typeof(Grid))]
     public class WorldView: BaseView<World, WorldController>
     {
@@ -115,8 +117,9 @@ namespace RCR.Settings.NewScripts.View
         {
             base.Awake();
             BoundingPoints = new List<Vector2>();
-           Controller.SetWorldSize(GetWorldSize, GetWorldSize,
+            Controller.SetWorldSize(GetWorldSize, GetWorldSize,
                 GetChunkSize, this.transform);
+            Controller.InitWorldComponents(GetComponent<ComponentPool<Entity.Entity>>());
         }
         
 
@@ -129,16 +132,17 @@ namespace RCR.Settings.NewScripts.View
 
         private IEnumerator Start()
         {
+            StartCoroutine(Controller.SpawningLoop());
             Controller.GetChunkController((GetWorldSize-1)/2, (GetWorldSize-1)/2).SetChunkVisuals( ref TestTilemap);
-            // yield return new WaitForSecondsRealtime(4.0f);
-            // Controller.GetChunkController(1, 0).SetChunkVisuals(ref TestTilemap);
+            yield return new WaitForSecondsRealtime(20.0f);
+            Controller.GetChunkController(1, 0).SetChunkVisuals(ref TestTilemap);
             // yield return new WaitForSecondsRealtime(7.0f);
             // Controller.GetChunkController(0, 1).SetChunkVisuals(ref TestTilemap);
             // yield return new WaitForSecondsRealtime(7.0f);
             // Controller.GetChunkController(1, 2).SetChunkVisuals(ref TestTilemap);
             // yield return new WaitForSecondsRealtime(7.0f);
             // Controller.GetChunkController(0, 2).SetChunkVisuals(ref TestTilemap);
-            yield return null;
+        
         }
 
         #endregion

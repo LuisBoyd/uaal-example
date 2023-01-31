@@ -1,6 +1,7 @@
 ﻿using Patterns.ObjectPooling;
 using Patterns.ObjectPooling.Model;
 using RCR.Patterns;
+using RCR.Settings.NewScripts.AI;
 using RCR.Settings.NewScripts.Geometry;
 using UnityEngine;
 
@@ -28,6 +29,8 @@ namespace NewScripts.Model
         public World World;
 
         public bool HasBeenInitialized = false;
+
+        public AILayer ChunkAiLayer;
 
         /// <summary>
         /// Active Means the chunk currently has any Tiles or anything inside it. does not mean it's currently visible on screen (could be culled)

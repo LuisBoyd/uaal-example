@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f48a6324160646e582345810bb8cf602, type: 3}
   m_Name: WaterPathTile
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 0}
+  m_DefaultSprite: {fileID: 5773185697745583870, guid: 26d435702dedb784694895af12418eff, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules: []
-  LogicDecorations: 0
+  LogicDecorations: 4

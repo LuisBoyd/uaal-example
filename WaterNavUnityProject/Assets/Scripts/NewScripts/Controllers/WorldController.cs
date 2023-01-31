@@ -9,8 +9,10 @@ using System.Linq;
 using Events.Library.Models;
 using Events.Library.Models.WorldEvents;
 using NewManagers;
+using Patterns.ObjectPooling.Model;
 using RCR.Settings.Collections;
 using RCR.Settings.Collections.Sorting;
+using RCR.Settings.NewScripts.Entity;
 using RCR.Settings.NewScripts.Geometry;
 using RCR.Utilities;
 using Tile = NewScripts.Model.Tile;
@@ -21,7 +23,7 @@ namespace RCR.Settings.NewScripts.Controllers
     {
 
         private AdjacencyMatrix<ChunkController> m_chunkControllers;
-
+        private IEntitySpawningSystem EntitySpawningSystem;
         private TilemapController m_TilemapController;
         private Token ChunkChangedToken;
 
@@ -71,6 +73,11 @@ namespace RCR.Settings.NewScripts.Controllers
                 Debug.LogError("Some Chunks Overlap");
                 return;
             }
+        }
+
+        public void InitWorldComponents(ComponentPool<Entity.Entity> entityPool)
+        {
+            EntitySpawningSystem = new ConcreteSpawningSystem(entityPool);
         }
 
         /// <summary>
@@ -204,7 +211,16 @@ namespace RCR.Settings.NewScripts.Controllers
             edges.Clear();
             edges = null;
         }
-        
+
+        public IEnumerator SpawningLoop() //TODO will need some value to determine rate of spawning for now just gonna set it to 10seconds
+        {
+            while (EntitySpawningSystem.Active)
+            {
+                yield return new WaitForSecondsRealtime(10.0f);
+                EntitySpawningSystem.Spawn();
+            }
+        }
+
         #endregion
 
         #region Private Methods

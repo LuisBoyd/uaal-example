@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -134,6 +134,8 @@ GameObject:
   - component: {fileID: 174205998}
   - component: {fileID: 174206000}
   - component: {fileID: 174205999}
+  - component: {fileID: 174206002}
+  - component: {fileID: 174206001}
   m_Layer: 0
   m_Name: GameWorld
   m_TagString: Untagged
@@ -170,7 +172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Chunk_Size: 6
   World_Size: 1
-  TestTilemap: {fileID: 1618941142230517103, guid: 0dfd775b08483f64bb701b4a7c01e400, type: 3}
+  TestTilemap: {fileID: 1618941142230517103, guid: be5b6d624b90189409d208737ff097c3, type: 3}
   DebugCubeSize: {x: 0.5, y: 0.5, z: 0.5}
   DebugCubeOffset: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!156049354 &174206000
@@ -185,6 +187,30 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &174206001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174205996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c084b77b9b24b6fbeab7874db995968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &174206002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174205996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 839cd770fd0148e7a1ef3c452b896155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &346068887
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -791,7 +817,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!156049354 &1196504793
 Grid:
   m_ObjectHideFlags: 0
@@ -1063,6 +1089,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217073380dd045ffa844c663b29c2a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BoatTexture: {fileID: 0}
+  CustomerTexture: {fileID: 0}
 --- !u!4 &1341095461
 Transform:
   m_ObjectHideFlags: 0

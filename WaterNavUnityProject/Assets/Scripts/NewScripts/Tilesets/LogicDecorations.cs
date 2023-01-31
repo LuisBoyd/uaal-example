@@ -7,6 +7,8 @@ namespace RCR.Settings.NewScripts.Tilesets
     {
         Debugger = 1,
         Path = 2,
-        Spawner = 4,
+        CustomerSpawner = 4,
+        BoatSpawner = 8,
+        BoatDock = 16
     }
 }

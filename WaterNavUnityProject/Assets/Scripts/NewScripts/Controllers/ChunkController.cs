@@ -4,7 +4,9 @@ using Events.Library.Models.WorldEvents;
 using NewManagers;
 using NewScripts.Model;
 using RCR.Patterns;
+using RCR.Settings.NewScripts.AI;
 using RCR.Settings.NewScripts.Geometry;
+using RCR.Settings.NewScripts.Tilesets;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -69,6 +71,7 @@ namespace RCR.Settings.NewScripts.Controllers
                 new Line(new Vector2(Xorgin + width, Yorigin + height), new Vector2(Xorgin + width, Yorigin)), //3 - 4
                 new Line(new Vector2(Xorgin + width, Yorigin), new Vector2(Xorgin, Yorigin)), //4 - 1
             };
+            Model.ChunkAiLayer = new AILayer(width, height);
             this.tilemapController = tilemapController;
         }
 
@@ -83,9 +86,8 @@ namespace RCR.Settings.NewScripts.Controllers
             TileBase[] tiles = ReadChunk(toCopy);
             if (tiles == null)
                 return false;
-            
-            BoundsInt bounds = new BoundsInt(new Vector3Int(Model.OriginX,
-                Model.OriginY, 1), new Vector3Int(Model.Width, Model.Height, 1));
+
+            BoundsInt bounds = GetChunksBoundsInt();
             
             tilemapController.SetTilesBlock(bounds, tiles);
             Model.Active = true;
@@ -95,6 +97,10 @@ namespace RCR.Settings.NewScripts.Controllers
                 Model.World.setWorldPoint = true;
             }
             GameManager_2_0.Instance.EventBus.Publish(new ChunkChanged(),
+                EventArgs.Empty);
+            GameManager_2_0.Instance.EventBus.Publish(new TilemapChanged(new TilemapChangedEventArgs(
+                   GetChunksBoundsInt(),
+                    tiles.Length)),
                 EventArgs.Empty);
             return true;
         }
@@ -109,8 +115,7 @@ namespace RCR.Settings.NewScripts.Controllers
             TileBase[] tiles = ReadChunk(toCopy, areaTocopy);
             if (tiles == null)
                 return false;
-            BoundsInt bounds = new BoundsInt(new Vector3Int(Model.OriginX,
-                Model.OriginY, 1), new Vector3Int(Model.Width, Model.Height, 1));
+            BoundsInt bounds = GetChunksBoundsInt();
             tilemapController.SetTilesBlock(bounds,tiles);
             Model.Active = true;
             if (!Model.World.setWorldPoint)
@@ -119,6 +124,10 @@ namespace RCR.Settings.NewScripts.Controllers
                 Model.World.setWorldPoint = true;
             }
             GameManager_2_0.Instance.EventBus.Publish(new ChunkChanged(),
+                EventArgs.Empty);
+            GameManager_2_0.Instance.EventBus.Publish(new TilemapChanged(new TilemapChangedEventArgs(
+                    GetChunksBoundsInt(),
+                    tiles.Length)),
                 EventArgs.Empty);
             return true;
         }
@@ -146,6 +155,10 @@ namespace RCR.Settings.NewScripts.Controllers
             }
             GameManager_2_0.Instance.EventBus.Publish(new ChunkChanged(),
                 EventArgs.Empty);
+            GameManager_2_0.Instance.EventBus.Publish(new TilemapChanged(new TilemapChangedEventArgs(
+                    GetChunksBoundsInt(),
+                    tiles.Length)),
+                EventArgs.Empty);
             return true;
         }
 
@@ -161,6 +174,10 @@ namespace RCR.Settings.NewScripts.Controllers
             Model.Active = false;
             GameManager_2_0.Instance.EventBus.Publish(new ChunkChanged(),
                 EventArgs.Empty);
+            GameManager_2_0.Instance.EventBus.Publish(new TilemapChanged(new TilemapChangedEventArgs(
+                    GetChunksBoundsInt(),
+                    Null_tiles.Length)),
+                EventArgs.Empty);
         }
 
         public Chunk GetChunk() => Model;
@@ -174,14 +191,14 @@ namespace RCR.Settings.NewScripts.Controllers
 
         public Bounds GetChunkBounds()
         {
-            return new Bounds(new Vector3(Model.OriginX + (Model.Width / 2),
-                Model.OriginY + (Model.Height / 2)), new Vector3(Model.Width, Model.Height));
+            return new Bounds(new Vector3(Model.OriginX ,
+                Model.OriginY), new Vector3(Model.Width, Model.Height, 1));
         }
 
         public BoundsInt GetChunksBoundsInt()
         {
-            return new BoundsInt(new Vector3Int(Model.OriginX + (Model.Width / 2),
-                Model.OriginY + (Model.Height / 2)), new Vector3Int(Model.Width, Model.Height));
+            return new BoundsInt(new Vector3Int(Model.OriginX,
+                Model.OriginY), new Vector3Int(Model.Width, Model.Height, 1));
         }
         
         #endregion
@@ -231,12 +248,15 @@ namespace RCR.Settings.NewScripts.Controllers
 
         private bool ValidateAreaInChunk(BoundsInt bounds)
         {
-            return (bounds.position.x < Model.Width) && (bounds.position.y < Model.Height)
-                                                     && (bounds.position.x >= Model.OriginX) &&
-                                                     bounds.position.y >= Model.OriginY
-                                                     && (bounds.position.x + bounds.size.x < Model.Width) &&
-                                                     (bounds.position.y
-                                                         + bounds.size.y < Model.Height);
+            // return (bounds.position.x < Model.Width) && (bounds.position.y < Model.Height)
+            //                                          && (bounds.position.x >= Model.OriginX) &&
+            //                                          bounds.position.y >= Model.OriginY
+            //                                          && (bounds.position.x + bounds.size.x < Model.Width) &&
+            //                                          (bounds.position.y
+            //                                              + bounds.size.y < Model.Height);
+            return (bounds.position.x < Model.OriginX + Model.Width) &&
+                   (bounds.position.y < Model.OriginY + Model.Height) &&
+                   (bounds.position.y >= Model.OriginY) && (bounds.position.x >= Model.OriginX);
         }
 
         private bool PointInChunk(Vector3 point)
@@ -281,7 +301,13 @@ namespace RCR.Settings.NewScripts.Controllers
         {
             if (!ValidateAreaInChunk(evnt.Args.Bounds))
                 return; //Means it's not our chunk that this event is calling upon
-            
+            //Ai Stuff
+            if (Model.ChunkAiLayer.ValidateAreaInAiLayer(evnt.Args.Bounds))
+            {
+                //Get the Underlying Tiles at the positions
+                PureLogicTile[] logicTiles = tilemapController.GetLogicTiles(evnt.Args.Bounds);
+                Model.ChunkAiLayer.ChangeAITiles(logicTiles);
+            }
         }
         #endregion
     }
