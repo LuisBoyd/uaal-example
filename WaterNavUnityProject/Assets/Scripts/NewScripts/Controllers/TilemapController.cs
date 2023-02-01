@@ -17,13 +17,13 @@ namespace RCR.Settings.NewScripts.Controllers
         #endregion
 
         #region values
-        private Dictionary<Vector3Int, PureLogicTile> logicTiles;
+
         #endregion
 
         public TilemapController()
         {
             Setup(new TilemapData());
-            logicTiles = new Dictionary<Vector3Int, PureLogicTile>();
+        
         }
 
         #region Public Methods
@@ -91,15 +91,7 @@ namespace RCR.Settings.NewScripts.Controllers
             Model.tilemap.ResizeBounds();
         }
 
-        public PureLogicTile[] GetLogicTiles(BoundsInt bounds)
-        {
-            if(!Model.HasBeenInitialized)
-                return null;
-            return logicTiles.Values.Where(lt => lt.location.x <= bounds.max.x
-                                                 && lt.location.y <= bounds.max.y &&
-                                                 lt.location.x >= bounds.min.x &&
-                                                 lt.location.y >= bounds.min.y).ToArray();
-        }
+      
         
         #endregion
 
@@ -111,9 +103,9 @@ namespace RCR.Settings.NewScripts.Controllers
                 TileBase logicTile = Model.tilemap.GetTile(vector3Int);
                 if(logicTile is not LogicTile)
                     continue;
-                PureLogicTile pureLogicTile = new PureLogicTile(logicTile as LogicTile,
-                    new Vector2Int(vector3Int.x, vector3Int.y));
-                RegisterTileLogic(vector3Int, pureLogicTile);
+                //PureLogicTile pureLogicTile = new PureLogicTile(logicTile as LogicTile,
+                    // new Vector2Int(vector3Int.x, vector3Int.y));
+                //RegisterTileLogic(vector3Int, pureLogicTile);
             }
         }
         
@@ -123,8 +115,8 @@ namespace RCR.Settings.NewScripts.Controllers
             LogicTile logicTile = Model.tilemap.GetTile<LogicTile>(point);
             if(logicTile == null)
                 return;
-            PureLogicTile pureLogicTile = new PureLogicTile(logicTile, new Vector2Int(point.x,point.y));
-            RegisterTileLogic(point, pureLogicTile);
+            //PureLogicTile pureLogicTile = new PureLogicTile(logicTile, new Vector2Int(point.x,point.y));
+            //RegisterTileLogic(point, pureLogicTile);
         }
 
         private void RemoveTilesPlaced(BoundsInt bounds)
@@ -136,18 +128,18 @@ namespace RCR.Settings.NewScripts.Controllers
         }
         private void RemoveTilePlaced(Vector3Int point)
         {
-            if (logicTiles.ContainsKey(point))
-            {
-                UnRegisterTileLogic(point);
-            }
+            // if (logicTiles.ContainsKey(point))
+            // {
+            //     UnRegisterTileLogic(point);
+            // }
         }
 
-        private void RegisterTileLogic(Vector3Int point ,PureLogicTile logicTile)
+        private void RegisterTileLogic(Vector3Int point)
         {
             try
             {
-                logicTiles.Add(point, logicTile);
-                TileInfo info = new TileInfo(new Vector2Int(point.x, point.y), ref Model.tilemap);
+                // logicTiles.Add(point, logicTile);
+                // TileInfo info = new TileInfo(new Vector2Int(point.x, point.y), ref Model.tilemap);
                 //logicTile.Controller.Start(info);
             }
             catch (ArgumentException argumentException)
@@ -164,10 +156,10 @@ namespace RCR.Settings.NewScripts.Controllers
         {
             try
             {
-                if (logicTiles[point] is PureLogicTile)
-                {
-                    //(logicTiles[point] as PureLogicTile).Controller.End();
-                }
+                // if (logicTiles[point] is PureLogicTile)
+                // {
+                //     //(logicTiles[point] as PureLogicTile).Controller.End();
+                // }
             }
             catch (ArgumentNullException e)
             {
@@ -179,10 +171,10 @@ namespace RCR.Settings.NewScripts.Controllers
         {
             try
             {
-                if (logicTiles[point] is PureLogicTile)
-                {
-                    //(logicTiles[point] as PureLogicTile).Controller.Process();
-                }
+                // if (logicTiles[point] is PureLogicTile)
+                // {
+                //     //(logicTiles[point] as PureLogicTile).Controller.Process();
+                // }
             }
             catch (ArgumentNullException e)
             {

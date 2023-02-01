@@ -14,6 +14,7 @@ using RCR.Settings.Collections;
 using RCR.Settings.Collections.Sorting;
 using RCR.Settings.NewScripts.Entity;
 using RCR.Settings.NewScripts.Geometry;
+using RCR.Settings.NewScripts.TaskSystem;
 using RCR.Utilities;
 using Tile = NewScripts.Model.Tile;
 
@@ -23,10 +24,36 @@ namespace RCR.Settings.NewScripts.Controllers
     {
 
         private AdjacencyMatrix<ChunkController> m_chunkControllers;
-        private IEntitySpawningSystem EntitySpawningSystem;
+        private ConcreteSpawningSystem EntitySpawningSystem;
         private TilemapController m_TilemapController;
         private Token ChunkChangedToken;
+        private Token On_EntitySpawned;
 
+        #region Task Systems
+
+        private TaskSystem<BoatTask> BoatTaskSystem;
+        private TaskSystem<CustomerTask> CustomerTaskSystem;
+
+        #endregion
+
+        #region SpawnTasks
+        private Token On_CustomerDeSpawnRequest;
+        private Token On_CustomerSpawnRequest;
+        private Token On_BoatDeSpawnRequest;
+        private Token On_BoatSpawnRequest;
+        #endregion
+
+        #region TileEvents
+        private Token OnBoatEndLocationSpawned;
+        private Vector3Int BoatDestroyerTileLocation;
+        #endregion
+
+        #region Entitys
+
+        private HashSet<IEntity> _EntitesInScene;
+
+        #endregion
+        
         #region Public Methods
         public override void Setup(World model)
         {
@@ -36,11 +63,25 @@ namespace RCR.Settings.NewScripts.Controllers
         public WorldController()
         {
             ChunkChangedToken = GameManager_2_0.Instance.EventBus.Subscribe<ChunkChanged>(On_ChunkChanged);
+            BoatTaskSystem = new TaskSystem<BoatTask>();
+            CustomerTaskSystem = new TaskSystem<CustomerTask>();
+            _EntitesInScene = new HashSet<IEntity>();
+            On_BoatSpawnRequest =
+                GameManager_2_0.Instance.EventBus.Subscribe<WorldEvent.BoatSpawnRequest>(OnBoatSpawnRequest);
+            On_BoatDeSpawnRequest =
+                GameManager_2_0.Instance.EventBus.Subscribe<WorldEvent.BoatDeSpawnRequest>(OnBoatDeSpawnRequest);
+            On_CustomerDeSpawnRequest =    GameManager_2_0.Instance.EventBus.Subscribe<WorldEvent.CustomerDeSpawnRequest>(OnCustomerDeSpawnRequest);
+
+            OnBoatEndLocationSpawned = GameManager_2_0.Instance.EventBus.Subscribe<TileEvents.BoatDestroyerTilePlaced>(OnBoatDestoyerTilePlaced);
         }
 
         ~WorldController()
         {
             GameManager_2_0.Instance.EventBus.UnSubscribe<ChunkChanged>(ChunkChangedToken.TokenId);
+            GameManager_2_0.Instance.EventBus.UnSubscribe<WorldEvent.BoatSpawnRequest>(On_BoatSpawnRequest.TokenId);
+            GameManager_2_0.Instance.EventBus.UnSubscribe<WorldEvent.BoatDeSpawnRequest>(On_BoatDeSpawnRequest.TokenId);
+            GameManager_2_0.Instance.EventBus.UnSubscribe<WorldEvent.CustomerDeSpawnRequest>(On_CustomerDeSpawnRequest.TokenId);
+            GameManager_2_0.Instance.EventBus.UnSubscribe<TileEvents.BoatDestroyerTilePlaced>(OnBoatEndLocationSpawned.TokenId);
         }
         public void SetWorldSize(int width, int height, int chunkSize, Transform optionalParent = null)
         {
@@ -57,7 +98,7 @@ namespace RCR.Settings.NewScripts.Controllers
                     // m_chunkControllers[x, y] = new ChunkController();
 
                     ChunkController cc = m_chunkControllers.CreateNode(new ChunkController(), x, y);
-                    cc.PreWarmTiles(chunkSize * chunkSize);
+                    //cc.PreWarmTiles(chunkSize * chunkSize);
                     Chunk c = Model.Chunks.CreateNode(cc.GetChunk(), x, y);
                     c.MatrixID = new Vector2Int(x, y);
                     // c.ID = (x * height) + y;
@@ -75,9 +116,9 @@ namespace RCR.Settings.NewScripts.Controllers
             }
         }
 
-        public void InitWorldComponents(ComponentPool<Entity.Entity> entityPool)
+        public void InitWorldComponents( ComponentPool<Boat> boatPool,  ComponentPool<Customer> CustomerPool)
         {
-            EntitySpawningSystem = new ConcreteSpawningSystem(entityPool);
+            EntitySpawningSystem = new ConcreteSpawningSystem( ref boatPool ,ref CustomerPool);
         }
 
         /// <summary>
@@ -214,11 +255,7 @@ namespace RCR.Settings.NewScripts.Controllers
 
         public IEnumerator SpawningLoop() //TODO will need some value to determine rate of spawning for now just gonna set it to 10seconds
         {
-            while (EntitySpawningSystem.Active)
-            {
-                yield return new WaitForSecondsRealtime(10.0f);
-                EntitySpawningSystem.Spawn();
-            }
+            yield return null;
         }
 
         #endregion
@@ -339,6 +376,25 @@ namespace RCR.Settings.NewScripts.Controllers
         
         private void On_ChunkChanged(ChunkChanged evnt, EventArgs args) => UpdateWorldBoundries();
         
+        private void OnBoatSpawnRequest(WorldEvent.BoatSpawnRequest evnt, EventArgs args)
+        {
+            _EntitesInScene.Add(EntitySpawningSystem.SpawnBoat(ref BoatTaskSystem));
+        }
+        private void OnBoatDeSpawnRequest(WorldEvent.BoatDeSpawnRequest evnt, EventArgs arg)
+        {
+            _EntitesInScene.Remove(evnt.entity);
+            EntitySpawningSystem.DeSpawnBoat(evnt.entity);
+        }
+        private void OnCustomerDeSpawnRequest(WorldEvent.CustomerDeSpawnRequest evnt, EventArgs arg)
+        {
+            _EntitesInScene.Remove(evnt.entity);
+            EntitySpawningSystem.DeSpawnCustomer(evnt.entity);
+        }
+        
+        private void OnBoatDestoyerTilePlaced(TileEvents.BoatDestroyerTilePlaced evnt, EventArgs arg2)
+        {
+            
+        }
         #endregion
     }
 }

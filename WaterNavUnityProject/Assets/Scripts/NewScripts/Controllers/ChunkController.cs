@@ -10,6 +10,7 @@ using RCR.Settings.NewScripts.Tilesets;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
+using Tile = NewScripts.Model.Tile;
 
 namespace RCR.Settings.NewScripts.Controllers
 {
@@ -62,6 +63,7 @@ namespace RCR.Settings.NewScripts.Controllers
             Model.OriginY = Yorigin;
             Model.Width = width;
             Model.Height = height;
+            Model.tiles = new Tile[width, height];
             Model.ChunkPlayerStartingPoint = new Vector2Int(Xorgin + (width/2), Yorigin + (height/2));
             Model.HasBeenInitialized = true;
             Model.Edges = new Line[4]
@@ -72,6 +74,7 @@ namespace RCR.Settings.NewScripts.Controllers
                 new Line(new Vector2(Xorgin + width, Yorigin), new Vector2(Xorgin, Yorigin)), //4 - 1
             };
             Model.ChunkAiLayer = new AILayer(width, height);
+            Model.PathFindingSystem = new PathFindingSystem(Model.ChunkAiLayer);
             this.tilemapController = tilemapController;
         }
 
@@ -280,6 +283,17 @@ namespace RCR.Settings.NewScripts.Controllers
 
             return tileBases;
         }
+
+        private void InsertLogicTiles(BoundsInt bounds,LogicTile[] logicTiles)
+        {
+            if(!ValidateAreaInChunk(bounds))
+                return;
+            foreach (var vector3Int in bounds.allPositionsWithin)
+            {
+                //Model.tiles[vector3Int.x,vector3Int.y] = 
+                    
+            }
+        }
         
         private TileBase[] ReadChunk(Tilemap tilemap, BoundsInt CopyArea)
         {
@@ -305,8 +319,8 @@ namespace RCR.Settings.NewScripts.Controllers
             if (Model.ChunkAiLayer.ValidateAreaInAiLayer(evnt.Args.Bounds))
             {
                 //Get the Underlying Tiles at the positions
-                PureLogicTile[] logicTiles = tilemapController.GetLogicTiles(evnt.Args.Bounds);
-                Model.ChunkAiLayer.ChangeAITiles(logicTiles);
+                // PureLogicTile[] logicTiles = tilemapController.GetLogicTiles(evnt.Args.Bounds);
+                // Model.ChunkAiLayer.ChangeAITiles(logicTiles);
             }
         }
         #endregion

@@ -22,7 +22,7 @@ using Random = UnityEngine.Random;
 
 namespace RCR.Settings.NewScripts.View
 {
-    [RequireComponent(typeof(EntityPool))]
+    [RequireComponent(typeof(BoatPool), typeof(CustomerPool))]
     [RequireComponent(typeof(Grid))]
     public class WorldView: BaseView<World, WorldController>
     {
@@ -119,7 +119,7 @@ namespace RCR.Settings.NewScripts.View
             BoundingPoints = new List<Vector2>();
             Controller.SetWorldSize(GetWorldSize, GetWorldSize,
                 GetChunkSize, this.transform);
-            Controller.InitWorldComponents(GetComponent<ComponentPool<Entity.Entity>>());
+            //Controller.InitWorldComponents(  GetComponent<BoatPool>(),  GetComponent<CustomerPool>());
         }
         
 
@@ -132,9 +132,9 @@ namespace RCR.Settings.NewScripts.View
 
         private IEnumerator Start()
         {
-            StartCoroutine(Controller.SpawningLoop());
+            //StartCoroutine(Controller.SpawningLoop());
             Controller.GetChunkController((GetWorldSize-1)/2, (GetWorldSize-1)/2).SetChunkVisuals( ref TestTilemap);
-            yield return new WaitForSecondsRealtime(20.0f);
+            yield return new WaitForSecondsRealtime(25.0f);
             Controller.GetChunkController(1, 0).SetChunkVisuals(ref TestTilemap);
             // yield return new WaitForSecondsRealtime(7.0f);
             // Controller.GetChunkController(0, 1).SetChunkVisuals(ref TestTilemap);

@@ -102,7 +102,7 @@ namespace RCR.Settings.NewScripts.Camera
             if(!CameraBounds.OverlapPoint(NewPosition))
                 return;
             helper.localPosition += new Vector3(eventData.delta.x, eventData.delta.y) * Sensitivity;
-            Debug.Log(helper.localPosition);
+            //Debug.Log(helper.localPosition);
         }
         
 #elif UNITY_IOS || UNITY_ANDROID

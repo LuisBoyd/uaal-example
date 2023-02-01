@@ -8,6 +8,7 @@ using Events.Library.Utils;
 using Patterns.ObjectPooling.Model;
 using RCR.BaseClasses;
 using RCR.Settings.NewScripts.Entity;
+using RCR.Settings.NewScripts.TaskSystem;
 using UnityEngine;
 
 namespace NewManagers
@@ -31,6 +32,7 @@ namespace NewManagers
         {
             base.Awake();
             EventBus = new UnityEventBus(new TokenUtils());
+
         }
 
         // private IEnumerator Start()

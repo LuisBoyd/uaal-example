@@ -8,16 +8,17 @@ namespace RCR.Settings.NewScripts.AI
 {
     public class AILayer
     {
-        public class AITile
+        public struct AITile
         {
-            public LogicDecorations Functinailty;
+            //public LogicDecorations Functinailty;
             public Vector2Int location;
+            
 
-            public AITile(Vector2Int point, LogicDecorations functinailty)
-            {
-                location = point;
-                Functinailty = functinailty;
-            }
+            // public AITile(Vector2Int point, LogicDecorations functinailty)
+            // {
+            //     location = point;
+            //     Functinailty = functinailty;
+            // }
         }
         
         private AITile[,] AiTiles; //TileType is an enum that represents int32 values
@@ -37,14 +38,14 @@ namespace RCR.Settings.NewScripts.AI
                 AiTiles[x, y] = default;
         }
 
-        public void ChangeAITiles(PureLogicTile[] tiles)
+        public void ChangeAITiles()
         {
-            foreach (PureLogicTile tile in tiles)
-            {
-                AiTiles[tile.location.x % Width, tile.location.y % Height]
-                    = new AITile(new Vector2Int(tile.location.x, tile.location.y),
-                        tile.LogicDecorations);
-            }
+            // foreach (PureLogicTile tile in tiles)
+            // {
+            //     AiTiles[tile.location.x % Width, tile.location.y % Height]
+            //         = new AITile(new Vector2Int(tile.location.x, tile.location.y),
+            //             tile.LogicDecorations);
+            // }
             AILayerChanged();
         }
         public bool ValidateAreaInAiLayer(BoundsInt bounds)
@@ -60,19 +61,19 @@ namespace RCR.Settings.NewScripts.AI
                                       && Position.x >= 0 && Position.y >= 0;
         }
 
+        public AITile[,] GetGrid() => AiTiles;
+
         private void AILayerChanged()
         {
             foreach (AITile LogicTileValue in AiTiles)
             {
-                if(LogicTileValue == null)
-                    continue;
-                if(LogicTileValue.Functinailty.HasFlag(LogicDecorations.Debugger))
-                    Debug.Log("");
-                if(LogicTileValue.Functinailty.HasFlag(LogicDecorations.Path))
-                    Debug.Log("");
-                if(LogicTileValue.Functinailty.HasFlag(LogicDecorations.BoatSpawner) ||LogicTileValue.Functinailty.HasFlag(LogicDecorations.CustomerSpawner))
-                   GameManager_2_0.Instance.EventBus.Publish(new OnSpawnerPlaced(
-                       new OnLogicChangedArgs(LogicTileValue.location, LogicTileValue.Functinailty)),EventArgs.Empty);
+                // if(LogicTileValue.Functinailty.HasFlag(LogicDecorations.Debugger))
+                //     Debug.Log("");
+                // if(LogicTileValue.Functinailty.HasFlag(LogicDecorations.Path))
+                //     Debug.Log("");
+                // if(LogicTileValue.Functinailty.HasFlag(LogicDecorations.BoatSpawner) ||LogicTileValue.Functinailty.HasFlag(LogicDecorations.CustomerSpawner))
+                //    GameManager_2_0.Instance.EventBus.Publish(new OnSpawnerPlaced(
+                //        new OnLogicChangedArgs(LogicTileValue.location, LogicTileValue.Functinailty)),EventArgs.Empty);
             }
         }
         

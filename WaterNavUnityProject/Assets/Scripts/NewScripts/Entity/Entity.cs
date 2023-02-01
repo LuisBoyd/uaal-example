@@ -1,36 +1,31 @@
 ﻿using System;
-using NewManagers;
-using RCR.Patterns;
+using RCR.Settings.NewScripts.TaskSystem;
 using UnityEngine;
 
 namespace RCR.Settings.NewScripts.Entity
 {
-    [RequireComponent(typeof(SpriteRenderer))]
-    public class Entity : BaseView<EntityAttributes, EntityController>
+    public abstract class Entity<T> : MonoBehaviour, IEntity where T : TaskBase
     {
-        #region Public Methods
-        public void ChangeEntityBehaviour(EntityController controller,
-            EntityAttributes attributes)
-        {
-            if (controller != null && attributes != null)
-            {
-                Controller = controller;
-                Model = attributes;
-            }
-        }
-        #endregion
+        protected TaskSystem<T> TaskSystem;
+        protected TaskWorkerAI<T> WorkerAI;
+        public Transform Transform { get; }
 
-        #region private Methods
-        private Sprite ChangeSprite(Type type)
+        public virtual void Setup(TaskSystem<T> taskSystem)
         {
-            return GameManager_2_0.Instance.SpriteDicitonary[type];
+            TaskSystem = taskSystem;
         }
-        #endregion
 
-        #region UnityFunctions
-        
-        #endregion
-        
-        
+        public void InterruptTask(TaskBase task)
+        {
+            if(task.GetType().IsAssignableFrom(typeof(T)))
+                WorkerAI.Interrupt(task as T);
+        }
+
+        public abstract void MoveTo(Vector3 position, Action onArrivedAtPosition = null);
+
+        protected virtual void Update()
+        {
+            WorkerAI.Update();
+        }
     }
 }

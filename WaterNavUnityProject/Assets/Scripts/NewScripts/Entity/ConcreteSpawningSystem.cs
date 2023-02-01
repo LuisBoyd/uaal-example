@@ -1,108 +1,86 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Events.Library.Models;
 using Events.Library.Models.WorldEvents;
 using NewManagers;
 using Patterns.ObjectPooling.Model;
+using RCR.Settings.NewScripts.Controllers;
+using RCR.Settings.NewScripts.TaskSystem;
 using UnityEngine;
 
 namespace RCR.Settings.NewScripts.Entity
 {
-    public class ConcreteSpawningSystem : IEntitySpawningSystem
+    public class ConcreteSpawningSystem
     {
+        private ComponentPool<Customer> CustomerPool;
+        private ComponentPool<Boat> boatPool;
 
-        private ComponentPool<Entity> _EntityPool;
-        private Dictionary<Vector2Int, EntityType> _EntitySpawnerLocations;
+        private Vector3Int BoatSpawnLocation;
+        private Token On_BoatSpawnerPlacedToken;
 
-        public ConcreteSpawningSystem(ComponentPool<Entity> pool, int warmUpQuantity = 100)
+
+
+        private HashSet<Vector3Int> CustomerSpawnLocations;
+        private Token On_CustomerSpawnerPlacedToken;
+
+
+        public float SpawnTime = 20.0f; //TODO later on these need to be replaced with upgrade's essentially to upgrade
+        public int BoatSize = 3;// The frequency and the size of offloading passengers
+
+        public ConcreteSpawningSystem(ref ComponentPool<Boat> boatPool, ref ComponentPool<Customer> CustomerPool,int CustomerQuantity = 20,
+            int BoatQuantity = 10)
         {
-            _EntityPool = pool;
-            _EntityPool.PreWarm(warmUpQuantity);
-            _EntitySpawnerLocations = new Dictionary<Vector2Int, EntityType>();
+            this.CustomerPool = CustomerPool;
+            this.boatPool = boatPool;
+            CustomerPool.PreWarm(CustomerQuantity);
+            boatPool.PreWarm(BoatQuantity);
             Active = true;
-            On_spawnerPlacement = GameManager_2_0.Instance.EventBus.Subscribe<OnSpawnerPlaced>(On_spawnerPlaced);
+            CustomerSpawnLocations = new HashSet<Vector3Int>();
+
+            
+            On_BoatSpawnerPlacedToken =
+                GameManager_2_0.Instance.EventBus.Subscribe<TileEvents.BoatSpawnerTilePlaced>(On_BoatSpawnerPlaced);
+            On_CustomerSpawnerPlacedToken = GameManager_2_0.Instance.EventBus.Subscribe<TileEvents.CustomerSpawnerTilePlaced>(On_CustomerSpawnerPlaced);
+            
         }
+        
         ~ConcreteSpawningSystem()
         {
             Active = false;
-            GameManager_2_0.Instance.EventBus.UnSubscribe<OnSpawnerPlaced>(On_spawnerPlacement.TokenId);
+            GameManager_2_0.Instance.EventBus.UnSubscribe<TileEvents.BoatSpawnerTilePlaced>(On_BoatSpawnerPlacedToken.TokenId);
+            GameManager_2_0.Instance.EventBus.UnSubscribe<TileEvents.CustomerSpawnerTilePlaced>(On_CustomerSpawnerPlacedToken.TokenId);
+
         }
 
 
         public bool Active { get; private set; }
-        public Token On_spawnerPlacement { get; }
 
-
-        public void Spawn(EntitySpawningOptions options = default)
+        public Boat SpawnBoat(ref TaskSystem<BoatTask> boatTaskSystem)
         {
-            if(_EntitySpawnerLocations.Count <= 0)
-                return;
-            Entity e = _EntityPool.Request();
-            Vector2Int spawnLocation = _EntitySpawnerLocations.First(kp =>
-                kp.Value == EntityType.Boat).Key;
-            e.ChangeEntityBehaviour(new BoatController(), new BoatAttributes());
-            e.transform.position = new Vector3(spawnLocation.x + .5f, spawnLocation.y + .5f);
-            e.transform.SetParent(options.Parent);
-            //TODO Add rotation
+            Boat requestedBoat = boatPool.Request();
+            requestedBoat.transform.localPosition = BoatSpawnLocation;
+            requestedBoat.Setup(boatTaskSystem);
+            return requestedBoat;
         }
 
-        public void Spawn(Vector2Int requestingLocation, EntitySpawningOptions options = default)
+        public Customer spawnCustomer(ref TaskSystem<CustomerTask> boatTaskSystem)
         {
-            if(_EntitySpawnerLocations.Count <= 0)
-                return;
-            Entity e = _EntityPool.Request();
-            Vector2Int spawnLocation;
-            switch (_EntitySpawnerLocations[requestingLocation])
-            {
-                default:
-                    Debug.LogWarning($"Can't Spawn A entity with no behavior");
-                    _EntityPool.Return(e);
-                    break;
-                case EntityType.Boat:
-                    e.ChangeEntityBehaviour(new BoatController(), new BoatAttributes());
-                    break;
-                case EntityType.Customer:
-                    e.ChangeEntityBehaviour(new CustomerController(), new CustomerAttributes());
-                    break;
-            }
-            e.transform.position = new Vector3(requestingLocation.x + .5f, requestingLocation.y + .5f);
-            e.transform.SetParent(options.Parent);
-            //TODO Add rotation
+            return null;
         }
 
-        public void Despawn(Entity e)
-        {
-            _EntityPool.Return(e);
-        }
+        public void DeSpawnBoat(Boat entity) => boatPool.Return(entity);
+        public void DeSpawnCustomer(Customer customer) => CustomerPool.Return(customer);
+        
 
-        public void StopPauseSystem()
+        private void On_BoatSpawnerPlaced(TileEvents.BoatSpawnerTilePlaced evnt, EventArgs args)
         {
-            Active = false;
+            BoatSpawnLocation = evnt.data.TilePlacedLocation;
         }
-
-        public void ResumeSystem()
+        private void On_CustomerSpawnerPlaced(TileEvents.CustomerSpawnerTilePlaced evnt, EventArgs args)
         {
-            Active = true;
-        }
-
-        private void On_spawnerPlaced(OnSpawnerPlaced envt, EventArgs args)
-        {
-            if (envt.Args.Removed)
-            {
-                if(_EntitySpawnerLocations.ContainsKey(envt.Args.Position))
-                    _EntitySpawnerLocations.Remove(envt.Args.Position);
-            }
-            else
-            {
-                if (_EntitySpawnerLocations.ContainsValue(EntityType.Boat))
-                {
-                    //If a boat Location Exists already remove it first
-                    _EntitySpawnerLocations.Remove(_EntitySpawnerLocations.First(kp => kp.Value == EntityType.Boat).Key);
-                }
-                if(!_EntitySpawnerLocations.ContainsKey(envt.Args.Position))
-                    _EntitySpawnerLocations.Add(envt.Args.Position, envt.entityType);
-            }
+            CustomerSpawnLocations.Add(evnt.data.TilePlacedLocation);
         }
     }
 }
