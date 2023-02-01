@@ -11,8 +11,7 @@ namespace NewScripts.Model
     {
 
         #region varibles
-
-        public AdjacencyMatrix<Chunk> Chunks;
+        
         /// <summary>
         /// The Width of the world in Chunks
         /// </summary>

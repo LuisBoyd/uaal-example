@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using RCR.Settings.NewScripts.Entity;
 using RCR.Settings.NewScripts.Tilesets;
+using RCR.Settings.SuperNewScripts;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -9,7 +10,7 @@ using UnityEngine.WSA;
 
 namespace RCR.Settings.NewScripts.AI
 {
-    public class PathFindingSystem
+    public class PathFindingSystem : MultithreadedSafeSingelton<PathFindingSystem>
     {
         private const int MOVE_STRAIGHT_COST = 10;
         private const int MOVE_DIAGONAL_COST = 10;
@@ -22,6 +23,9 @@ namespace RCR.Settings.NewScripts.AI
             Tiles = layer.GetGrid();
             gridSize = new int2(Tiles.GetLength(0), Tiles.GetLength(1));
         }
+        
+        public PathFindingSystem(){}
+        
 
         public void FindPath(Vector2Int startPos, Vector2Int endpos, EntityType entityType)
         {

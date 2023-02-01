@@ -7,6 +7,7 @@ using Events.Library.Models.WorldEvents;
 using NewManagers;
 using NewScripts.Model;
 using Patterns.ObjectPooling.Model;
+using RCR.BaseClasses;
 using RCR.Patterns;
 using RCR.Settings.Collections.Sorting;
 using RCR.Settings.NewScripts.Controllers;
@@ -24,7 +25,7 @@ namespace RCR.Settings.NewScripts.View
 {
     [RequireComponent(typeof(BoatPool), typeof(CustomerPool))]
     [RequireComponent(typeof(Grid))]
-    public class WorldView: BaseView<World, WorldController>
+    public class WorldView: Singelton<BaseView<World, WorldController>>
     {
         public enum ChunkSize
         {
@@ -117,8 +118,8 @@ namespace RCR.Settings.NewScripts.View
         {
             base.Awake();
             BoundingPoints = new List<Vector2>();
-            Controller.SetWorldSize(GetWorldSize, GetWorldSize,
-                GetChunkSize, this.transform);
+            //C/ontroller.SetWorldSize(GetWorldSize, GetWorldSize,
+                // GetChunkSize, this.transform);
             //Controller.InitWorldComponents(  GetComponent<BoatPool>(),  GetComponent<CustomerPool>());
         }
         
@@ -126,29 +127,28 @@ namespace RCR.Settings.NewScripts.View
         private void OnEnable()
         {
 #if UNITY_EDITOR
-            Debug.Log($"The Current World Tile Count: {Controller.GetTileCount()}");      
+            //Debug.Log($"The Current World Tile Count: {Controller.GetTileCount()}");      
 #endif
         }
 
-        private IEnumerator Start()
-        {
-            //StartCoroutine(Controller.SpawningLoop());
-            Controller.GetChunkController((GetWorldSize-1)/2, (GetWorldSize-1)/2).SetChunkVisuals( ref TestTilemap);
-            yield return new WaitForSecondsRealtime(25.0f);
-            Controller.GetChunkController(1, 0).SetChunkVisuals(ref TestTilemap);
-            // yield return new WaitForSecondsRealtime(7.0f);
-            // Controller.GetChunkController(0, 1).SetChunkVisuals(ref TestTilemap);
-            // yield return new WaitForSecondsRealtime(7.0f);
-            // Controller.GetChunkController(1, 2).SetChunkVisuals(ref TestTilemap);
-            // yield return new WaitForSecondsRealtime(7.0f);
-            // Controller.GetChunkController(0, 2).SetChunkVisuals(ref TestTilemap);
-        
-        }
+        // private IEnumerator Start()
+        // {
+        //     //StartCoroutine(Controller.SpawningLoop());
+        //     // Controller.GetChunkController((GetWorldSize-1)/2, (GetWorldSize-1)/2).SetChunkVisuals( ref TestTilemap);
+        //     // yield return new WaitForSecondsRealtime(25.0f);
+        //     // Controller.GetChunkController(1, 0).SetChunkVisuals(ref TestTilemap);
+        //     // yield return new WaitForSecondsRealtime(7.0f);
+        //     // Controller.GetChunkController(0, 1).SetChunkVisuals(ref TestTilemap);
+        //     // yield return new WaitForSecondsRealtime(7.0f);
+        //     // Controller.GetChunkController(1, 2).SetChunkVisuals(ref TestTilemap);
+        //     // yield return new WaitForSecondsRealtime(7.0f);
+        //     // Controller.GetChunkController(0, 2).SetChunkVisuals(ref TestTilemap);
+        //
+        // }
 
         #endregion
 
         #region Only-Editor
-#if UNITY_EDITOR
         [Header("Editor Only Values")]
         [SerializeField] 
         private Vector3 DebugCubeSize;
@@ -161,24 +161,24 @@ namespace RCR.Settings.NewScripts.View
         {
             if (Application.isPlaying)
             {
-                foreach (ChunkController chunkController in Controller.GetChunkControllers())
-                {
-                    Chunk chunk = chunkController.GetChunk();
-                    Gizmos.color = chunkController.DebugColor;
-                    Gizmos.DrawCube(new Vector3(chunk.OriginX, chunk.OriginY) + transform.position + DebugCubeOffset,
-                        DebugCubeSize); //Min
-                    Gizmos.DrawCube(
-                        new Vector3(chunk.OriginX + chunk.Width, chunk.OriginY + chunk.Height) + transform.position + DebugCubeOffset,
-                       DebugCubeSize); //Max
-                    Gizmos.DrawCube(new Vector3(chunk.OriginX + chunk.Width, chunk.OriginY) + transform.position + DebugCubeOffset,
-                        DebugCubeSize); //Max x
-                    Gizmos.DrawCube(new Vector3(chunk.OriginX, chunk.OriginY + chunk.Height) + transform.position + DebugCubeOffset,
-                       DebugCubeSize); //Max y
+        //         foreach (ChunkController chunkController in Controller.GetChunkControllers())
+        //         {
+        //             Chunk chunk = chunkController.GetChunk();
+        //             Gizmos.color = chunkController.DebugColor;
+        //             Gizmos.DrawCube(new Vector3(chunk.OriginX, chunk.OriginY) + transform.position + DebugCubeOffset,
+        //                 DebugCubeSize); //Min
+        //             Gizmos.DrawCube(
+        //                 new Vector3(chunk.OriginX + chunk.Width, chunk.OriginY + chunk.Height) + transform.position + DebugCubeOffset,
+        //                DebugCubeSize); //Max
+        //             Gizmos.DrawCube(new Vector3(chunk.OriginX + chunk.Width, chunk.OriginY) + transform.position + DebugCubeOffset,
+        //                 DebugCubeSize); //Max x
+        //             Gizmos.DrawCube(new Vector3(chunk.OriginX, chunk.OriginY + chunk.Height) + transform.position + DebugCubeOffset,
+        //                DebugCubeSize); //Max y
                 }
             }
-        }
 
-#endif
         #endregion
+
     }
+
 }

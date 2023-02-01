@@ -6,12 +6,14 @@ using RCR.Patterns;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Linq;
+using System.Threading.Tasks;
 using Events.Library.Models;
 using Events.Library.Models.WorldEvents;
 using NewManagers;
 using Patterns.ObjectPooling.Model;
 using RCR.Settings.Collections;
 using RCR.Settings.Collections.Sorting;
+using RCR.Settings.NewScripts.DataStorage.Interfaces;
 using RCR.Settings.NewScripts.Entity;
 using RCR.Settings.NewScripts.Geometry;
 using RCR.Settings.NewScripts.TaskSystem;
@@ -20,7 +22,7 @@ using Tile = NewScripts.Model.Tile;
 
 namespace RCR.Settings.NewScripts.Controllers
 {
-    public class WorldController : BaseController<World>
+    public class WorldController : BaseController<World>, ILoader<World>
     {
 
         private AdjacencyMatrix<ChunkController> m_chunkControllers;
@@ -86,7 +88,6 @@ namespace RCR.Settings.NewScripts.Controllers
         public void SetWorldSize(int width, int height, int chunkSize, Transform optionalParent = null)
         {
             m_chunkControllers = new AdjacencyMatrix<ChunkController>(width,height);
-            Model.Chunks = new AdjacencyMatrix<Chunk>(width, height);
             Model.ChunkSize = chunkSize;
             Model.height = height;
             Model.width = width;
@@ -95,16 +96,7 @@ namespace RCR.Settings.NewScripts.Controllers
             {
                 for (int y = 0; y < height; y++)
                 {
-                    // m_chunkControllers[x, y] = new ChunkController();
-
                     ChunkController cc = m_chunkControllers.CreateNode(new ChunkController(), x, y);
-                    //cc.PreWarmTiles(chunkSize * chunkSize);
-                    Chunk c = Model.Chunks.CreateNode(cc.GetChunk(), x, y);
-                    c.MatrixID = new Vector2Int(x, y);
-                    // c.ID = (x * height) + y;
-                    // m_chunkControllers[x,y].PreWarmTiles(chunkSize * chunkSize);
-                    // Model.Chunks[x, y] = m_chunkControllers[x, y].GetChunk();
-                    // Model.Chunks[x, y].ID = (x * height) + y;
                 }
             }
             SetUpTilemap(width,height,chunkSize, optionalParent);
@@ -134,9 +126,9 @@ namespace RCR.Settings.NewScripts.Controllers
                 for (int y = 0; y < Model.height; y++)
                 {
                     // count += Model.Chunks.GetNode(x,y). * Model.Chunks[x, y].Height;
-                    Chunk xy = Model.Chunks.GetNode(x, y);
-                    count += xy.Width * xy.Height;
-                    xy = null;
+                    // Chunk xy = Model.Chunks.GetNode(x, y);
+                    // count += xy.Width * xy.Height;
+                    // xy = null;
                 }
             }
             return count;
@@ -194,8 +186,8 @@ namespace RCR.Settings.NewScripts.Controllers
             
             foreach (var chunkController in adjacent_chunks)
             {
-                if(!chunkController.IsChunkActive())
-                    continue;
+                // if(!chunkController.IsChunkActive())
+                //     continue;
                 Line[] chunkEdges = chunkController.GetChunkEdges();
                 for (int i = 0; i < chunkEdges.Length; i++)
                 {
@@ -271,17 +263,17 @@ namespace RCR.Settings.NewScripts.Controllers
             Chunk a = controllerA.GetChunk();
             Chunk b = controllerB.GetChunk();
             
-            if ((a.OriginX < b.OriginX + b.Width) &&
-                (a.OriginX + a.Width > b.OriginX) &&
-                (a.OriginY < b.OriginY + b.Height) &&
-                (a.OriginY + a.Height > b.OriginY))
-            {
-                Debug.LogWarning("Chunk a: \n" +
-                                 $"Origin: {a.OriginX},{a.OriginY}, Width: {a.Width}, Height: {a.Height} \n" +
-                                 $"Chunk b: \n" +
-                                 $"Origin: {b.OriginX},{b.OriginY}, Width: {b.Width}, Height: {b.Height}");
-                return !true;
-            }
+            // if ((a.OriginX < b.OriginX + b.Width) &&
+            //     (a.OriginX + a.Width > b.OriginX) &&
+            //     (a.OriginY < b.OriginY + b.Height) &&
+            //     (a.OriginY + a.Height > b.OriginY))
+            // {
+            //     Debug.LogWarning("Chunk a: \n" +
+            //                      $"Origin: {a.OriginX},{a.OriginY}, Width: {a.Width}, Height: {a.Height} \n" +
+            //                      $"Chunk b: \n" +
+            //                      $"Origin: {b.OriginX},{b.OriginY}, Width: {b.Width}, Height: {b.Height}");
+            //     return !true;
+            // }
 
             return !false;
         }
@@ -331,9 +323,8 @@ namespace RCR.Settings.NewScripts.Controllers
                 {
                     // m_chunkControllers[x,y].SetChunkData(Model,x * chunkSize,
                     //     y * chunkSize, chunkSize, chunkSize);
-                    m_chunkControllers.GetNode(x,y).SetChunkData(Model, x * chunkSize,
-                        y * chunkSize, chunkSize, chunkSize,
-                        ref m_TilemapController);
+                    m_chunkControllers.GetNode(x,y).SetChunkData(x * chunkSize,y * chunkSize,
+                        y * chunkSize, chunkSize);
                 }
             }
         }
@@ -355,7 +346,8 @@ namespace RCR.Settings.NewScripts.Controllers
         /// <returns>True if both chunks are active, False if one or both are Inactive</returns>
         private bool ChunksActive(ChunkController a, ChunkController b)
         {
-            return a.GetChunk().Active && b.GetChunk().Active;
+            // return a.GetChunk().Active && b.GetChunk().Active;
+            return false;
         }
 
         private void SetUpTilemap(int width, int height, int chunkSize,Transform optionalParent = null)
@@ -394,6 +386,15 @@ namespace RCR.Settings.NewScripts.Controllers
         private void OnBoatDestoyerTilePlaced(TileEvents.BoatDestroyerTilePlaced evnt, EventArgs arg2)
         {
             
+        }
+        #endregion
+
+        #region Loading/Saving
+
+        public IFileReader FileReader { get; }
+        public Task<World> ReconstructObject()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }
