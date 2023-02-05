@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Events.Library.Models;
 using Events.Library.Unity;
 using Patterns.ObjectPooling.Model;
@@ -8,6 +10,8 @@ using RCR.Settings.NewScripts.AI;
 using RCR.Settings.NewScripts.Entity;
 using RCR.Settings.NewScripts.TaskSystem;
 using RCR.Systems.ProgressSystem;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace RCR.Settings.SuperNewScripts
 {
@@ -38,10 +42,11 @@ namespace RCR.Settings.SuperNewScripts
         #endregion
         
         #region Statisitcs
+
         /// <summary>
         /// Later on to do with graph's and such
         /// </summary>
-        private StatisticsCalculator statCalculator = StatisticsCalculator.GetInstance();
+        private StatisticsCalculator statCalculator;
         #endregion
         #endregion
 
@@ -50,8 +55,9 @@ namespace RCR.Settings.SuperNewScripts
         public Dictionary<WorldEvent, Token> WorldEventTokens { get; private set; }
         #endregion
         #region LookUpDataSets
-        public TileDataBase TileDataBase = SuperNewScripts.TileDataBase.GetInstance();
-        public StructureDataBase StructureDataBase = SuperNewScripts.StructureDataBase.GetInstance();
+
+        public TileDataBase TileDataBase;
+        public StructureDataBase StructureDataBase;
         #endregion
 
         #region AI
@@ -59,12 +65,18 @@ namespace RCR.Settings.SuperNewScripts
         #endregion
 
         #region Systems
-        public AdaptivePerformanceSystem AdaptivePerformanceSystem =
-            SuperNewScripts.AdaptivePerformanceSystem.GetInstance();
 
-        public AddresablesSystem AddresablesSystem = SuperNewScripts.AddresablesSystem.GetInstance();
-        public AdvertismentSystem AdvertismentSystem = SuperNewScripts.AdvertismentSystem.GetInstance();
-        public LoggingSystem LoggingSystem = SuperNewScripts.LoggingSystem.GetInstance();
+        public AdaptivePerformanceSystem AdaptivePerformanceSystem;
+
+        #region Addresable System
+
+        [SerializeField] 
+        private AssetLabelReference[] _LoadAssetLabelOnStart;
+        
+        public AddresablesSystem AddresablesSystem;
+        #endregion
+        public AdvertismentSystem AdvertismentSystem;
+        public LoggingSystem LoggingSystem;
         #endregion
 
         #region Entity's
@@ -113,7 +125,23 @@ namespace RCR.Settings.SuperNewScripts
         protected override void Awake()
         {
             base.Awake();
+            statCalculator = StatisticsCalculator.GetInstance();
+            TileDataBase = SuperNewScripts.TileDataBase.GetInstance();
+            StructureDataBase = SuperNewScripts.StructureDataBase.GetInstance();
+            AdaptivePerformanceSystem =
+                SuperNewScripts.AdaptivePerformanceSystem.GetInstance();
+            AddresablesSystem = SuperNewScripts.AddresablesSystem.GetInstance();
+            AdvertismentSystem = SuperNewScripts.AdvertismentSystem.GetInstance();
+            LoggingSystem = SuperNewScripts.LoggingSystem.GetInstance();
+
         }
+
+        private async UniTaskVoid Start()
+        {
+            AddresablesSystem.Start().Forget();
+            AddresablesSystem.LoadAssetLabel(_LoadAssetLabelOnStart).Forget();
+        }
+
         #endregion
 
         #region ImportantMethods

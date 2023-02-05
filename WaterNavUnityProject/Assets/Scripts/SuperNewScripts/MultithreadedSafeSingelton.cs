@@ -1,4 +1,6 @@
-﻿namespace RCR.Settings.SuperNewScripts
+﻿using Cysharp.Threading.Tasks;
+
+namespace RCR.Settings.SuperNewScripts
 {
     public class MultithreadedSafeSingelton<T> where T: new()
     {

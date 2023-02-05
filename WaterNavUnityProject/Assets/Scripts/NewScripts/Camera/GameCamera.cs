@@ -52,12 +52,12 @@ namespace RCR.Settings.NewScripts.Camera
             Confiner2D.m_BoundingShape2D = CameraBounds;
              VirtualCamera.Follow = helper;
              VirtualCamera.m_Lens.OrthographicSize = ZoomOutMax; 
-             BoundsUpdatedtoken = GameManager_2_0.Instance.EventBus.Subscribe<WorldBoundsChanged>(Update_CameraBounds);
+             //BoundsUpdatedtoken = GameManager_2_0.Instance.EventBus.Subscribe<WorldBoundsChanged>(Update_CameraBounds);
         }
 
         private void OnDisable()
         {
-            GameManager_2_0.Instance.EventBus.UnSubscribe<WorldBoundsChanged>(BoundsUpdatedtoken.TokenId);
+            //GameManager_2_0.Instance.EventBus.UnSubscribe<WorldBoundsChanged>(BoundsUpdatedtoken.TokenId);
         }
 
 

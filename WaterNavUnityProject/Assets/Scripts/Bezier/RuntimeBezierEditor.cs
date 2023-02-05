@@ -47,7 +47,7 @@ namespace Bezier
         private void OnEnable()
         {
             SetupPoints();
-            _GlobalDisplaySettings = GlobalDisplaySettings.Load();
+            //_GlobalDisplaySettings = GlobalDisplaySettings.Load();
         }
 
         private void SetupPoints()

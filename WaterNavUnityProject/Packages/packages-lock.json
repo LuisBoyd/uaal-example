@@ -1,5 +1,21 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "73d86259ce31ce7f4dfe1d028ea1c3edf96c23e4"
+    },
+    "com.laicasaane.unity-addressables-manager": {
+      "version": "https://github.com/laicasaane/unity-addressables-manager.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.addressables": "1.6.0"
+      },
+      "hash": "ad110eb243c52670412e847fab9c969e9612b3da"
+    },
     "com.unity.2d.animation": {
       "version": "9.0.1",
       "depth": 1,
