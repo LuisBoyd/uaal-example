@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: DefaultMaps
+  m_EditorClassIdentifier: 
+  m_GroupName: DefaultMaps
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 0f3d6721821d7f84797228cb4d6a8f73
+  m_SerializeEntries:
+  - m_GUID: e922970b7d8fa634cac8174cb520711f
+    m_Address: Assets/Gameplay/Prefabs/Map/RiverRightMap_128x128.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Maps
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 853554b409af11f49ab42905e455de87, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 5e98804a137cc6349be896ded9729fa8, type: 2}
+    - {fileID: 11400000, guid: d619b791eec1a4e44b9b38d794e5fbdd, type: 2}

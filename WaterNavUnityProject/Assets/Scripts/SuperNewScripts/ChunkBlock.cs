@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace RCR.Settings.SuperNewScripts
 {
@@ -9,20 +10,21 @@ namespace RCR.Settings.SuperNewScripts
         /// Tiles Stores all the Datatiles inside this Chunk
         /// </summary>
         public DataTile[,] Tiles;
+        public Vector2Int Origin { get; private set; }
+        public bool Active { get; private set; }
         #endregion
 
-        public void ReadIn(string[] visualIDs)
+        //No Need for Size as a const is set for the chunks size;
+        public void SetOrigin(Vector2Int origin) => Origin = origin;
+        public void SetActive(bool state) => Active = state;
+        public void SetDataTiles(DataTile[] tiles)
         {
-            Tiles = new DataTile[GameConstants.ChunkSize, GameConstants.ChunkSize];
-            
-            for (int x = 0; x < GameConstants.ChunkSize; x++)
+            for (int i = 0; i < tiles.Length; i++)
             {
-                for (int y = 0; y < GameConstants.ChunkSize; y++)
-                {
-                    Tiles[x,y] = DataTile.Create(visualIDs[(x * GameConstants.ChunkSize) + y]);
-                }
+                Tiles[i / tiles.GetLength(0),
+                    i % tiles.GetLength(1)] = tiles[i];
             }
         }
-
+        
     }
 }

@@ -1,4 +1,7 @@
-﻿using RCR.Settings.NewScripts.Entity;
+﻿using System.Collections.Generic;
+using RCR.Settings.NewScripts.Entity;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Events.Library.Models
 {
@@ -36,6 +39,29 @@ namespace Events.Library.Models
             public BoatDeSpawnRequest(Boat entity)
             {
                 this.entity = entity;
+            }
+        }
+        
+        public class WorldTilemapChanged: WorldEvent
+        {
+            public TileBase[] tiles;
+            public Vector3Int[] positions;
+
+            public WorldTilemapChanged(BoundsInt position, TileBase[] tiles)
+            {
+                this.tiles = tiles;
+                List<Vector3Int> positionsList = new List<Vector3Int>();
+                foreach (var vector3Int in position.allPositionsWithin)
+                {
+                    positionsList.Add(vector3Int);
+                }
+                this.positions = positionsList.ToArray();
+            }
+            public WorldTilemapChanged(Vector3Int[] positions, TileBase[] tiles)
+            {
+                this.tiles = tiles;
+                this.positions = positions;
+
             }
         }
         

@@ -5,21 +5,28 @@ using UnityEngine;
 
 namespace RCR.Settings.Collections
 {
-    public class AdjacencyMatrix<T>
+    public class AdjacencyMatrix<T> where T : new()
     {
     private int[,] _AdjacencyRepresentation;
     private T[,] Nodes;
     private List<MatrixEdge<T>> Edges;
     private int Width;
     private int Height;
-
-    public AdjacencyMatrix(int width, int height)
+    
+    
+    public AdjacencyMatrix(int width, int height, bool initialise = false)
     {
         _AdjacencyRepresentation = new int[width, height];
         Nodes = new T[width, height];
         Edges = new List<MatrixEdge<T>>();
         Width = width;
         Height = height;
+        if (initialise)
+        {
+            for (int x = 0; x < width; x++)
+            for (int y = 0; y < width; y++)
+                CreateNode(new T(), x, y);
+        }
         SortOutNullPaths();
     }
 

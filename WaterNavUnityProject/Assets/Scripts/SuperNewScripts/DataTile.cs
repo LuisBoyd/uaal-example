@@ -13,7 +13,7 @@
         /// if the tile it'self has any special properties either Entity's or other
         /// systems should be aware of
         /// </summary>
-        public int BitMaskedIDs { get; private set; }
+        //public int BitMaskedIDs { get; private set; }
         #endregion
 
         #region Constructors

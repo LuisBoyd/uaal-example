@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using RCR.BaseClasses;
+using RCR.Settings.SuperNewScripts.DontDestroyOnLoad;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
@@ -74,6 +77,24 @@ namespace RCR.Settings.SuperNewScripts
                 progress = (float) tasks.Count(t => t.Status == UniTaskStatus.Succeeded) / tasks.Length;
                 onProgress.Invoke(progress);
             }
+        }
+
+        
+        //NGL gonna wanna UNIT test this one
+        /// <summary>
+        /// Called on the Native platform to feed information into unity
+        /// </summary>
+        /// <param name="NativeAppInfo"></param>
+        private void AcceptNativeAppInfo(string NativeAppInfo)
+        {
+            JObject AppInfo = JObject.Parse(NativeAppInfo);
+            if (!AppInfo.IsValid(GameConstants.Schema))
+            {
+                Debug.LogError("Passed in Json was not formatted properly");
+                return;
+            }
+            //Set the LocationID
+            InitialData.SetLocationID( AppInfo["LocationID"] != null ? AppInfo["LocationID"].ToString() : String.Empty);
         }
 
     }

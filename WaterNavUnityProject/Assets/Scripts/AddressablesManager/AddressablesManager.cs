@@ -22,6 +22,7 @@ namespace UnityEngine.AddressableAssets
         private static readonly Dictionary<object, string> _instanceAdresses;
         private static readonly List<GameObject> _noInstanceList;
         private static readonly List<object> _keys;
+        public static readonly Dictionary<string, AssetReference> _AssetReferences;
 
         public static IReadOnlyList<object> Keys => _keys;
 
@@ -43,6 +44,7 @@ namespace UnityEngine.AddressableAssets
             _instanceAdresses = new Dictionary<object, string>();
             _instanceListPool = new Queue<List<GameObject>>();
             _noInstanceList = new List<GameObject>(0);
+            _AssetReferences = new Dictionary<string, AssetReference>();
             _keys = new List<object>();
         }
 

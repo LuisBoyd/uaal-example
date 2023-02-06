@@ -8,11 +8,11 @@ namespace RCR.Settings.SuperNewScripts.SaveSystem.FileSavers
 {
     public abstract class Saver<T> : IFileSaver<T>
     {
-        protected T obj;
+        
 
-        protected Saver(T obj)
+        protected Saver()
         {
-            this.obj = obj;
+           
         }
 
         public virtual bool CanWrite

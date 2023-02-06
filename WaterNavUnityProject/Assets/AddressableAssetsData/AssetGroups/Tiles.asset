@@ -15,8 +15,14 @@ MonoBehaviour:
   m_GroupName: Tiles
   m_Data:
     m_SerializedData: []
-  m_GUID: 8013c824fcd4d8e41a541e15de241bf5
+  m_GUID: 5af72c67221ac1741b0e5b0e30bd14c5
   m_SerializeEntries:
+  - m_GUID: 6bec5e9c94cdc9e418b7670ad9a0aefc
+    m_Address: Assets/2D/Tiles/PureGrass.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Tiles
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7d1555e68567b9d47af0a0419f6a3dba
     m_Address: Assets/2D/Tiles/LogicTiles/PathTiles/NewPathTiles.asset
     m_ReadOnly: 0
@@ -30,8 +36,8 @@ MonoBehaviour:
     - Tiles
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
-  m_Settings: {fileID: 11400000, guid: 6dfb98c128afeee4396e39b36169c8ac, type: 2}
+  m_Settings: {fileID: 11400000, guid: 853554b409af11f49ab42905e455de87, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 42bb4fe8346ed454894ab510f3c9decd, type: 2}
-    - {fileID: 11400000, guid: 2992a6011f9f24f458e1f67dfe1472b7, type: 2}
+    - {fileID: 11400000, guid: 9492dca5e77ded84a93959c479289e30, type: 2}
+    - {fileID: 11400000, guid: 6bbecfda00e37e94d8ae034e85e6b37b, type: 2}

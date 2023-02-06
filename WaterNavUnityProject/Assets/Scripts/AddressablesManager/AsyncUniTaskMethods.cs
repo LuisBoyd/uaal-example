@@ -280,6 +280,7 @@ namespace UnityEngine.AddressableAssets
                 await operation;
 
                 OnLoadAssetCompleted(operation, key, true);
+                _AssetReferences.Add(key, reference);
                 return new OperationResult<T>(reference, operation);
             }
             catch (Exception ex)
@@ -531,6 +532,7 @@ namespace UnityEngine.AddressableAssets
                 await operation;
 
                 OnInstantiateCompleted(operation, key, true);
+                _AssetReferences.Add(key, reference);
                 return new OperationResult<GameObject>(reference, operation);
             }
             catch (Exception ex)
