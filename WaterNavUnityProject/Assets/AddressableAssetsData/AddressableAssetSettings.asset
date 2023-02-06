@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
-  m_DefaultGroup: fa8743035619c044190f1027a4a13c1b
+  m_DefaultGroup: 56f89e5bd01a1ea4ca49d3db142535fe
   m_currentHash:
     serializedVersion: 2
-    Hash: c46403a77b8ce1b05c1d1a7997010e83
+    Hash: baaf1f62d0f4d282d35c7dec5b0c11ec
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -35,19 +35,20 @@ MonoBehaviour:
   m_CheckForContentUpdateRestrictionsOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
-    m_Id: 364185b318df5194cbd872069ebf932e
+    m_Id: 60f0b9692d58ea647ad968f9afe7a865
   m_RemoteCatalogLoadPath:
-    m_Id: 3576342a2c13f6c4dae502e68e219383
+    m_Id: 0f0f72207db24f44292c4aeaff8ac6b8
   m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: 
   m_GroupAssets:
-  - {fileID: 11400000, guid: 66ca167fc2aeaf74485f2209ead0bbaf, type: 2}
-  - {fileID: 11400000, guid: caaf03ae78436fc49b26b297448b3297, type: 2}
-  - {fileID: 11400000, guid: d1547825209e0b04f8a841fe10b42b29, type: 2}
-  - {fileID: 11400000, guid: 397137a3bda02424aa852c781470802b, type: 2}
+  - {fileID: 11400000, guid: 57eeff0898aa9af4784a5854ca68674e, type: 2}
+  - {fileID: 11400000, guid: 3f08b1e9d2ab40349a980503fd2e5983, type: 2}
+  - {fileID: 11400000, guid: 9ef59baa18af8e1468c5553f96752fac, type: 2}
+  - {fileID: 11400000, guid: ddd96169419961343ae00b680df35efa, type: 2}
+  - {fileID: 11400000, guid: 4f6ae7808454f864fa4271bdb07eb5a8, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -56,47 +57,47 @@ MonoBehaviour:
   m_ProfileSettings:
     m_Profiles:
     - m_InheritedParent: 
-      m_Id: e5b260a080e73ee4ab88a086b538badf
+      m_Id: 63616fcafb379f94cbc767eea2805bf5
       m_ProfileName: Default
       m_Values:
-      - m_Id: 07c886a43f6236b40b43967baf3f479b
+      - m_Id: 5b9153c77031e414a98fa2e09fb431bd
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
-      - m_Id: 76c5216d10744ea409efa7f99e822e93
+      - m_Id: 0abf560b70c4bdc4bb1c2fca9ecfff30
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
-      - m_Id: 606e4569a07ed514b8042dbb5bbbdfe9
+      - m_Id: a071f2981ec92df4b8f1a41fb3d0b3e3
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
-      - m_Id: 364185b318df5194cbd872069ebf932e
+      - m_Id: 60f0b9692d58ea647ad968f9afe7a865
         m_Value: ServerData/[BuildTarget]
-      - m_Id: 3576342a2c13f6c4dae502e68e219383
+      - m_Id: 0f0f72207db24f44292c4aeaff8ac6b8
         m_Value: http://[PrivateIpAddress]:[HostingServicePort]
     - m_InheritedParent: 
-      m_Id: 33460e63574467f4aae31aecbf3f513d
-      m_ProfileName: DevelopmentProfile
+      m_Id: 4647c6e0d87c789489a05567eccc6ba6
+      m_ProfileName: Development
       m_Values:
-      - m_Id: 07c886a43f6236b40b43967baf3f479b
+      - m_Id: 5b9153c77031e414a98fa2e09fb431bd
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
-      - m_Id: 76c5216d10744ea409efa7f99e822e93
+      - m_Id: 0abf560b70c4bdc4bb1c2fca9ecfff30
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
-      - m_Id: 606e4569a07ed514b8042dbb5bbbdfe9
+      - m_Id: a071f2981ec92df4b8f1a41fb3d0b3e3
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
-      - m_Id: 364185b318df5194cbd872069ebf932e
+      - m_Id: 60f0b9692d58ea647ad968f9afe7a865
         m_Value: ServerData/[BuildTarget]
-      - m_Id: 3576342a2c13f6c4dae502e68e219383
-        m_Value: https://waternav.co.uk/WaterNavGame/WNContent/[BuildTarget]
+      - m_Id: 0f0f72207db24f44292c4aeaff8ac6b8
+        m_Value: https://waternav.co.uk/WaterNavGame/WNContent:[HostingServicePort]
     m_ProfileEntryNames:
-    - m_Id: 07c886a43f6236b40b43967baf3f479b
+    - m_Id: 5b9153c77031e414a98fa2e09fb431bd
       m_Name: BuildTarget
       m_InlineUsage: 0
-    - m_Id: 76c5216d10744ea409efa7f99e822e93
+    - m_Id: 0abf560b70c4bdc4bb1c2fca9ecfff30
       m_Name: Local.BuildPath
       m_InlineUsage: 0
-    - m_Id: 606e4569a07ed514b8042dbb5bbbdfe9
+    - m_Id: a071f2981ec92df4b8f1a41fb3d0b3e3
       m_Name: Local.LoadPath
       m_InlineUsage: 0
-    - m_Id: 364185b318df5194cbd872069ebf932e
+    - m_Id: 60f0b9692d58ea647ad968f9afe7a865
       m_Name: Remote.BuildPath
       m_InlineUsage: 0
-    - m_Id: 3576342a2c13f6c4dae502e68e219383
+    - m_Id: 0f0f72207db24f44292c4aeaff8ac6b8
       m_Name: Remote.LoadPath
       m_InlineUsage: 0
     m_ProfileVersion: 1
@@ -104,25 +105,25 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - Tiles
-    - Scenes
+    - Scene
+    - Maps
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
-  - {fileID: 11400000, guid: c754d5de120c71540b246c532f85c038, type: 2}
+  - {fileID: 11400000, guid: d3dc5bc73660c3b47b7b236e23545ad7, type: 2}
   m_InitializationObjects: []
   m_CertificateHandlerType:
     m_AssemblyName: 
     m_ClassName: 
   m_ActivePlayerDataBuilderIndex: 3
   m_DataBuilders:
-  - {fileID: 11400000, guid: 80bcb41f02f6d314ea0a7edc5079bb19, type: 2}
-  - {fileID: 11400000, guid: f970b7f274361974f949b6dd56d18537, type: 2}
-  - {fileID: 11400000, guid: 53d203f4a2e98ec48bef5ed31b8903ef, type: 2}
-  - {fileID: 11400000, guid: cf9ac468f4f320b4094edbb73d6a6f9e, type: 2}
-  m_ActiveProfileId: 33460e63574467f4aae31aecbf3f513d
+  - {fileID: 11400000, guid: 4905906fd2686ec4bb4829d03d4f0c30, type: 2}
+  - {fileID: 11400000, guid: d5cc8629c35aee7438e413bd58032a7b, type: 2}
+  - {fileID: 11400000, guid: 90c71b30245c7a54390ebd4f410d66b3, type: 2}
+  - {fileID: 11400000, guid: 1eaa48e784038e64babe13099d75a34f, type: 2}
+  m_ActiveProfileId: 4647c6e0d87c789489a05567eccc6ba6
   m_HostingServicesManager:
     m_HostingServiceInfos: []
     m_Settings: {fileID: 11400000}
     m_NextInstanceId: 0
-    m_RegisteredServiceTypeRefs:
-    - UnityEditor.AddressableAssets.HostingServices.HttpHostingService, Unity.Addressables.Editor
+    m_RegisteredServiceTypeRefs: []
     m_PingTimeoutInMilliseconds: 5000
