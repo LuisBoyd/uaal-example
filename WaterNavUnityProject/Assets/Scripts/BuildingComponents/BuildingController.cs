@@ -6,7 +6,6 @@ using DataStructures;
 using RCR.Patterns;
 using RCR.Settings.AI;
 using UnityEngine;
-using Bezier;
 
 namespace BuildingComponents
 {

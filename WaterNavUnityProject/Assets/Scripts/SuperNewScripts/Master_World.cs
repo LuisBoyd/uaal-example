@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Events.Library.Models;
 using Events.Library.Unity;
+using Events.Library.Utils;
 using Patterns.ObjectPooling.Model;
 using RCR.BaseClasses;
 using RCR.Settings.Collections;
@@ -72,8 +73,6 @@ namespace RCR.Settings.SuperNewScripts
 
         [SerializeField] 
         private AssetLabelReference[] _LoadAssetLabelOnStart;
-        
-        public AddresablesSystem AddresablesSystem;
         #endregion
         public AdvertismentSystem AdvertismentSystem;
         public LoggingSystem LoggingSystem;
@@ -86,6 +85,9 @@ namespace RCR.Settings.SuperNewScripts
         public ComponentPool<Boat> CustomerPool { get; private set; } //TODO these Derived
         //mono behaviors will have to be checked
         #endregion
+
+        [SerializeField] 
+        private AssetReferenceT<RuleTile> Tile;
         
         #region CustomEnums
         public enum ChunkSize
@@ -125,12 +127,17 @@ namespace RCR.Settings.SuperNewScripts
         protected override void Awake()
         {
             base.Awake();
+
+            //Declare the Event System so that is up and running at the start on the Loaded Scene
+            EventBus = new UnityEventBus(new TokenUtils());
+            
+            
+            
             statCalculator = StatisticsCalculator.GetInstance();
             TileDataBase = SuperNewScripts.TileDataBase.GetInstance();
             StructureDataBase = SuperNewScripts.StructureDataBase.GetInstance();
             AdaptivePerformanceSystem =
                 SuperNewScripts.AdaptivePerformanceSystem.GetInstance();
-            AddresablesSystem = SuperNewScripts.AddresablesSystem.GetInstance();
             AdvertismentSystem = SuperNewScripts.AdvertismentSystem.GetInstance();
             LoggingSystem = SuperNewScripts.LoggingSystem.GetInstance();
 
@@ -138,20 +145,15 @@ namespace RCR.Settings.SuperNewScripts
 
         private async UniTaskVoid Start()
         {
-            AddresablesSystem.Start().Forget();
-            AddresablesSystem.LoadAssetLabel(_LoadAssetLabelOnStart).Forget();
+           var obj = await AddresablesSystem.Instance.LoadAssetAsync<RuleTile>(Tile);
+           Debug.Log(AddresablesSystem.Instance.GetInstanceAddress(obj.Value));
+           var anotherobj =
+             await  Addressables.LoadAssetAsync<RuleTile>(AddresablesSystem.Instance.GetInstanceAddress(obj.Value)); 
+           Debug.Log(anotherobj.name);
         }
 
         #endregion
-
-        #region ImportantMethods
-
-        private void InitViusals()
-        {
-            
-        }
-
-        #endregion
+        
         
     }
 }

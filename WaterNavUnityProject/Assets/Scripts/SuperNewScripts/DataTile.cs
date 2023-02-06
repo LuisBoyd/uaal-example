@@ -4,10 +4,10 @@
     {
         #region Save/Load Properties
         /// <summary>
-        /// Visual Id responds to a start up time dataset of sprites so as to assign
+        /// Visual Key responds to a start up time dataset of sprites so as to assign
         /// the right sprite to the right Tile.
         /// </summary>
-        public int VisualID { get; private set; }
+        public object VisualKey { get; private set; }
         /// <summary>
         /// BitMaskedIDs is a bunch of flags essentially I use this value to determine
         /// if the tile it'self has any special properties either Entity's or other
@@ -21,6 +21,17 @@
         /// Parameterless constructor for things such as serialization. 
         /// </summary>
         public DataTile(){}
+        #endregion
+
+        #region static
+
+        public static DataTile Create(string visualID)
+        {
+            return new DataTile()
+            {
+                VisualKey = visualID
+            };
+        }
         #endregion
     }
 }

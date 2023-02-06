@@ -1,4 +1,6 @@
-﻿namespace RCR.Settings.SuperNewScripts
+﻿using System.Collections.Generic;
+
+namespace RCR.Settings.SuperNewScripts
 {
     public struct ChunkBlock
     {
@@ -8,8 +10,19 @@
         /// </summary>
         public DataTile[,] Tiles;
         #endregion
-        
-        
+
+        public void ReadIn(string[] visualIDs)
+        {
+            Tiles = new DataTile[GameConstants.ChunkSize, GameConstants.ChunkSize];
+            
+            for (int x = 0; x < GameConstants.ChunkSize; x++)
+            {
+                for (int y = 0; y < GameConstants.ChunkSize; y++)
+                {
+                    Tiles[x,y] = DataTile.Create(visualIDs[(x * GameConstants.ChunkSize) + y]);
+                }
+            }
+        }
 
     }
 }

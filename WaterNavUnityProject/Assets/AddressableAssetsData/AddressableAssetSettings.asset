@@ -15,9 +15,9 @@ MonoBehaviour:
   m_DefaultGroup: fa8743035619c044190f1027a4a13c1b
   m_currentHash:
     serializedVersion: 2
-    Hash: d099768869efc1ade2271abe7670e4d5
+    Hash: c46403a77b8ce1b05c1d1a7997010e83
   m_OptimizeCatalogSize: 0
-  m_BuildRemoteCatalog: 0
+  m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
   m_CatalogRequestsTimeout: 0
   m_DisableCatalogUpdateOnStart: 0
@@ -69,6 +69,20 @@ MonoBehaviour:
         m_Value: ServerData/[BuildTarget]
       - m_Id: 3576342a2c13f6c4dae502e68e219383
         m_Value: http://[PrivateIpAddress]:[HostingServicePort]
+    - m_InheritedParent: 
+      m_Id: 33460e63574467f4aae31aecbf3f513d
+      m_ProfileName: DevelopmentProfile
+      m_Values:
+      - m_Id: 07c886a43f6236b40b43967baf3f479b
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: 76c5216d10744ea409efa7f99e822e93
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: 606e4569a07ed514b8042dbb5bbbdfe9
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: 364185b318df5194cbd872069ebf932e
+        m_Value: ServerData/[BuildTarget]
+      - m_Id: 3576342a2c13f6c4dae502e68e219383
+        m_Value: https://waternav.co.uk/WaterNavGame/WNContent/[BuildTarget]
     m_ProfileEntryNames:
     - m_Id: 07c886a43f6236b40b43967baf3f479b
       m_Name: BuildTarget
@@ -90,6 +104,7 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - Tiles
+    - Scenes
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: c754d5de120c71540b246c532f85c038, type: 2}
@@ -103,10 +118,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f970b7f274361974f949b6dd56d18537, type: 2}
   - {fileID: 11400000, guid: 53d203f4a2e98ec48bef5ed31b8903ef, type: 2}
   - {fileID: 11400000, guid: cf9ac468f4f320b4094edbb73d6a6f9e, type: 2}
-  m_ActiveProfileId: e5b260a080e73ee4ab88a086b538badf
+  m_ActiveProfileId: 33460e63574467f4aae31aecbf3f513d
   m_HostingServicesManager:
     m_HostingServiceInfos: []
     m_Settings: {fileID: 11400000}
     m_NextInstanceId: 0
-    m_RegisteredServiceTypeRefs: []
+    m_RegisteredServiceTypeRefs:
+    - UnityEditor.AddressableAssets.HostingServices.HttpHostingService, Unity.Addressables.Editor
     m_PingTimeoutInMilliseconds: 5000
