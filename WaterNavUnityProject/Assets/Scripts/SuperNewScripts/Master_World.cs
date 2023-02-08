@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Events.Library.Models;
 using Events.Library.Unity;
 using Events.Library.Utils;
+using Newtonsoft.Json;
 using Patterns.ObjectPooling.Model;
 using RCR.BaseClasses;
 using RCR.Settings.Collections;
@@ -144,12 +146,19 @@ namespace RCR.Settings.SuperNewScripts
         {
             base.Awake();
 
-            FileLoader = new ChunkLoader();
-            FileSaver = new ChunkSaver();
+            // FileLoader = new ChunkLoader();
+            // FileSaver = new ChunkSaver();
             //Declare the Event System so that is up and running at the start on the Loaded Scene
             EventBus = new UnityEventBus(new TokenUtils());
+//
+            var s = GameConstants.DefaultSerializerSettings;
+            JsonSerializer serializer = JsonSerializer.Create(s);
+
+            var text = File.ReadAllText(Path.Combine(Application.dataPath, "2D/DefaultChunk_AstonMarina.json"));
+
+            var chunk = JsonConvert.DeserializeObject<ChunkBlock>(text);
             
-            
+            ///
             
             statCalculator = StatisticsCalculator.GetInstance();
             TileDataBase = SuperNewScripts.TileDataBase.GetInstance();

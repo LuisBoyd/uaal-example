@@ -1,0 +1,99 @@
+{ "columns":11,
+ "image":"Texture2D\/WaterTiles.png",
+ "imageheight":2048,
+ "imagewidth":5632,
+ "margin":0,
+ "name":"WaterTiles",
+ "spacing":0,
+ "tilecount":44,
+ "tiledversion":"1.9.2",
+ "tileheight":512,
+ "tiles":[
+        {
+         "id":0,
+         "properties":[
+                {
+                 "name":"AddresablePath",
+                 "type":"string",
+                 "value":"Assets\/2D\/Tiles\/LogicTiles\/PathTiles\/NewWaterTiles.asset"
+                }]
+        }, 
+        {
+         "id":36,
+         "properties":[
+                {
+                 "name":"AddresablePath",
+                 "type":"string",
+                 "value":"Assets\/2D\/Tiles\/LogicTiles\/PathTiles\/NewWaterTiles.asset"
+                }]
+        }],
+ "tilewidth":512,
+ "type":"tileset",
+ "version":"1.9",
+ "wangsets":[
+        {
+         "colors":[
+                {
+                 "color":"#ff0000",
+                 "name":"water",
+                 "probability":1,
+                 "tile":-1
+                }],
+         "name":"Water",
+         "tile":-1,
+         "type":"corner",
+         "wangtiles":[
+                {
+                 "tileid":4,
+                 "wangid":[0, 0, 0, 1, 0, 0, 0, 0]
+                }, 
+                {
+                 "tileid":5,
+                 "wangid":[0, 0, 0, 0, 0, 1, 0, 0]
+                }, 
+                {
+                 "tileid":6,
+                 "wangid":[0, 1, 0, 1, 0, 1, 0, 0]
+                }, 
+                {
+                 "tileid":15,
+                 "wangid":[0, 1, 0, 0, 0, 0, 0, 0]
+                }, 
+                {
+                 "tileid":16,
+                 "wangid":[0, 0, 0, 0, 0, 0, 0, 1]
+                }, 
+                {
+                 "tileid":17,
+                 "wangid":[0, 0, 0, 1, 0, 1, 0, 1]
+                }, 
+                {
+                 "tileid":26,
+                 "wangid":[0, 1, 0, 1, 0, 0, 0, 0]
+                }, 
+                {
+                 "tileid":27,
+                 "wangid":[0, 0, 0, 0, 0, 1, 0, 1]
+                }, 
+                {
+                 "tileid":28,
+                 "wangid":[0, 1, 0, 0, 0, 1, 0, 1]
+                }, 
+                {
+                 "tileid":36,
+                 "wangid":[0, 1, 0, 1, 0, 1, 0, 1]
+                }, 
+                {
+                 "tileid":37,
+                 "wangid":[0, 0, 0, 1, 0, 1, 0, 0]
+                }, 
+                {
+                 "tileid":38,
+                 "wangid":[0, 1, 0, 0, 0, 0, 0, 1]
+                }, 
+                {
+                 "tileid":39,
+                 "wangid":[0, 1, 0, 1, 0, 0, 0, 1]
+                }]
+        }]
+}
