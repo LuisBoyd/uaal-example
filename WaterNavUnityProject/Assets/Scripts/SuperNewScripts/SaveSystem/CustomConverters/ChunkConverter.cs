@@ -13,7 +13,7 @@ namespace RCR.Settings.SuperNewScripts.SaveSystem.CustomConverters
     public class ChunkConverter : PartialConverter<ChunkBlock>
     {
         private JObject jsonObj;
-        public static string TileSetLocation = Path.Combine(Application.dataPath, "2D/");
+        public static string TileSetLocation = Path.Combine(Application.dataPath, "2D/"); //TODO if I change the directory of where I store the Json Files this needs to change
         
         public ChunkConverter()
         {
@@ -202,13 +202,15 @@ namespace RCR.Settings.SuperNewScripts.SaveSystem.CustomConverters
                 tileset.SetSource(sourcejson);
                 //tileset.SetSource(jToken["source"].ToString() ?? null);
                 
+                ReadAddressableAssets(ref tileset, sourcejson);
+                
                 tilesets.Add(tileset);
             }
             
             value.SetTileSets(tilesets.ToArray());
         }
 
-        private void ReadAddressableAssets(ref ChunkBlock value, string location)
+        private void ReadAddressableAssets(ref ChunkBlock.Tileset value, string location)
         {
             var path = Path.Combine(TileSetLocation, location);
             if(!File.Exists(path))
@@ -222,25 +224,57 @@ namespace RCR.Settings.SuperNewScripts.SaveSystem.CustomConverters
                     {
                         switch (jsonReader.Value)
                         {
-                            case "tiles": //TODO LOOSE
-                                
+                            case nameof(value.tiles): //TODO LOOSE
+                                handleTileReading(ref value, jsonReader);
                                 break;
-                            
+                            default:
+                                break;
                         }
                     }
                 }
             }
 
-            var FullTest = File.ReadAllText(path);
-            JObject AssetFileJobj;
-            try
+            // var FullTest = File.ReadAllText(path);
+            // JObject AssetFileJobj;
+            // try
+            // {
+            //     AssetFileJobj = JObject.Parse(FullTest);
+            // }
+            // catch (JsonReaderException e)
+            // {
+            //     Debug.LogError(e.Message);
+            // }
+        }
+
+        private void handleTileReading(ref ChunkBlock.Tileset tileset, JsonReader reader)
+        {
+            reader.Read(); //Get past array value
+            JArray TilesArray = JArray.Load(reader);
+            List<ChunkBlock.Tileset.Tiles> tilesList = new List<ChunkBlock.Tileset.Tiles>();
+            Dictionary<int, string> addressablelookup = new Dictionary<int, string>();
+            foreach (var jToken in TilesArray)
             {
-                AssetFileJobj = JObject.Parse(FullTest);
+                ChunkBlock.Tileset.Tiles TempTile = new ChunkBlock.Tileset.Tiles();
+                TempTile.Setid(jToken["id"].ToObject<int>());
+                List<ChunkBlock.Property> PropertyList = new List<ChunkBlock.Property>();
+                foreach (var jtokenProp in jToken["properties"].Children())
+                {
+                    ChunkBlock.Property prop = new ChunkBlock.Property();
+                    prop.setName(jtokenProp["name"].ToString() ?? null);
+                    prop.setType(jtokenProp["type"].ToString() ?? null);
+                    prop.setValue(jtokenProp["value"].ToString() ?? null);//Cast the values later on
+                    PropertyList.Add(prop);
+                    
+                    if(prop.name == "AddresablePath")
+                        addressablelookup.Add(TempTile.id, (string)prop.value);
+                    
+                }
+                TempTile.setProperties(PropertyList.ToArray());
+                
+                tilesList.Add(TempTile);
             }
-            catch (JsonReaderException e)
-            {
-                Debug.LogError(e.Message);
-            }
+            tileset.SetTiles(tilesList.ToArray());
+            tileset.SetaddressableLookup(addressablelookup);
         }
     }
 }

@@ -18,6 +18,7 @@ using RCR.Settings.SuperNewScripts.SaveSystem.FileLoaders;
 using RCR.Settings.SuperNewScripts.SaveSystem.FileSavers;
 using RCR.Settings.SuperNewScripts.SaveSystem.Interfaces;
 using RCR.Settings.SuperNewScripts.ScriptableObjects;
+using RCR.Settings.SuperNewScripts.World;
 using RCR.Settings.SuperNewScripts.World.Interfaces;
 using RCR.Systems.ProgressSystem;
 using UnityEngine;
@@ -180,49 +181,56 @@ namespace RCR.Settings.SuperNewScripts
             WorldTilemap.ResizeBounds();
             WorldTilemap.gameObject.transform.SetParent(this.transform);
             WorldTilemap.gameObject.transform.localPosition = Vector3.zero;
-            InitialData.SetLocationID("Aston.json");
+            InitialData.SetLocationID("AstonMarina");
 
 
         }
 
         private async UniTaskVoid Start()
         {
-            var LoadOperation = await Load();
-            if(LoadOperation)
-                return;
-            //NEED TO INITIALISE A NEW INSTANCE
-
-            Value = new AdjacencyMatrix<ChunkBlock>(GameConstants.WorldMaxSize,
-                GameConstants.WorldMaxSize, true);
-            
-            //Init ChunkOrigins
-            for (int x = 0; x < GameConstants.WorldMaxSize; x++)
-            for (int y = 0; y < GameConstants.WorldMaxSize; y++)
+            WorldLoader worldLoader = new WorldLoader(InitialData.LocationID, ref WorldTilemap);
+            bool LoadingSuccess = await worldLoader.LoadWorld();
+            if (!LoadingSuccess)
             {
-                var Node = Value.GetNode(x, y);
-                Node.SetOrigin(new Vector2Int(
-                    x * GameConstants.ChunkSize, y * GameConstants.ChunkSize));
-                Node.SetActive(false);
+                Debug.LogError("Failed TO Load");
             }
 
-            //Check If Any Overlap
-            for (int x = 0; x < Value.GetLength(0); x++)
-            for (int y = 0; y < Value.GetLength(1); y++)
-                if (!Value.CheckOtherNodes(x, y,
-                        (C1, C2) => ((C1.Origin.x < C2.Origin.x + GameConstants.ChunkSize) &&
-                                     (C1.Origin.x + GameConstants.ChunkSize > C2.Origin.x) &&
-                                     (C1.Origin.y < C2.Origin.y + GameConstants.ChunkSize) &&
-                                     (C1.Origin.y + GameConstants.ChunkSize > C2.Origin.y))))
-                {
-                    //Something Overlaps
-                    Debug.LogError("Chunks Overlap");
-                    return;
-                }
-
-            var TilemapOperation = await LoadDefaultChunk();
-            if(!TilemapOperation.Succeeded)
-                return;
-            
+            // var LoadOperation = await Load();
+            // if(LoadOperation)
+            //     return;
+            // //NEED TO INITIALISE A NEW INSTANCE
+            //
+            // Value = new AdjacencyMatrix<ChunkBlock>(GameConstants.WorldMaxSize,
+            //     GameConstants.WorldMaxSize, true);
+            //
+            // //Init ChunkOrigins
+            // for (int x = 0; x < GameConstants.WorldMaxSize; x++)
+            // for (int y = 0; y < GameConstants.WorldMaxSize; y++)
+            // {
+            //     var Node = Value.GetNode(x, y);
+            //     Node.SetOrigin(new Vector2Int(
+            //         x * GameConstants.ChunkSize, y * GameConstants.ChunkSize));
+            //     Node.SetActive(false);
+            // }
+            //
+            // //Check If Any Overlap
+            // for (int x = 0; x < Value.GetLength(0); x++)
+            // for (int y = 0; y < Value.GetLength(1); y++)
+            //     if (!Value.CheckOtherNodes(x, y,
+            //             (C1, C2) => ((C1.Origin.x < C2.Origin.x + GameConstants.ChunkSize) &&
+            //                          (C1.Origin.x + GameConstants.ChunkSize > C2.Origin.x) &&
+            //                          (C1.Origin.y < C2.Origin.y + GameConstants.ChunkSize) &&
+            //                          (C1.Origin.y + GameConstants.ChunkSize > C2.Origin.y))))
+            //     {
+            //         //Something Overlaps
+            //         Debug.LogError("Chunks Overlap");
+            //         return;
+            //     }
+            //
+            // var TilemapOperation = await LoadDefaultChunk();
+            // if(!TilemapOperation.Succeeded)
+            //     return;
+            //
 
         }
 

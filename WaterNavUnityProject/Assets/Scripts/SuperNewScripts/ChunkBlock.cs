@@ -35,13 +35,49 @@ namespace RCR.Settings.SuperNewScripts
             public void SetY(int y) => this.y = y;
         }
         
-        public struct Tileset
+        public class Tileset
         {
+            public Tileset()
+            {
+                firstid = 0;
+                source = null;
+                tiles = new Tiles[] { };
+                addressableLookup = new Dictionary<int, string>();
+            }
+            
             public int firstid { get; private set; }
             public string source { get; private set; }
+            
+            public Tiles[] tiles { get; private set; }
+            
+            public Dictionary<int, string> addressableLookup { get; private set; }
+            
 
             public void SetFirstId(int id) => this.firstid = id;
             public void SetSource(string source) => this.source = source;
+
+            public void SetaddressableLookup(Dictionary<int, string> newLookUp) => addressableLookup = newLookUp;
+            public void SetTiles(Tiles[] tilesArray) => tiles = tilesArray;
+            
+            public struct Tiles
+            {
+                public int id { get; private set; }
+                public Property[] Properties { get; private set; }
+                public void Setid(int id) => this.id = id;
+                public void setProperties(Property[] properties) => this.Properties = properties;
+            }
+            
+        }
+        
+        public struct Property
+        {
+            public string name { get; private set; }
+            public string type { get; private set; }
+            public object value { get; private set; }
+
+            public void setName(string name) => this.name = name;
+            public void setType(string type) => this.type = type;
+            public void setValue(object value) => this.value = value;
         }
 
         
@@ -73,8 +109,10 @@ namespace RCR.Settings.SuperNewScripts
         public string version { get; private set; }
         public int width { get; private set; }
         
+        public int X { get; private set; }
+        public int Y { get; private set; }
+        
         //TODO addressable
-        public Dictionary<int, string> addressableLookup { get; }
 
         #endregion
 
@@ -83,7 +121,6 @@ namespace RCR.Settings.SuperNewScripts
         public ChunkBlock()
         {
             Tiles = new DataTile[,] { };
-            addressableLookup = new Dictionary<int, string>();
             Origin = default;
             Active = false;
             compressionlevel = 0;
@@ -101,6 +138,8 @@ namespace RCR.Settings.SuperNewScripts
             type = null;
             version = null;
             width = 0;
+            X = 0;
+            Y = 0;
         }
         
         public void Setversion(string version) => this.version = version;
