@@ -50,6 +50,8 @@ namespace RCR.Settings.SuperNewScripts
             
             public Tiles[] tiles { get; private set; }
             
+            public wangset[] wangsets { get; private set; }
+            
             public Dictionary<int, string> addressableLookup { get; private set; }
             
 
@@ -58,6 +60,8 @@ namespace RCR.Settings.SuperNewScripts
 
             public void SetaddressableLookup(Dictionary<int, string> newLookUp) => addressableLookup = newLookUp;
             public void SetTiles(Tiles[] tilesArray) => tiles = tilesArray;
+
+            public void SetWangSets(wangset[] sets) => this.wangsets = sets;
             
             public struct Tiles
             {
@@ -67,6 +71,101 @@ namespace RCR.Settings.SuperNewScripts
                 public void setProperties(Property[] properties) => this.Properties = properties;
             }
             
+        }
+        
+        public class wangset
+        {
+            public class WangColor
+            {
+                public Color color { get; private set; }
+                public string name { get; private set; }
+                public float probability { get; private set; }
+                public int tile { get; private set; }
+                
+                public void Setcolor(Color color) => this.color = color;
+                public void Setcolor(string color)
+                {
+                    color = color.Remove(0, 1);
+                    var Rhex = color.Substring(0, 2);
+                    var Ghex = color.Substring(2, 2);
+                    var Bhex = color.Substring(4, 6);
+
+                    this.color = new Color(
+                        Mathf.Clamp01(Convert.ToInt32(Rhex, 16)),
+                        Mathf.Clamp01(Convert.ToInt32(Ghex, 16)),
+                        Mathf.Clamp01(Convert.ToInt32(Bhex, 16))
+                    );
+                }
+                public void Setname(string name) => this.name = name;
+                public void SetProbabilty(float probability) => this.probability = probability;
+                public void Settile(int tileid) => this.tile = tileid;
+            }
+            
+            public class WangTile
+            {
+                public int tileid { get; private set; }
+                public int[] wangId { get; private set; }
+
+                public void SetTileID(int id) => tileid = id;
+                public void SetWangID(int[] ids)
+                {
+                    bool LessThan = false;
+                    if (ids.Length > 8)
+                    {
+                        Debug.LogWarning("Wang Tiles can only have Max entries of 8 ignoring the overflow");
+                     
+                    }
+                    if (ids.Length < 8)
+                    {
+                        Debug.LogWarning("Wang Tiles should be 8 entries filling remaining entries with default values");
+                        LessThan = true;
+                    }
+                    int[] entries = new int[8];
+                    if (LessThan)
+                    {
+                        for (int i = entries.Length; i > ids.Length; i++)
+                        {
+                            entries[i] = 0;
+                        }
+                        for (int i = 0; i < ids.Length; i++)
+                        {
+                            entries[i] = ids[i];
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < entries.Length; i++)
+                        {
+                            entries[i] = ids[i];
+                        } 
+                    }
+
+                    wangId = entries;
+
+                }
+            }
+
+            public WangColor[] Colors { get; private set; }
+            public string name { get; private set; }
+            public int tile { get; private set; }
+            public string type { get; private set; }
+            public WangTile[] WangTiles { get; private set; }
+
+            public void SetWangColors(WangColor[] colors) => this.Colors = colors;
+            public void SetWangName(string name) => this.name = name;
+            public void SetWangTile(int tileid) => this.tile = tileid;
+            public void SetWangType(string type) => this.type = type;
+            public void SetWangTiles(WangTile[] tiles) => this.WangTiles = tiles;
+            public int[] ReturnWangTilesIDs()
+            {
+                List<int> wangTilesIDs = new List<int>();
+                foreach (WangTile wangTile in WangTiles)
+                {
+                    wangTilesIDs.Add(wangTile.tileid);
+                }
+
+                return wangTilesIDs.ToArray();
+            }
         }
         
         public struct Property

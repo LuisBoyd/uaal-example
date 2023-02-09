@@ -90,8 +90,9 @@ namespace RCR.Settings.SuperNewScripts.World
                     foreach (var keyValuePair in chunkTileset.addressableLookup)
                     {
                         accuarateLookup.Add(id + keyValuePair.Key, keyValuePair.Value);
-                        id++;
                     }
+
+                    id++;
                 }
 
                 for (int i = 0; i < tiles.Length; i++)

@@ -227,6 +227,9 @@ namespace RCR.Settings.SuperNewScripts.SaveSystem.CustomConverters
                             case nameof(value.tiles): //TODO LOOSE
                                 handleTileReading(ref value, jsonReader);
                                 break;
+                            // case nameof(value.wangsets):
+                            //     ReadWangSets(ref value, jsonReader);
+                            //     break;
                             default:
                                 break;
                         }
@@ -245,6 +248,14 @@ namespace RCR.Settings.SuperNewScripts.SaveSystem.CustomConverters
             //     Debug.LogError(e.Message);
             // }
         }
+
+        // private void ReadWangSets(ref ChunkBlock.Tileset value, JsonReader reader)
+        // {
+        //     reader.Read(); //Get Past array value
+        //     JArray WangArray = JArray.Load(reader);
+        //     List<ChunkBlock.wangset> wangsets = new List<ChunkBlock.wangset>();
+        //     
+        // }
 
         private void handleTileReading(ref ChunkBlock.Tileset tileset, JsonReader reader)
         {
