@@ -1,0 +1,13 @@
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\bin\Debug\netstandard2.1\RCRMapLibrary.deps.json
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\bin\Debug\netstandard2.1\RCRMapLibrary.dll
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\bin\Debug\netstandard2.1\RCRMapLibrary.pdb
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\bin\Debug\netstandard2.1\RCRCoreLibrary.dll
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\bin\Debug\netstandard2.1\RCRCoreLibrary.pdb
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\obj\Debug\netstandard2.1\RCRMapLibrary.csproj.AssemblyReference.cache
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\obj\Debug\netstandard2.1\RCRMapLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\obj\Debug\netstandard2.1\RCRMapLibrary.AssemblyInfoInputs.cache
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\obj\Debug\netstandard2.1\RCRMapLibrary.AssemblyInfo.cs
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\obj\Debug\netstandard2.1\RCRMapLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\obj\Debug\netstandard2.1\RCRMapLibrary.csproj.CopyComplete
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\obj\Debug\netstandard2.1\RCRMapLibrary.dll
+C:\Users\Luis\Documents\uaal-example\Libs\RCRMapLibrary\obj\Debug\netstandard2.1\RCRMapLibrary.pdb

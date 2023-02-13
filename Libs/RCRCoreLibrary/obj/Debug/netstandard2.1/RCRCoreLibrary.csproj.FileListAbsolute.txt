@@ -1,0 +1,10 @@
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\bin\Debug\netstandard2.1\RCRCoreLibrary.deps.json
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\bin\Debug\netstandard2.1\RCRCoreLibrary.dll
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\bin\Debug\netstandard2.1\RCRCoreLibrary.pdb
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.csproj.AssemblyReference.cache
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.AssemblyInfoInputs.cache
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.AssemblyInfo.cs
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.dll
+C:\Users\Luis\Documents\uaal-example\Libs\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.pdb

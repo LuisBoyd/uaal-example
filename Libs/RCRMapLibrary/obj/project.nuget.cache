@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "9XjXwhBB+sw+TMWj6HtIM7iI25JM8G04siffqxHlscDEE1gOSaVwJ3HF6Tyl3o8MopImqHppFOUIgRc9cZREew==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Luis\\Documents\\uaal-example\\Libs\\RCRMapLibrary\\RCRMapLibrary.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Luis\\.nuget\\packages\\c5\\3.0.0-rc\\c5.3.0.0-rc.nupkg.sha512",
+    "C:\\Users\\Luis\\.nuget\\packages\\newtonsoft.json\\13.0.3-beta1\\newtonsoft.json.13.0.3-beta1.nupkg.sha512"
+  ],
+  "logs": []
+}
