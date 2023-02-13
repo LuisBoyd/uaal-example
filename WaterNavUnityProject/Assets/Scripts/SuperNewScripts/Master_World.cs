@@ -8,11 +8,15 @@ using Events.Library.Unity;
 using Events.Library.Utils;
 using Newtonsoft.Json;
 using Patterns.ObjectPooling.Model;
+using QuikGraph;
 using RCR.BaseClasses;
 using RCR.Settings.Collections;
+using RCR.Settings.Collections.Sorting;
 using RCR.Settings.NewScripts.AI;
 using RCR.Settings.NewScripts.Entity;
+using RCR.Settings.NewScripts.Geometry;
 using RCR.Settings.NewScripts.TaskSystem;
+using RCR.Settings.SuperNewScripts.DataStructures;
 using RCR.Settings.SuperNewScripts.DontDestroyOnLoad;
 using RCR.Settings.SuperNewScripts.SaveSystem.FileLoaders;
 using RCR.Settings.SuperNewScripts.SaveSystem.FileSavers;
@@ -28,15 +32,23 @@ using UnityEngine.Tilemaps;
 namespace RCR.Settings.SuperNewScripts
 {
     [RequireComponent(typeof(Grid))]
-    public class Master_World : Singelton<Master_World>, IRuntimeSaveSystem<AdjacencyMatrix<ChunkBlock>>
+    public class Master_World : Singelton<Master_World>
     , IObservableTileMap
     {
         #region Save/Load properties
+
+        private WorldLoader worldLoader;
+        
         #region Tiles/Chunks
+
+        
         /// <summary>
         /// Chunk Block Matrix will let me store the ChunkBlock's in a way that can
         /// I can connect them together with Edge's and Lookup adjacent Chunks
         /// </summary>
+
+        public AdjacencyGraph<ChunkBlock, ChunkEdge> AdjacencyGraph { get; private set; }
+
         #endregion
         #region Progress
         /*Things such as buildings progress on leaving the game and the progression they are
@@ -108,38 +120,10 @@ namespace RCR.Settings.SuperNewScripts
         private TileBaselookUp TileDict;
 
         #region CustomEnums
-        public enum ChunkSize
-        {
-            x2 = 2,
-            x4 = 4,
-            x8 = 8,
-            x16 = 16,
-            x32 = 32,
-            x64 = 64,
-            x128 = 128,
-            x256 = 256,
-            x512 = 512,
-            x1024 = 1024,
-            x2048 = 2048,
-            x4096 = 4096
-        }
-        public enum WorldSize
-        {
-            x2 = 2,
-            x4 = 4,
-            x6 = 6,
-            x8 = 8,
-            x10 = 10,
-            x12 = 12
-        }
         #endregion
         
         #region EditorOnly
-#if UNITY_EDITOR
-        public ChunkSize Csize;
-        public WorldSize Wsize;
-        private IRuntimeSaveSystem<AdjacencyMatrix<ChunkBlock>> _runtimeSaveSystemImplementation;
-#endif
+
         #endregion
 
         #region UnityFunctions
@@ -151,15 +135,10 @@ namespace RCR.Settings.SuperNewScripts
             // FileSaver = new ChunkSaver();
             //Declare the Event System so that is up and running at the start on the Loaded Scene
             EventBus = new UnityEventBus(new TokenUtils());
-//
-            var s = GameConstants.DefaultSerializerSettings;
-            JsonSerializer serializer = JsonSerializer.Create(s);
 
-            var text = File.ReadAllText(Path.Combine(Application.dataPath, "2D/DefaultChunk_AstonMarina.json"));
 
-            var chunk = JsonConvert.DeserializeObject<ChunkBlock>(text);
-            
-            ///
+            AdjacencyGraph = new AdjacencyGraph<ChunkBlock, ChunkEdge>();
+            //AdjacencyGraph.VertexAdded += UpdateWorldBoundries;
             
             statCalculator = StatisticsCalculator.GetInstance();
             TileDataBase = SuperNewScripts.TileDataBase.GetInstance();
@@ -188,12 +167,15 @@ namespace RCR.Settings.SuperNewScripts
 
         private async UniTaskVoid Start()
         {
-            WorldLoader worldLoader = new WorldLoader(InitialData.LocationID, ref WorldTilemap);
+            worldLoader = new WorldLoader(InitialData.LocationID,  this);
             bool LoadingSuccess = await worldLoader.LoadWorld();
             if (!LoadingSuccess)
             {
                 Debug.LogError("Failed TO Load");
             }
+            
+            //Have Camera GoTo StartPoisition
+            //Have the world Have a start position
 
             // var LoadOperation = await Load();
             // if(LoadOperation)
@@ -234,6 +216,11 @@ namespace RCR.Settings.SuperNewScripts
 
         }
 
+        private async UniTaskVoid OnDestroy()
+        {
+           await worldLoader.SaveWorld();
+        }
+
         #endregion
 
 
@@ -241,33 +228,7 @@ namespace RCR.Settings.SuperNewScripts
         private Tilemap WorldTilemap;
         private PolygonCollider2D WorldBounds;
         //Could use renderer in future but not needed now TODO
-        public IFileLoader<AdjacencyMatrix<ChunkBlock>> FileLoader { get; private set; }
-        public IFileSaver<AdjacencyMatrix<ChunkBlock>> FileSaver { get; private set; }
-        public AdjacencyMatrix<ChunkBlock> Value { get; private set; }
-
-        public async UniTaskVoid Save()
-        {
-            FileSaver.WriteToFile(InitialData.LocationID, Value).Forget();
-        }
-
-        public async UniTask<bool> Load( AdjacencyMatrix<ChunkBlock> overWriteObj)
-        {
-            //Probably don't use
-            var operation = await FileLoader.ReadFromFile(InitialData.LocationID);
-            if (!operation.Succeeded)
-                return false;
-            overWriteObj = operation.Value;
-            return true;
-        }
-
-        public async UniTask<bool> Load()
-        {
-            var operation = await FileLoader.ReadFromFile(InitialData.LocationID);
-            if (!operation.Succeeded)
-                return false;
-            Value = operation.Value;
-            return true;
-        }
+        
 
         public Tilemap Tilemap
         {
@@ -305,68 +266,55 @@ namespace RCR.Settings.SuperNewScripts
             }
             Debug.Log("Mass Setted");
         }
-
-        public async UniTask<OperationResult<TileBase[]>> LoadDefaultChunk()
+        
+        public void UpdateWorldBoundries(ChunkBlock _)
         {
-            var loadOperation = await AddresablesSystem.Instance.LoadAssetAsync<GameObject>(
-                DefaultChunk);
-            if (!loadOperation.Succeeded)
-                return new OperationResult<TileBase[]>(false, default, null);
-            var tilemap = loadOperation.Value.GetComponent<Tilemap>();
-            if (tilemap.size.x <= GameConstants.ChunkSize && tilemap.size.y <= GameConstants.ChunkSize
-                                                          && tilemap.size.x > 0 && tilemap.size.y > 0)
-            {
-                TileBase[] tiles = tilemap.GetTilesBlock(tilemap.cellBounds);
-                return new OperationResult<TileBase[]>(true, default, tiles);
-            }
-            return new OperationResult<TileBase[]>(false, default, null);
-        }
+            WorldTilemap.CompressBounds();
+            WorldTilemap.ResizeBounds();
 
-        public async UniTaskVoid SortVisualsDefault()
-        {
-            var ActiveNodes = Value.GetNodes().Where(x => x.Active);
-            List<KeyValuePair<BoundsInt, TileBase[]>> NodeData = new List<KeyValuePair<BoundsInt, TileBase[]>>();
-            foreach (var AC in ActiveNodes)
+            HashSet<Line> edges = new HashSet<Line>(new LineEqualityComparer());
+            List<Line> List_edges = new List<Line>();
+            foreach (ChunkBlock chunkBlock in AdjacencyGraph.Vertices)
             {
-                var DT = AC.Tiles;
-                TileBase[] TilesToPlace = new TileBase[DT.GetLength(0) * DT.GetLength(1)];
-
-                for (int i = 0; i < TilesToPlace.Length; i++)
+                Line[] ChunkEdges = chunkBlock.GetEdges();
+                for (int i = 0; i < ChunkEdges.Length; i++)
                 {
-                    TilesToPlace[i] = await AddresablesSystem.Instance.LoadAssetAsync<TileBase>(
-                        DT[i / GameConstants.ChunkSize, i % GameConstants.ChunkSize].VisualKey.ToString());
+                    if (!edges.Add(ChunkEdges[i]))
+                    {
+                        Line toRemove = edges.First(l => l.StartPosition == ChunkEdges[i].EndPosition
+                                                         && ChunkEdges[i].StartPosition == l.EndPosition);
+                        List_edges.Remove(toRemove);
+                        edges.Remove(toRemove);
+                    }
+                    else
+                    {
+                        List_edges.Add(ChunkEdges[i]);
+                    }
                 }
-                
-                BoundsInt ACBoundInt = new BoundsInt(new Vector3Int(AC.Origin.x, AC.Origin.y),
-                    new Vector3Int(GameConstants.ChunkSize, GameConstants.ChunkSize, 1));
-                
-                NodeData.Add(new KeyValuePair<BoundsInt, TileBase[]>(ACBoundInt, TilesToPlace));
+            }
+
+            Stack<Vector2> path = new Stack<Vector2>();
+            path.Push(List_edges[0].StartPosition);
+            List_edges.RemoveAt(0);
+            while (List_edges.Count != 0)
+            {
+                Vector2 lastPointAdded = path.Peek();
+                bool foundsameEndPoint = List_edges.Any(x => x.EndPosition == lastPointAdded);
+                if (!foundsameEndPoint)
+                {
+                    List_edges.Clear();
+                    continue;
+                }
+
+                Line sameEndPoint = List_edges.First(x => x.EndPosition == lastPointAdded);
+                path.Push(sameEndPoint.StartPosition);
+                List_edges.Remove(sameEndPoint);
             }
             
-            MassSetTilesBlock(NodeData);
-        }
-        public async UniTaskVoid SortVisualsDefault(TileBase[] tiles)
-        {
-            DataTile[] dataTiles = new DataTile[tiles.Length];
-            for (int i = 0; i < tiles.Length; i++)
-            {
-                //Check if Tile is apart of TileBaseDict
-                if (TileDict.TryGetValue(tiles[i], out AssetReferenceT<TileBase>
-                        referenceT))
-                {
-                    dataTiles[i] = DataTile.Create(referenceT.RuntimeKey.ToString());
-                }
-                else
-                {
-                    dataTiles[i] = DataTile.Create("0");
-                }
-                
-            }
+            EventBus.Publish<WorldEvent.WorldBoundriesChanged>(
+                new WorldEvent.WorldBoundriesChanged(path.ToArray()), EventArgs.Empty);
 
-            var Node = Value.GetNode(0, 0);
-            Node.SetActive(true);
-            Node.SetDataTiles(dataTiles);
-            SortVisualsDefault().Forget();
         }
+        
     }
 }

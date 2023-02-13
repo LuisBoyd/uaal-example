@@ -42,34 +42,34 @@ namespace RCR.Settings.NewScripts.Camera
         
         private void Awake()
         {
-            // VirtualCamera = GetComponent<CinemachineVirtualCamera>();
-            // Confiner2D = GetComponent<CinemachineConfiner2D>();
-            // CameraInput = UnityEngine.Camera.main.GetComponent<CameraInput>();
-            // CameraInput._gameCamera = this;
-            // helper = new GameObject($"{VirtualCamera.name}_helper").transform;
-            // CameraBounds = new GameObject($"{VirtualCamera.name}_VirtualBounds").AddComponent<PolygonCollider2D>();
-            // //helper.SetParent(VirtualCamera.transform);
-            // Confiner2D.m_BoundingShape2D = CameraBounds;
-            //  VirtualCamera.Follow = helper;
-            //  VirtualCamera.m_Lens.OrthographicSize = ZoomOutMax; 
-            //  //BoundsUpdatedtoken = GameManager_2_0.Instance.EventBus.Subscribe<WorldBoundsChanged>(Update_CameraBounds);
+            VirtualCamera = GetComponent<CinemachineVirtualCamera>();
+            Confiner2D = GetComponent<CinemachineConfiner2D>();
+            CameraInput = UnityEngine.Camera.main.GetComponent<CameraInput>();
+            CameraInput._gameCamera = this;
+            helper = new GameObject($"{VirtualCamera.name}_helper").transform;
+            CameraBounds = new GameObject($"{VirtualCamera.name}_VirtualBounds").AddComponent<PolygonCollider2D>();
+            //helper.SetParent(VirtualCamera.transform);
+            Confiner2D.m_BoundingShape2D = CameraBounds;
+             VirtualCamera.Follow = helper;
+             VirtualCamera.m_Lens.OrthographicSize = ZoomOutMax; 
+             //BoundsUpdatedtoken = GameManager_2_0.Instance.EventBus.Subscribe<WorldEvent.WorldTilemapChanged>(Update_CameraBounds);
         }
 
         private void OnDisable()
         {
-            //GameManager_2_0.Instance.EventBus.UnSubscribe<WorldBoundsChanged>(BoundsUpdatedtoken.TokenId);
+            GameManager_2_0.Instance.EventBus.UnSubscribe<WorldBoundsChanged>(BoundsUpdatedtoken.TokenId);
         }
 
 
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
         private void Update()
         {
-            // float zoom = UnityEngine.Input.GetAxis("Mouse ScrollWheel");
-            // if (zoom < -ScrollDeadZoneRange || zoom > ScrollDeadZoneRange) //Deadzones
-            // {
-            //     Debug.Log($"Zoom Levels: {zoom}");
-            //     ZoomScreen(zoom);
-            // }
+            float zoom = UnityEngine.Input.GetAxis("Mouse ScrollWheel");
+            if (zoom < -ScrollDeadZoneRange || zoom > ScrollDeadZoneRange) //Deadzones
+            {
+                Debug.Log($"Zoom Levels: {zoom}");
+                ZoomScreen(zoom);
+            }
         }
 #endif
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using RCR.Settings.NewScripts.Geometry;
 using UnityEngine;
 
 namespace RCR.Settings.SuperNewScripts
@@ -189,6 +190,7 @@ namespace RCR.Settings.SuperNewScripts
         public bool Active { get; private set; }
         
         //--------
+        public string fileName { get; private set; }
         public int compressionlevel { get; private set; }
         public int height { get; private set; }
         public bool infinite { get; private set; }
@@ -219,6 +221,7 @@ namespace RCR.Settings.SuperNewScripts
 
         public ChunkBlock()
         {
+            fileName = null;
             Tiles = new DataTile[,] { };
             Origin = default;
             Active = false;
@@ -260,18 +263,18 @@ namespace RCR.Settings.SuperNewScripts
         
         public void setType(string type) => this.type = type;
         public void Setwidth(int width) => this.width = width;
-        
-        
-        public void SetOrigin(Vector2Int origin) => Origin = origin;
-        public void SetActive(bool state) => Active = state;
-        public void SetDataTiles(DataTile[] tiles)
+
+        public void SetFileName(string name) => this.fileName = name;
+        public void SetX(int x) => this.X = x;
+        public void SetY(int y) => this.Y = y;
+
+        public Line[] GetEdges() => new Line[4]
         {
-            for (int i = 0; i < tiles.Length; i++)
-            {
-                Tiles[i / tiles.GetLength(0),
-                    i % tiles.GetLength(1)] = tiles[i];
-            }
-        }
-        
+            new Line(new Vector2(X, Y), new Vector2(X, Y + height)),
+            new Line(new Vector2(X, Y + height), new Vector2(X + width, Y + height)),
+            new Line(new Vector2(X + width, Y + height), new Vector2(X + width, Y)),
+            new Line(new Vector2(X + width, Y), new Vector2(X, Y))
+        };
+
     }
 }

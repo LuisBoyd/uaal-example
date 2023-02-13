@@ -1,0 +1,10 @@
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\bin\Debug\netstandard2.1\RCRCoreLibrary.deps.json
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\bin\Debug\netstandard2.1\RCRCoreLibrary.dll
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\bin\Debug\netstandard2.1\RCRCoreLibrary.pdb
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.csproj.AssemblyReference.cache
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.GeneratedMSBuildEditorConfig.editorconfig
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.AssemblyInfoInputs.cache
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.AssemblyInfo.cs
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.csproj.CoreCompileInputs.cache
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.dll
+F:\Unity Projects\Unity 2022.0.2.b10\uaal-example\Libs\RCRMap\RCRCoreLibrary\RCRCoreLibrary\RCRCoreLibrary\obj\Debug\netstandard2.1\RCRCoreLibrary.pdb

@@ -65,5 +65,15 @@ namespace Events.Library.Models
             }
         }
         
+        public class WorldBoundriesChanged: WorldEvent
+        {
+            public Vector2[] Boundrypoints;
+
+            public WorldBoundriesChanged(Vector2[] points)
+            {
+                this.Boundrypoints = points;
+            }
+        }
+
     }
 }
