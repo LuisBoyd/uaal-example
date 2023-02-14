@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="left-up" width="16" height="16" tilewidth="128" tileheight="128" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" source="../TileSets/OtherGroundTiles.tsx"/>
+ <tileset firstgid="2" source="../TileSets/PathWays.tsx"/>
+ <tileset firstgid="46" source="../TileSets/WaterWays.tsx"/>
+ <tileset firstgid="90" source="../TileSets/BuildingStructures.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYBzFo3gUj0gMAAYeAQE=
+  </data>
+ </layer>
+</map>

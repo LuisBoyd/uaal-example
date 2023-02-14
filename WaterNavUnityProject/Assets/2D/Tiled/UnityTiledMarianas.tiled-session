@@ -1,0 +1,114 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "TileSets/IsoTest.tmx",
+    "expandedProjectPaths": [
+        "TileSets",
+        ".",
+        "maps"
+    ],
+    "fileStates": {
+        "TileSets/BuildingStructures.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TileSets/IsoTest.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 403.66666666666663,
+                "y": 349.33333333333326
+            }
+        },
+        "TileSets/IsoWaterTiles64x64.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TileSets/OtherGroundTiles.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TileSets/PathWays.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "TileSets/WaterWays.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TileSets/iso-64x64-building.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TileSets/landscapeTiles_sheet.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/BlankChunk.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1964,
+                "y": 1620
+            }
+        },
+        "maps/MainAstonMarinaBuilding.tmx": {
+            "expandedGroupLayers": [
+                9
+            ],
+            "expandedObjectLayers": [
+                9,
+                7
+            ],
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 797.6666666666666,
+                "y": 715.3333333333333
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/Luis/Documents/uaal-example/WaterNavUnityProject/Assets/2D/Texture2D/IsoMetrictiles",
+    "map.height": 16,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": null,
+    "map.orientation": null,
+    "map.renderOrder": null,
+    "map.tileHeight": 32,
+    "map.tileWidth": 64,
+    "map.width": 16,
+    "openFiles": [
+        "maps/BlankChunk.tmx",
+        "TileSets/BuildingStructures.tsx",
+        "maps/MainAstonMarinaBuilding.tmx",
+        "TileSets/IsoWaterTiles64x64.tsx",
+        "TileSets/IsoTest.tmx"
+    ],
+    "project": "UnityTiledMarianas.tiled-project",
+    "recentFiles": [
+        "maps/BlankChunk.tmx",
+        "TileSets/BuildingStructures.tsx",
+        "maps/MainAstonMarinaBuilding.tmx",
+        "TileSets/IsoWaterTiles64x64.tsx",
+        "TileSets/IsoTest.tmx",
+        "TileSets/iso-64x64-building.tsx",
+        "TileSets/landscapeTiles_sheet.tsx",
+        "TileSets/PathWays.tsx",
+        "TileSets/WaterWays.tsx",
+        "TileSets/OtherGroundTiles.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 64,
+        "width": 64
+    },
+    "tileset.type": 1
+}
