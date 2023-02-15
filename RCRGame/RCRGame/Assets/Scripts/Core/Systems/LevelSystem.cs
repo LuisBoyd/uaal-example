@@ -12,7 +12,7 @@ namespace RCRCoreLib.Core.Systems
     public class LevelSystem : Singelton<LevelSystem>
     {
         private int XPnow;
-        private int Level;
+        public int Level { get; private set; }
         private int XpToNextLevel;
 
         [SerializeField] private GameObject levelPannel;
