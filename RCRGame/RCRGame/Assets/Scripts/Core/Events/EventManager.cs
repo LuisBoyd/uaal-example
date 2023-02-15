@@ -5,26 +5,27 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
 using Cysharp.Threading.Tasks.Linq;
+using RCRCoreLib.Core;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace RCRCoreLib
 {
-    public static class EventManager //Only really needs to be static as only ever going to be one EventManager Instance.
+    public  class EventManager : Singelton<EventManager> //Only really needs to be static as only ever going to be one EventManager Instance.
     {
-        public static bool limitQueueProcessing = false;
-        public static float queueProcessTime = 0.0f;
-        private static Queue ms_eventQueue = new Queue();
+        public  bool limitQueueProcessing = false;
+        public  float queueProcessTime = 0.0f;
+        private  Queue ms_eventQueue = new Queue();
 
         public delegate void EventDelegate<T>(T e) where T : GameEvent;
         private delegate void EventDelegate(GameEvent e);
 
-        private static Dictionary<System.Type, EventDelegate> ms_delegates = new Dictionary<Type, EventDelegate>();
-        private static Dictionary<System.Delegate, EventDelegate> ms_delegateLookUp =
+        private  Dictionary<System.Type, EventDelegate> ms_delegates = new Dictionary<Type, EventDelegate>();
+        private  Dictionary<System.Delegate, EventDelegate> ms_delegateLookUp =
             new Dictionary<Delegate, EventDelegate>();
-        private static Dictionary<System.Delegate, System.Delegate> ms_onceLookups = new Dictionary<Delegate, Delegate>();
+        private  Dictionary<System.Delegate, System.Delegate> ms_onceLookups = new Dictionary<Delegate, Delegate>();
 
-        private static EventDelegate AddDelegate<T>(EventDelegate<T> del) where T : GameEvent
+        private  EventDelegate AddDelegate<T>(EventDelegate<T> del) where T : GameEvent
         {
             if (ms_delegateLookUp.ContainsKey(del))
                 return null;//Early Quitting of function
@@ -47,11 +48,11 @@ namespace RCRCoreLib
             return internalDelegate;
         }
         
-        public static void AddListener<T> (EventDelegate<T> del) where T : GameEvent {
+        public  void AddListener<T> (EventDelegate<T> del) where T : GameEvent {
             AddDelegate<T>(del);
         }
         
-        public static void AddListenerOnce<T> (EventDelegate<T> del) where T : GameEvent {
+        public  void AddListenerOnce<T> (EventDelegate<T> del) where T : GameEvent {
             EventDelegate result = AddDelegate<T>(del);
 
             if(result != null){
@@ -60,7 +61,7 @@ namespace RCRCoreLib
             }
         }
         
-        public static void RemoveListener<T> (EventDelegate<T> del) where T : GameEvent {
+        public  void RemoveListener<T> (EventDelegate<T> del) where T : GameEvent {
             EventDelegate internalDelegate;
             if (ms_delegateLookUp.TryGetValue(del, out internalDelegate)) {
                 EventDelegate tempDel;
@@ -77,17 +78,17 @@ namespace RCRCoreLib
             }
         }
         
-        public static void RemoveAll(){
+        public  void RemoveAll(){
             ms_delegates.Clear();
             ms_delegateLookUp.Clear();
             ms_onceLookups.Clear();
         }
         
-        public static bool HasListener<T> (EventDelegate<T> del) where T : GameEvent {
+        public  bool HasListener<T> (EventDelegate<T> del) where T : GameEvent {
             return ms_delegateLookUp.ContainsKey(del);
         }
         
-        public static void TriggerEvent (GameEvent e) {
+        public  void TriggerEvent (GameEvent e) {
             EventDelegate del;
             if (ms_delegates.TryGetValue(e.GetType(), out del)) {
                 del.Invoke(e);
@@ -112,7 +113,7 @@ namespace RCRCoreLib
         }
         
         //Inserts the event into the current queue.
-        public static bool QueueEvent(GameEvent evt) {
+        public  bool QueueEvent(GameEvent evt) {
             if (!ms_delegates.ContainsKey(evt.GetType())) {
                 Debug.LogWarning("EventManager: QueueEvent failed due to no listeners for event: " + evt.GetType());
                 return false;
@@ -122,7 +123,7 @@ namespace RCRCoreLib
             return true;
         }
         
-        public static void Update() {
+        public void Update() {
             float timer = 0.0f;
             while (ms_eventQueue.Count > 0) {
                 if (limitQueueProcessing) {
@@ -138,7 +139,7 @@ namespace RCRCoreLib
             }
         }
         
-        public static void OnApplicationQuit(){
+        public void OnApplicationQuit(){
             RemoveAll();
             ms_eventQueue.Clear();
         }
