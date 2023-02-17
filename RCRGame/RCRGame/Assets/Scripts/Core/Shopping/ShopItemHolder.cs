@@ -35,7 +35,7 @@ namespace RCRCoreLib.Core.Shopping
         public void unlockItem()
         {
             iconImage.gameObject.AddComponent<ShopItemDrag>();
-            iconImage.transform.GetChild(0).gameObject.SetActive(true);
+            iconImage.transform.gameObject.SetActive(true);
         }
     }
 }

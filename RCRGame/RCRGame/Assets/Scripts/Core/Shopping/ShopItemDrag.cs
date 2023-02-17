@@ -34,15 +34,15 @@ namespace RCRCoreLib.Core.Shopping
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            rt.anchoredPosition += eventData.delta / canvas.scaleFactor;
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
             drag = false;
             cg.blocksRaycasts = true;
             img.maskable = true;
             rt.anchoredPosition = orginPos;
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            rt.anchoredPosition += eventData.delta / canvas.scaleFactor;
         }
 
         private void OnTriggerEnter2D(Collider2D col)

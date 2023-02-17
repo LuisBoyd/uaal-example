@@ -56,8 +56,8 @@ namespace RCRCoreLib.Core.Shopping
                     () =>
                     {
                         gameObject.SetActive(false);
+                        isOpened = false;
                     });
-                isOpened = false;
             }
         }
 
