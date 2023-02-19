@@ -1,4 +1,5 @@
 ﻿using System;
+using RCRCoreLib.Core.Building;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,6 +9,9 @@ namespace RCRCoreLib.Core.Shopping
     public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
 
+        [SerializeField]
+        private ShopItem Item;
+        
         public static Canvas canvas;
         private RectTransform rt;
         private CanvasGroup cg;
@@ -25,6 +29,11 @@ namespace RCRCoreLib.Core.Shopping
             orginPos = rt.anchoredPosition;
         }
 
+        public void Initialize(ShopItem item)
+        {
+            Item = item;
+        }
+        
         public void OnBeginDrag(PointerEventData eventData)
         {
             drag = true;
@@ -51,6 +60,12 @@ namespace RCRCoreLib.Core.Shopping
             Color c = Color.clear;
             c.a = 0f;
             img.color = c;
+
+            Vector3 position = new Vector3(transform.position.x, transform.position.y);
+            position = Camera.main.ScreenToWorldPoint(position);
+            
+           var obj = BuildingSystem.Instance.InitializeWithObject(Item.prefab, position);
+           obj.GetComponent<PlaceableObject>().Initialize(Item);
         }
 
         private void OnEnable()

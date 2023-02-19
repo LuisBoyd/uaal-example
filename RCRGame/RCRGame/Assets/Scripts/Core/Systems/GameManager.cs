@@ -1,4 +1,7 @@
-﻿using RCRCoreLib.Core.Enums;
+﻿using System;
+using RCRCoreLib.Core.Building;
+using RCRCoreLib.Core.Enums;
+using RCRCoreLib.Core.SaveSystem;
 using RCRCoreLib.Core.Shopping;
 using RCRCoreLib.Currency;
 using RCRCoreLib.XPLevel;
@@ -10,10 +13,14 @@ namespace RCRCoreLib.Core.Systems
     {
         public GameObject canvas;
 
+        public SaveData saveData;
+        [SerializeField] private string shopItemsPath = "shop";
+
         protected override void Awake()
         {
             base.Awake();
             ShopItemDrag.canvas = canvas.GetComponent<Canvas>();
+            SaveSystem.SaveSystem.Initialize();
         }
 
         public void GetXp(int amount)
@@ -26,6 +33,42 @@ namespace RCRCoreLib.Core.Systems
         {
             CurrencyChangedGameEvent info = new CurrencyChangedGameEvent(amount, CurrencyType.Coins);
             EventManager.Instance.QueueEvent(info);
+        }
+
+        private void Start()
+        {
+           saveData = SaveSystem.SaveSystem.Load();
+           LoadGame();
+        }
+
+        private void LoadGame()
+        {
+            LoadPlaceableObjects();
+        }
+
+        private void LoadPlaceableObjects()
+        {
+            foreach (var plObjData in saveData.placeableObjectDatas.Values)
+            {
+                try
+                {
+                    ShopItem item = Resources.Load<ShopItem>(shopItemsPath + "/" + plObjData.assetName);
+                    GameObject obj = BuildingSystem.Instance.InitializeWithObject(item.prefab, plObjData.position, true);
+                    PlaceableObject plObj = obj.GetComponent<PlaceableObject>();
+                    plObj.Initialize(item, plObjData);
+                    plObj.Load();
+                }
+                catch (Exception e)
+                {
+                    // Console.WriteLine(e);
+                    // throw;
+                }
+            }
+        }
+
+        private void OnDisable()
+        {
+            SaveSystem.SaveSystem.Save(saveData);
         }
     }
 }

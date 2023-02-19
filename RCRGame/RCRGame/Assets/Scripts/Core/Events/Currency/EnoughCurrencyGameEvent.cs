@@ -1,6 +1,6 @@
 ﻿namespace RCRCoreLib.Currency
 {
-    public class EnoughCurrencyGameEvent
+    public class EnoughCurrencyGameEvent: GameEvent
     {
          
     }
