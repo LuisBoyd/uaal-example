@@ -8,10 +8,17 @@ namespace RCRCoreLib.Core.Timers
     {
         public string Name { get; private set; }
         public bool IsRunning { get; private set; }
-        private DateTime startTime;
+        public DateTime startTime { get; private set; }
         public TimeSpan timeToFinish { get; private set; }
-        private DateTime finishTime;
+        public DateTime finishTime { get; private set; }
         public UnityEvent TimerFinishedEvent;
+        
+        /// <summary>
+        /// Updates are done in a normalized value so if Max time
+        /// was 1 Hour then 1 = 1 hour, 0.5 = 30 mins, etc...
+        /// </summary>
+        public UnityEvent<float> TimerUpdateEvent;
+        
         
         public double secondsLeft { get; private set; }
 
@@ -31,12 +38,35 @@ namespace RCRCoreLib.Core.Timers
             finishTime = start.Add(time);
 
             TimerFinishedEvent = new UnityEvent();
+            TimerUpdateEvent = new UnityEvent<float>();
         }
+        
 
         public void StartTimer()
         {
             secondsLeft = timeToFinish.TotalSeconds;
             IsRunning = true;
+        }
+        
+        /// <summary>
+        /// Loads the Timer where it was previously left off at
+        /// </summary>
+        /// <param name="startTimerAt">Seconds into the timer</param>
+        public void StartTimer(double startTimerAt)
+        {
+            secondsLeft = startTimerAt;
+            Debug.Log($"Start Time At {startTimerAt}");
+            Debug.Log($"Seconds Left {secondsLeft}");
+            if (secondsLeft > 0)
+            {
+                IsRunning = true;
+            }
+            else
+            {
+                TimerFinishedEvent.Invoke();
+                secondsLeft = 0;
+                IsRunning = false;
+            }
         }
 
         private void Update()
@@ -44,7 +74,10 @@ namespace RCRCoreLib.Core.Timers
             if (IsRunning)
             {
                 if (secondsLeft > 0)
+                {
                     secondsLeft -= Time.deltaTime;
+                    TimerUpdateEvent?.Invoke((float) NormalizedPercentageDone());
+                }
                 else
                 {
                     TimerFinishedEvent.Invoke();
@@ -92,5 +125,13 @@ namespace RCRCoreLib.Core.Timers
             secondsLeft = 0;
             finishTime = DateTime.Now;
         }
+
+        public double NormalizedPercentageDone()
+        {
+            TimeSpan timeleft = TimeSpan.FromSeconds(timeToFinish.TotalSeconds - secondsLeft);
+            return (double) timeleft.Ticks / (double) timeToFinish.Ticks;
+        }
+
+       
     }
 }

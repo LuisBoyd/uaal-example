@@ -25,15 +25,16 @@ namespace RCRCoreLib.Core.Building
         // {
         //     OriginTransform = GetComponentInChildren<Transform>();
         // }
+        
 
-        public void Initialize(ShopItem shopItem)
+        public virtual void Initialize(ShopItem shopItem)
         {
             item = shopItem;
             data.assetName = item.name;
             data.ID = SaveData.GeneratedID();
         }
 
-        public void Initialize(ShopItem shopItem, PlaceableObjectData data)
+        public virtual void Initialize(ShopItem shopItem, PlaceableObjectData data)
         {
             item = shopItem;
             this.data = data;
@@ -87,7 +88,7 @@ namespace RCRCoreLib.Core.Building
             
         }
 
-        public void Load()
+        public virtual void Load()
         {
             PanZoom.Instance.UnfollowObject();
             Destroy(GetComponent<ObjectDrag>());
@@ -125,7 +126,7 @@ namespace RCRCoreLib.Core.Building
             }
         }
 
-        private void OnApplicationQuit()
+        protected virtual void OnApplicationQuit()
         {
             data.position = transform.position;
             GameManager.Instance.saveData.AddData(data);

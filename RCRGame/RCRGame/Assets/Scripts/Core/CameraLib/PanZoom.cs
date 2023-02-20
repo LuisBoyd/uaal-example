@@ -1,5 +1,6 @@
 ﻿using System;
 using Cinemachine;
+using RCRCoreLib.Core.Timers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,6 +11,7 @@ namespace RCRCoreLib.Core.CameraLib
     {
         private CinemachineVirtualCamera camera;
         private Camera mainCamera;
+
         private bool moveAllowed;
 
         [SerializeField] private float LeftLimit;
@@ -96,6 +98,8 @@ namespace RCRCoreLib.Core.CameraLib
                             else
                             {
                                 moveAllowed = true;
+                                //Hide ToolTip TODO other DYNAMIC UI
+                                TimerToolTip.HideTimer_Static();
                             }
 
                             touchPos = mainCamera.ScreenToWorldPoint(touch.position);

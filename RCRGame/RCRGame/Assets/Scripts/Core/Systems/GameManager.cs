@@ -43,12 +43,12 @@ namespace RCRCoreLib.Core.Systems
 
         private void LoadGame()
         {
-            LoadPlaceableObjects();
+            LoadDelayedPlaceableObjects();
         }
 
-        private void LoadPlaceableObjects()
+        private void LoadDelayedPlaceableObjects()
         {
-            foreach (var plObjData in saveData.placeableObjectDatas.Values)
+            foreach (var plObjData in saveData.delayedPlaceableObjectDatas.Values)
             {
                 try
                 {

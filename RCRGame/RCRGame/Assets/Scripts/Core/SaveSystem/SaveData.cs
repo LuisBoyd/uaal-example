@@ -12,6 +12,9 @@ namespace RCRCoreLib.Core.SaveSystem
         public Dictionary<string, PlaceableObjectData> placeableObjectDatas =
             new Dictionary<string, PlaceableObjectData>();
 
+        public Dictionary<string, DelayedPlaceableObjectData> delayedPlaceableObjectDatas =
+            new Dictionary<string, DelayedPlaceableObjectData>();
+
         public static string GeneratedID()
         {
             idCount++;
@@ -20,16 +23,24 @@ namespace RCRCoreLib.Core.SaveSystem
 
         public void AddData(Data data)
         {
-            if (data is PlaceableObjectData plObjData)
+            switch (data)
             {
-                if (placeableObjectDatas.ContainsKey(plObjData.ID))
-                {
-                    placeableObjectDatas[plObjData.ID] = plObjData;
-                }
-                else
-                {
-                    placeableObjectDatas.Add(plObjData.ID, plObjData);
-                }
+                case PlaceableObjectData plobjData when plobjData.GetType() == typeof(PlaceableObjectData):
+                    if (placeableObjectDatas.ContainsKey(plobjData.ID))
+                        placeableObjectDatas[plobjData.ID] = plobjData;
+                    else
+                    {
+                        placeableObjectDatas.Add(plobjData.ID, plobjData);
+                    }
+                    break;
+                case DelayedPlaceableObjectData delplobjData when delplobjData.GetType() == typeof(DelayedPlaceableObjectData):
+                    if (delayedPlaceableObjectDatas.ContainsKey(delplobjData.ID))
+                        delayedPlaceableObjectDatas[delplobjData.ID] = delplobjData;
+                    else
+                    {
+                        delayedPlaceableObjectDatas.Add(delplobjData.ID,delplobjData);
+                    }
+                    break;
             }
         }
 

@@ -195,7 +195,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1e08bba7cf24d238c05ca211e892cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
   OriginTransform: {fileID: 1531027260136312855}
   area:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 14, y: 12, z: 1}
+  data:
+    ID: 
+    assetName: 
+    position: {x: 0, y: 0, z: 0}
+  ConstructionMaterial: {fileID: 2100000, guid: 04fbec243e5dc75438fd415d082088fc,
+    type: 2}
+  BuiltMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
