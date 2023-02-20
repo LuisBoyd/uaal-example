@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RCRCoreLib.Core.CameraLib;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -14,7 +15,7 @@ namespace RCRCoreLib.Core.Building
 
         #region TileMap Management
 
-        private TileBase[] GetTilesBlock(BoundsInt area, Tilemap tilemap)
+        public TileBase[] GetTilesBlock(BoundsInt area, Tilemap tilemap)
         {
             TileBase[] array = new TileBase[area.size.x * area.size.y];
             int Index = 0;
@@ -22,6 +23,19 @@ namespace RCRCoreLib.Core.Building
             {
                 Vector3Int pos = new Vector3Int(vector3Int.x, vector3Int.y, 0);
                 array[Index] = tilemap.GetTile(pos);
+                Index++;
+            }
+
+            return array;
+        }
+        public TileBase[] GetTilesBlock(BoundsInt area)
+        {
+            TileBase[] array = new TileBase[area.size.x * area.size.y];
+            int Index = 0;
+            foreach (Vector3Int vector3Int in area.allPositionsWithin)
+            {
+                Vector3Int pos = new Vector3Int(vector3Int.x, vector3Int.y, 0);
+                array[Index] = MainTilemap.GetTile(pos);
                 Index++;
             }
 
@@ -76,6 +90,24 @@ namespace RCRCoreLib.Core.Building
             foreach (TileBase tileBase in baseArray)
             {
                 if (tileBase == takenTile)
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool CanTakeAreaWithPredicates(BoundsInt area, IEnumerable<BuildingPredicate> predicates)
+        {
+            TileBase[] baseArray = GetTilesBlock(area, MainTilemap);
+
+            foreach (TileBase tileBase in baseArray)
+            {
+                if (tileBase == takenTile)
+                    return false;
+            }
+            foreach (var predicate in predicates)
+            {
+                if (!predicate.CanBuildHere(area))
                     return false;
             }
 

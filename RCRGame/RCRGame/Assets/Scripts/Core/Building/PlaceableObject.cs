@@ -40,7 +40,7 @@ namespace RCRCoreLib.Core.Building
             this.data = data;
         }
 
-        public bool CanBePlaced()
+        public virtual bool CanBePlaced()
         {
             Vector3Int positionInt = BuildingSystem.Instance.gridLayout.LocalToCell(OriginTransform.position);
             BoundsInt areaTemp = new BoundsInt(positionInt, new Vector3Int(area.size.x, area.size.y, 1));
