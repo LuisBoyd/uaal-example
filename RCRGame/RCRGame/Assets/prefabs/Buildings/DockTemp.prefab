@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6095428843653574864}
   - component: {fileID: 6095428843653574867}
-  - component: {fileID: 6095428843653574866}
   - component: {fileID: 6095428843653574865}
   - component: {fileID: 6095428843653574876}
+  - component: {fileID: 2300176981502781891}
   m_Layer: 0
   m_Name: DockTemp
   m_TagString: Untagged
@@ -27,14 +27,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6095428843653574871}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6095428845550788125}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6095428843653574867
 SpriteRenderer:
@@ -88,59 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!60 &6095428843653574866
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6095428843653574871}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.484375, y: 1.25}
-    newSize: {x: 3.18, y: 1.6}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.609375, y: 0.625}
-      - {x: -1.2421875, y: -0.328125}
-      - {x: -1.2421875, y: -0.4453125}
-      - {x: -0.8125, y: -0.625}
-      - {x: -0.609375, y: -0.625}
-      - {x: 1.2421875, y: 0.3359375}
-      - {x: 1.2421875, y: 0.4296875}
-      - {x: 0.8046875, y: 0.625}
-  m_UseDelaunayMesh: 0
 --- !u!114 &6095428843653574865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +128,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WaterTile: {fileID: 11400000, guid: 6a9a3cca57f29b045bd733885f98792f, type: 2}
   LandTile: {fileID: 11400000, guid: a1f961bccccf50447baee870fa51a472, type: 2}
+--- !u!60 &2300176981502781891
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6095428843653574871}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.19894812, y: 0.009793207}
+    oldSize: {x: 2.484375, y: 1.25}
+    newSize: {x: 3.18, y: 1.6}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.3573008, y: 1.2377585}
+      - {x: -0.49426174, y: 0.28463352}
+      - {x: -0.49426174, y: 0.16744602}
+      - {x: -0.06457424, y: -0.012241483}
+      - {x: 0.13855076, y: -0.012241483}
+      - {x: 1.9901133, y: 0.948696}
+      - {x: 1.9901133, y: 1.042446}
+      - {x: 1.5526133, y: 1.2377585}
+  m_UseDelaunayMesh: 0
 --- !u!1 &6095428845550788124
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,7 +205,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6095428845550788124}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.7656, y: -0.6164, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

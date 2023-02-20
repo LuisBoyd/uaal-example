@@ -30,7 +30,12 @@ namespace RCRCoreLib.Core.Building
             timerToBuild = gameObject.AddComponent<Timer>();
             SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
             renderer.material = ConstructionMaterial;
-            timerToBuild.Initialize("Building", DateTime.Now, TimeSpan.FromMinutes(3));
+            var CustomTimeSpan = DateTime.Now
+                .AddDays(item.TimeToBuild_Days)
+                .AddHours(item.TimeToBuild_Hours)
+                .AddMinutes(item.TimeToBuild_Minutes)
+                .AddSeconds(item.TimeToBuild_Seconds);
+            timerToBuild.Initialize("Building", DateTime.Now, CustomTimeSpan.Subtract(DateTime.Now));
             timerToBuild.StartTimer();
             timerToBuild.TimerUpdateEvent.AddListener(delegate(float time)
             {

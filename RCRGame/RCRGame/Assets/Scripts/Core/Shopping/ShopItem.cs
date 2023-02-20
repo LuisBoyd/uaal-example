@@ -1,4 +1,5 @@
-﻿using RCRCoreLib.Core.Enums;
+﻿using System;
+using RCRCoreLib.Core.Enums;
 using UnityEngine;
 
 namespace RCRCoreLib.Core.Shopping
@@ -10,6 +11,10 @@ namespace RCRCoreLib.Core.Shopping
         public string description = "Description";
         public int level;
         public int price;
+        public int TimeToBuild_Days = 0;
+        public int TimeToBuild_Hours = 0;
+        public int TimeToBuild_Minutes = 0;
+        public int TimeToBuild_Seconds = 0;
         public CurrencyType currencyType;
         public ObjectType objectType;
         public Sprite sprite;

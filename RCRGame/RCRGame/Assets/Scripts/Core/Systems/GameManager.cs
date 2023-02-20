@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using RCRCoreLib.Core.AI;
 using RCRCoreLib.Core.Building;
 using RCRCoreLib.Core.Enums;
 using RCRCoreLib.Core.SaveSystem;
@@ -22,6 +24,7 @@ namespace RCRCoreLib.Core.Systems
             ShopItemDrag.canvas = canvas.GetComponent<Canvas>();
             SaveSystem.SaveSystem.Initialize();
         }
+        
 
         public void GetXp(int amount)
         {
@@ -37,8 +40,14 @@ namespace RCRCoreLib.Core.Systems
 
         private void Start()
         {
-           saveData = SaveSystem.SaveSystem.Load();
+            saveData = SaveSystem.SaveSystem.Load();
            LoadGame();
+           List<Vector3Int> explore = PathFindingSystem.Instance.FindPath(
+               new Vector3Int(120, 94), new Vector3Int(95, 17), PathFindingSystem.PathFindingMode.Land);
+           for (var i = 0; i < explore.Count; i++)
+           {
+               Debug.Log(explore[i]);
+           }
         }
 
         private void LoadGame()
