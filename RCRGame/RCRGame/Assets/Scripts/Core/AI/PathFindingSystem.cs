@@ -92,7 +92,7 @@ namespace RCRCoreLib.Core.AI
             PathtilePositions.Clear();
         }
 
-        public List<Vector3Int> FindPath(Vector3 startLocation, Vector3 endLocation, PathFindingMode mode)
+        public List<Vector3> FindPath(Vector3 startLocation, Vector3 endLocation, PathFindingMode mode)
         {
             obstacles.Clear();
             Vector3Int StartCell = new Vector3Int((int)startLocation.x, (int)startLocation.y);
@@ -101,7 +101,7 @@ namespace RCRCoreLib.Core.AI
             int2 EndCoord = new int2() { x = EndCell.x, y = EndCell.y };
             Vector2Int StartCell2D = new Vector2Int(StartCoord.x, StartCoord.y);
             Vector2Int EndCell2D = new Vector2Int(EndCoord.x, EndCoord.y);
-            List<Vector3Int> Path = new List<Vector3Int>();
+            List<Vector3> Path = new List<Vector3>();
             start.coord = StartCoord;
             end.coord = EndCoord;
             if (obstacles.ContainsKey(StartCoord) || obstacles.ContainsKey(EndCoord))
@@ -132,6 +132,10 @@ namespace RCRCoreLib.Core.AI
                                                                  || PathtilePositions.Contains(StartCell2D) ||
                                                                  PathtilePositions.Contains(EndCell2D))
                     {
+                        bool one = !WatertilePositions.Contains(StartCell2D);
+                        bool two = !WatertilePositions.Contains(EndCell2D);
+                        bool three = PathtilePositions.Contains(StartCell2D);
+                        bool four = PathtilePositions.Contains(EndCell2D);
                         return null;
                     }
                     else
@@ -191,9 +195,8 @@ namespace RCRCoreLib.Core.AI
                 while (!currentCoord.Equals(start.coord))
                 {
                     currentCoord = nodes[currentCoord].parent;
-                    Vector3Int currentTile = new Vector3Int(currentCoord.x,
-                        currentCoord.y, 0);
-                    Path.Add(currentTile);
+                    Vector3 currentTileWorldPos = map.CellToWorld(new Vector3Int(currentCoord.x, currentCoord.y)); 
+                    Path.Add(currentTileWorldPos);
                 }
             }
 
@@ -202,12 +205,20 @@ namespace RCRCoreLib.Core.AI
             isObstacle.Dispose();
             offsets.Dispose();
             nodeArray.Dispose();
+            Path.Reverse();
             return Path;
         }
-        public List<Vector3Int> FindPath(Transform startlocation, Transform endlocation, PathFindingMode mode)
+        public List<Vector3> FindPath(Transform startlocation, Transform endlocation, PathFindingMode mode)
         {
             Vector3Int StartCell = map.WorldToCell(startlocation.position);
             Vector3Int EndCell = map.WorldToCell(endlocation.position);
+            return FindPath(StartCell, EndCell, mode);
+        }
+
+        public List<Vector3> FindPath(Transform startlocation, Vector3 endlocation, PathFindingMode mode)
+        {
+            Vector3Int StartCell = map.WorldToCell(startlocation.position);
+            Vector3Int EndCell = map.WorldToCell(endlocation);
             return FindPath(StartCell, EndCell, mode);
         }
         //[BurstCompile(CompileSynchronously = true)]

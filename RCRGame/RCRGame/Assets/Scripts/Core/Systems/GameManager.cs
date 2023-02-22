@@ -41,13 +41,7 @@ namespace RCRCoreLib.Core.Systems
         private void Start()
         {
             saveData = SaveSystem.SaveSystem.Load();
-           LoadGame();
-           List<Vector3Int> explore = PathFindingSystem.Instance.FindPath(
-               new Vector3Int(120, 94), new Vector3Int(95, 17), PathFindingSystem.PathFindingMode.Land);
-           for (var i = 0; i < explore.Count; i++)
-           {
-               Debug.Log(explore[i]);
-           }
+            LoadGame();
         }
 
         private void LoadGame()
