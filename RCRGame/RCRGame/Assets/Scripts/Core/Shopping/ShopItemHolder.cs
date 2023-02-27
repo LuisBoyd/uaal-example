@@ -18,18 +18,18 @@ namespace RCRCoreLib.Core.Shopping
 
         public void Initialize(ShopItem item)
         {
-            this.item = item;
-
-            iconImage.sprite = this.item.sprite;
-            tittleText.text = this.item.name;
-            descriptionText.text = this.item.description;
-            currencyIcon.sprite = ShoppingManager.Instance.CurrencySprites[item.currencyType];
-            priceText.text = this.item.price.ToString();
-
-            if (item.level >= LevelSystem.Instance.Level)
-            {
-                unlockItem();
-            }
+            // this.item = item;
+            //
+            // iconImage.sprite = this.item.sprite;
+            // tittleText.text = this.item.name;
+            // descriptionText.text = this.item.description;
+            // currencyIcon.sprite = ShoppingManager.Instance.CurrencySprites[item.currencyType];
+            // priceText.text = this.item.price.ToString();
+            //
+            // if (item.level >= LevelSystem.Instance.Level)
+            // {
+            //     unlockItem();
+            // }
         }
 
         public void unlockItem()

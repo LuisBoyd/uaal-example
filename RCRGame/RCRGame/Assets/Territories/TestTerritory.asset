@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d971ebefae294d0c8a604d21a18eaffc, type: 3}
+  m_Name: TestTerritory
+  m_EditorClassIdentifier: 
+  TerritoryName: Starter
+  previewImage: {fileID: 2800000, guid: 5a871acd307e4e540b4d8bf2a0b0aaf1, type: 3}
+  BackGroundTilemap: {fileID: 2159000720128897111, guid: 2131ab55f873af24ba24d0b55af38d43,
+    type: 3}
+  LogicTileMap: {fileID: 8935197755808834398, guid: 8240cd2080776ac4e98c0e0c9eba76dd,
+    type: 3}

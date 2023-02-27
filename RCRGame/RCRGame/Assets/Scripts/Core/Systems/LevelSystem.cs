@@ -20,8 +20,8 @@ namespace RCRCoreLib.Core.Systems
         
         //TODO replace with a more concrete method of getting UGUI
 
-        [SerializeField]private Slider _slider;
-        [SerializeField]private TextMeshProUGUI xpText;
+        // [SerializeField]private Slider _slider;
+        // [SerializeField]private TextMeshProUGUI xpText;
         [SerializeField]private TextMeshProUGUI lvlText;
         [SerializeField]private Image StarImage;
 
@@ -76,8 +76,8 @@ namespace RCRCoreLib.Core.Systems
         private void UpdateUI()
         {
             float fill = (float)XPnow / XpToNextLevel;
-            _slider.value = fill;
-            xpText.text = $"{XPnow}/{XpToNextLevel}";
+            // _slider.value = fill;
+            // xpText.text = $"{XPnow}/{XpToNextLevel}";
         }
 
         private void onXpAdded(XPAddedGameEvent evnt)
@@ -108,7 +108,7 @@ namespace RCRCoreLib.Core.Systems
 
             CurrencyChangedGameEvent currencyChangedGameEvent = new CurrencyChangedGameEvent(lvlReward[evnt.newLevel][0], CurrencyType.Coins);
             EventManager.Instance.QueueEvent(currencyChangedGameEvent);
-            currencyChangedGameEvent = new CurrencyChangedGameEvent(lvlReward[evnt.newLevel][0], CurrencyType.Dollars);
+            currencyChangedGameEvent = new CurrencyChangedGameEvent(lvlReward[evnt.newLevel][0], CurrencyType.Coins);
             EventManager.Instance.QueueEvent(currencyChangedGameEvent);
         }
     }

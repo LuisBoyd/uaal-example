@@ -3,6 +3,6 @@
     public enum CurrencyType
     {
         Coins,
-        Dollars
+        Premium
     }
 }

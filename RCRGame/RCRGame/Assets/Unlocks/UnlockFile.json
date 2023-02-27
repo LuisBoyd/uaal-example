@@ -1,0 +1,460 @@
+{
+   "LockedStructures": {},
+   "LockedBuildings": {
+      "0": {
+         "name": "Fueling Station",
+         "ID": 0,
+         "Unlocked": true,
+         "prefabPath": "",
+         "SpriteIconPath": "BuildingIcons/FuelingStation/FuelingStation0",
+         "BuildingLevelInfo": {
+            "0": {
+               "CardsToNextLevel": 10,
+               "costToBuildType": "Coins",
+               "CostToBuild": 100,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 1000,
+               "IconSpritePath": "BuildingIcons/FuelingStation/FuelingStation0",
+               "PrefabPath": ""
+            },
+            "1": {
+               "CardsToNextLevel": 20,
+               "costToBuildType": "Coins",
+               "CostToBuild": 110,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 2000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "2": {
+               "CardsToNextLevel": 30,
+               "costToBuildType": "Coins",
+               "CostToBuild": 120,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 3000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "3": {
+               "CardsToNextLevel": 40,
+               "costToBuildType": "Coins",
+               "CostToBuild": 130,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 4000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "4": {
+               "CardsToNextLevel": 50,
+               "costToBuildType": "Coins",
+               "CostToBuild": 140,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 5000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "5": {
+               "CardsToNextLevel": 60,
+               "costToBuildType": "Coins",
+               "CostToBuild": 150,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 6000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            }
+         },
+         "category": "Repair",
+         "CurrentLevel": 0
+      },
+      "1": {
+         "name": "Repair Station",
+         "ID": 1,
+         "Unlocked": true,
+         "prefabPath": "",
+         "SpriteIconPath": "BuildingIcons/RepairStation/RepairStation0",
+         "BuildingLevelInfo": {
+            "0": {
+               "CardsToNextLevel": 10,
+               "costToBuildType": "Coins",
+               "CostToBuild": 100,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 1000,
+               "IconSpritePath": "BuildingIcons/RepairStation/RepairStation0",
+               "PrefabPath": ""
+            },
+            "1": {
+               "CardsToNextLevel": 20,
+               "costToBuildType": "Coins",
+               "CostToBuild": 110,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 2000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "2": {
+               "CardsToNextLevel": 30,
+               "costToBuildType": "Coins",
+               "CostToBuild": 120,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 3000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "3": {
+               "CardsToNextLevel": 40,
+               "costToBuildType": "Coins",
+               "CostToBuild": 130,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 4000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "4": {
+               "CardsToNextLevel": 50,
+               "costToBuildType": "Coins",
+               "CostToBuild": 140,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 5000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "5": {
+               "CardsToNextLevel": 60,
+               "costToBuildType": "Coins",
+               "CostToBuild": 150,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 6000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            }
+         },
+         "category": "Repair",
+         "CurrentLevel": 0
+      },
+      "2": {
+         "name": "Private Sale Office",
+         "ID": 2,
+         "Unlocked": false,
+         "prefabPath": "",
+         "SpriteIconPath": "BuildingIcons/PrivateSaleOffice/PrivateSaleOffice0",
+         "BuildingLevelInfo": {
+            "0": {
+               "CardsToNextLevel": 10,
+               "costToBuildType": "Coins",
+               "CostToBuild": 100,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 1000,
+               "IconSpritePath": "BuildingIcons/PrivateSaleOffice/PrivateSaleOffice0",
+               "PrefabPath": ""
+            },
+            "1": {
+               "CardsToNextLevel": 20,
+               "costToBuildType": "Coins",
+               "CostToBuild": 110,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 2000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "2": {
+               "CardsToNextLevel": 30,
+               "costToBuildType": "Coins",
+               "CostToBuild": 120,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 3000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "3": {
+               "CardsToNextLevel": 40,
+               "costToBuildType": "Coins",
+               "CostToBuild": 130,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 4000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "4": {
+               "CardsToNextLevel": 50,
+               "costToBuildType": "Coins",
+               "CostToBuild": 140,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 5000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "5": {
+               "CardsToNextLevel": 60,
+               "costToBuildType": "Coins",
+               "CostToBuild": 150,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 6000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            }
+         },
+         "category": "Business",
+         "CurrentLevel": 0
+      },
+      "3": {
+         "name": "Toilet Station",
+         "ID": 3,
+         "Unlocked": false,
+         "prefabPath": "",
+         "SpriteIconPath": "BuildingIcons/ToiletStation/ToiletStation0",
+         "BuildingLevelInfo": {
+            "0": {
+               "CardsToNextLevel": 10,
+               "costToBuildType": "Coins",
+               "CostToBuild": 100,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 1000,
+               "IconSpritePath": "BuildingIcons/ToiletStation/ToiletStation0",
+               "PrefabPath": ""
+            },
+            "1": {
+               "CardsToNextLevel": 20,
+               "costToBuildType": "Coins",
+               "CostToBuild": 110,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 2000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "2": {
+               "CardsToNextLevel": 30,
+               "costToBuildType": "Coins",
+               "CostToBuild": 120,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 3000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "3": {
+               "CardsToNextLevel": 40,
+               "costToBuildType": "Coins",
+               "CostToBuild": 130,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 4000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "4": {
+               "CardsToNextLevel": 50,
+               "costToBuildType": "Coins",
+               "CostToBuild": 140,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 5000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "5": {
+               "CardsToNextLevel": 60,
+               "costToBuildType": "Coins",
+               "CostToBuild": 150,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 6000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            }
+         },
+         "category": "Lodging",
+         "CurrentLevel": 0
+      },
+      "4": {
+         "name": "Rescue Station",
+         "ID": 4,
+         "Unlocked": false,
+         "prefabPath": "",
+         "SpriteIconPath": "BuildingIcons/RescueStation/RescueStation0",
+         "BuildingLevelInfo": {
+            "0": {
+               "CardsToNextLevel": 10,
+               "costToBuildType": "Coins",
+               "CostToBuild": 100,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 1000,
+               "IconSpritePath": "BuildingIcons/RescueStation/RescueStation0",
+               "PrefabPath": ""
+            },
+            "1": {
+               "CardsToNextLevel": 20,
+               "costToBuildType": "Coins",
+               "CostToBuild": 110,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 2000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "2": {
+               "CardsToNextLevel": 30,
+               "costToBuildType": "Coins",
+               "CostToBuild": 120,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 3000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "3": {
+               "CardsToNextLevel": 40,
+               "costToBuildType": "Coins",
+               "CostToBuild": 130,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 4000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "4": {
+               "CardsToNextLevel": 50,
+               "costToBuildType": "Coins",
+               "CostToBuild": 140,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 5000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "5": {
+               "CardsToNextLevel": 60,
+               "costToBuildType": "Coins",
+               "CostToBuild": 150,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 6000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            }
+         },
+         "category": "Repair",
+         "CurrentLevel": 0
+      },
+      "5": {
+         "name": "Convinence Store",
+         "ID": 5,
+         "Unlocked": false,
+         "prefabPath": "",
+         "SpriteIconPath": "BuildingIcons/ConvinenceStore/ConvinenceStore0",
+         "BuildingLevelInfo": {
+            "0": {
+               "CardsToNextLevel": 10,
+               "costToBuildType": "Coins",
+               "CostToBuild": 100,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 1000,
+               "IconSpritePath": "BuildingIcons/ConvinenceStore/ConvinenceStore0",
+               "PrefabPath": ""
+            },
+            "1": {
+               "CardsToNextLevel": 20,
+               "costToBuildType": "Coins",
+               "CostToBuild": 110,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 2000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "2": {
+               "CardsToNextLevel": 30,
+               "costToBuildType": "Coins",
+               "CostToBuild": 120,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 3000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "3": {
+               "CardsToNextLevel": 40,
+               "costToBuildType": "Coins",
+               "CostToBuild": 130,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 4000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "4": {
+               "CardsToNextLevel": 50,
+               "costToBuildType": "Coins",
+               "CostToBuild": 140,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 5000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "5": {
+               "CardsToNextLevel": 60,
+               "costToBuildType": "Coins",
+               "CostToBuild": 150,
+               "costToUpgradeType": "Coins",
+               "CostToUpgrade": 6000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            }
+         },
+         "category": "Food",
+         "CurrentLevel": 0
+      },
+      "6": {
+         "name": "Vistor Berth",
+         "ID": 6,
+         "Unlocked": true,
+         "prefabPath": "",
+         "SpriteIconPath": "BuildingIcons/VistorBerth/VistorBerth0",
+         "BuildingLevelInfo": {
+            "0": {
+               "CardsToNextLevel": 10,
+               "costToBuildType": "Premium",
+               "CostToBuild": 100,
+               "costToUpgradeType": "Premium",
+               "CostToUpgrade": 1000,
+               "IconSpritePath": "BuildingIcons/VistorBerth/VistorBerth0",
+               "PrefabPath": ""
+            },
+            "1": {
+               "CardsToNextLevel": 20,
+               "costToBuildType": "Premium",
+               "CostToBuild": 110,
+               "costToUpgradeType": "Premium",
+               "CostToUpgrade": 2000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "2": {
+               "CardsToNextLevel": 30,
+               "costToBuildType": "Premium",
+               "CostToBuild": 120,
+               "costToUpgradeType": "Premium",
+               "CostToUpgrade": 3000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "3": {
+               "CardsToNextLevel": 40,
+               "costToBuildType": "Premium",
+               "CostToBuild": 130,
+               "costToUpgradeType": "Premium",
+               "CostToUpgrade": 4000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "4": {
+               "CardsToNextLevel": 50,
+               "costToBuildType": "Premium",
+               "CostToBuild": 140,
+               "costToUpgradeType": "Premium",
+               "CostToUpgrade": 5000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            },
+            "5": {
+               "CardsToNextLevel": 60,
+               "costToBuildType": "Premium",
+               "CostToBuild": 150,
+               "costToUpgradeType": "Premium",
+               "CostToUpgrade": 6000,
+               "IconSpritePath": "",
+               "PrefabPath": ""
+            }
+         },
+         "category": "Berth",
+         "CurrentLevel": 0
+      }
+   }
+}

@@ -60,7 +60,7 @@ namespace RCRCoreLib.Core.Timers
             EventManager.Instance.AddListenerOnce<EnoughCurrencyGameEvent>(OnEnoughCurrency);
             EventManager.Instance.AddListenerOnce<NotEnoughCurrencyGameEvent>(OnNotEnoughCurrency);
 
-            CurrencyChangedGameEvent info = new CurrencyChangedGameEvent(-Timer.skipAmount, CurrencyType.Dollars);
+            CurrencyChangedGameEvent info = new CurrencyChangedGameEvent(-Timer.skipAmount, CurrencyType.Premium);
             EventManager.Instance.QueueEvent(info);
         }
 

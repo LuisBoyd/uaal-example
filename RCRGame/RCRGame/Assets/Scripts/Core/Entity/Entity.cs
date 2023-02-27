@@ -44,7 +44,8 @@ namespace RCRCoreLib.Core.Entity
         {
             Path = PathFindingSystem.Instance.FindPath(transform, position, m_entityType.PathFindingMode);
             LTDescr d = LeanTween.moveSpline(gameObject, Path.ToArray(),  Path.Count() / m_entityType.MovementSpeed);
-            d.setOnUpdate((Action<Vector3>) IsometricAnimatorController.SetDirection); //TODO Check Casting
+            IsometricAnimatorController.CurrentPosition = transform.position;
+            d.setOnUpdate(IsometricAnimatorController.SetDirection);
             if (onArrivedAtPosition != null)
                 d.setOnComplete(onArrivedAtPosition);
             //TODO more consistant speed modifier calculations
@@ -52,6 +53,8 @@ namespace RCRCoreLib.Core.Entity
             //     m_entityType.MovementSpeed * 60, onArrivedAtPosition));
             //TODO might need to get rid of LTdescr when changing paths
         }
+        
+        
 
         private IEnumerator MovePathOverFrames(float secondsTocomplete,Action OnCompleteCallback = null)
         {

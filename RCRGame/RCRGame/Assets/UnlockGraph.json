@@ -1,0 +1,139 @@
+{
+   "UnlockGraph": {
+      "Buildings": [
+         {
+            "Name": "Fueling Station",
+            "ID": "1",
+            "UnlockedAtLevel": 0,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Repair Station",
+            "ID": "2",
+            "UnlockedAtLevel": 0,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Private Sale Office",
+            "ID": "3",
+            "UnlockedAtLevel": 3,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Toilet Station",
+            "ID": "4",
+            "UnlockedAtLevel": 2,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Rescue Station",
+            "ID": "5",
+            "UnlockedAtLevel": 7,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Convinence Store",
+            "ID": "6",
+            "UnlockedAtLevel": 4,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Vistor Berth",
+            "ID": "7",
+            "UnlockedAtLevel": 0,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "waste disposal skips",
+            "ID": "8",
+            "UnlockedAtLevel": 5,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "marine diesel berth",
+            "ID": "9",
+            "UnlockedAtLevel": 6,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Cafe",
+            "ID": "10",
+            "UnlockedAtLevel": 2,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Restaruant",
+            "ID": "11",
+            "UnlockedAtLevel": 7,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "recycling facilities",
+            "ID": "12",
+            "UnlockedAtLevel": 8,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Shower Station",
+            "ID": "13",
+            "UnlockedAtLevel": 6,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Lodging",
+            "ID": "14",
+            "UnlockedAtLevel": 9,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Hotel",
+            "ID": "15",
+            "UnlockedAtLevel": 11,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "mobile crane",
+            "ID": "16",
+            "UnlockedAtLevel": 10,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "Launderette",
+            "ID": "17",
+            "UnlockedAtLevel": 8,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "chandlery",
+            "ID": "18",
+            "UnlockedAtLevel": 6,
+            "RequiredCards": 1,
+            "DependantOn": []
+         },
+         {
+            "Name": "River Canal Branch",
+            "ID": "19",
+            "UnlockedAtLevel": 12,
+            "RequiredCards": 1,
+            "DependantOn": []
+         }
+      ]
+   }
+}
