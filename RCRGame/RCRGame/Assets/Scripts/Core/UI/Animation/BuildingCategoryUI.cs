@@ -17,6 +17,8 @@ namespace RCRCoreLib.Core.UI.Animation
 
         public override void SlideIn()
         {
+            Debug.Log($"UI Pos {UItransform.position.y}");
+            Debug.Log($"UI toBe Pos {EnabledPosition.y}");
             LeanTween.moveY(UItransform, EnabledPosition.y, TimeToLerp)
                 .setEase(LeanTweenType.easeInOutBack);
         }
@@ -43,6 +45,16 @@ namespace RCRCoreLib.Core.UI.Animation
         public override void ScaleOut()
         {
             throw new System.NotImplementedException();
+        }
+
+        public override void Selected()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Unselected()
+        {
+            throw new NotImplementedException();
         }
     }
 }

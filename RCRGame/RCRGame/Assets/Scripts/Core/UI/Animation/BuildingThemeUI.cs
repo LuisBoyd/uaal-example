@@ -42,5 +42,15 @@ namespace RCRCoreLib.Core.UI.Animation
         {
             throw new System.NotImplementedException();
         }
+
+        public override void Selected()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Unselected()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

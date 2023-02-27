@@ -99,7 +99,7 @@ namespace RCRCoreLib.Core.CameraLib
                             {
                                 moveAllowed = true;
                                 //Hide ToolTip TODO other DYNAMIC UI
-                                TimerToolTip.HideTimer_Static();
+//                                TimerToolTip.HideTimer_Static();
                             }
 
                             touchPos = mainCamera.ScreenToWorldPoint(touch.position);

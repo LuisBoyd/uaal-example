@@ -21,10 +21,50 @@ namespace RCRCoreLib.Core.Shopping
             EventManager.Instance.RemoveListener<ShoppingTabGroupClicked>(OnSelected);
         }
 
+        public override void SlideIn()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SlideOut()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void FadeIn()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void FadeOut()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ScaleIn()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ScaleOut()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Selected()
+        {
+            Debug.Log($"Selected {Category.ToString()}");
+        }
+
+        public override void Unselected()
+        {
+            throw new NotImplementedException();
+        }
+
         private void OnSelected(ShoppingTabGroupClicked evnt)
         {
             if(evnt.group == Category)
-                Debug.Log($"Selected {Category.ToString()}");
+                Selected();
         }
 
         public override void OnPointerDown(PointerEventData eventData)

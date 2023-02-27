@@ -24,8 +24,6 @@ namespace RCRCoreLib.Core.Systems
         protected override void Awake()
         {
             base.Awake();
-            ShopItemDrag.canvas = canvas.GetComponent<Canvas>();
-            SaveSystem.SaveSystem.Initialize();
         }
         
 
@@ -52,7 +50,7 @@ namespace RCRCoreLib.Core.Systems
         private void LoadGame()
         {
             ShoppingManager.Instance.Load();
-            LoadDelayedPlaceableObjects();
+            //LoadDelayedPlaceableObjects();
         }
 
         private void LoadDelayedPlaceableObjects()

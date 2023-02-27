@@ -32,8 +32,8 @@ namespace RCRCoreLib.Core.AI
         private int safeGuard = 1000;
 
         public Tilemap map;
-        public TileBase WaterTile;
-        public TileBase LandTile;
+        public List<TileBase> WaterTile = new List<TileBase>();
+        public List<TileBase> LandTile = new List<TileBase>();
 
         private HashSet<Vector2Int> WatertilePositions;
         private HashSet<Vector2Int> PathtilePositions;
@@ -54,9 +54,9 @@ namespace RCRCoreLib.Core.AI
             foreach (var Pos in map.cellBounds.allPositionsWithin)
             {
                 TileBase TileAtLocation = map.GetTile(Pos);
-                if (TileAtLocation == WaterTile)
+                if (WaterTile.Contains(TileAtLocation))
                     SetWaterTilePosition(new Vector2Int(Pos.x, Pos.y));
-                else if (TileAtLocation == LandTile)
+                else if (LandTile.Contains(TileAtLocation))
                     SetLandTilePosition(new Vector2Int(Pos.x, Pos.y));
             }
 

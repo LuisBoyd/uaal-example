@@ -13,7 +13,7 @@ namespace RCRCoreLib.Core.SaveSystem
         public static string fileName { get; private set; }
         public static string filePath { get; private set; }
 
-        public static void Initialize()
+        static SaveSystem()
         {
             if (!Directory.Exists(SAVE_FOLDER))
             {

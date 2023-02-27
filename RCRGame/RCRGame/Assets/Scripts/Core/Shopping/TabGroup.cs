@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using RCRCoreLib.Core.UI.Animation;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace RCRCoreLib.Core.Shopping
 {
-    public abstract class TabGroup: MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public abstract class TabGroup: AnimatedUI, IPointerDownHandler, IPointerUpHandler
     {
         // public Sprite tabIdle;
         // public Sprite tabActive;

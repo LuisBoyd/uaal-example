@@ -21,7 +21,7 @@ namespace RCRCoreLib.Core.UI.Animation
 
         protected RectTransform UItransform;
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             UItransform = GetComponent<RectTransform>();
         }
@@ -62,5 +62,8 @@ namespace RCRCoreLib.Core.UI.Animation
        
 
         public abstract void ScaleOut();
+
+        public abstract void Selected();
+        public abstract void Unselected();
     }
 }
