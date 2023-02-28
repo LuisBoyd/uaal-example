@@ -15,7 +15,7 @@
                "costToUpgradeType": "Coins",
                "CostToUpgrade": 1000,
                "IconSpritePath": "BuildingIcons/FuelingStation/FuelingStation0",
-               "PrefabPath": ""
+               "PrefabPath": "UnlockableItems/UnlockableBuildings/FuelingStation/FuelingStation0"
             },
             "1": {
                "CardsToNextLevel": 20,
@@ -64,7 +64,8 @@
             }
          },
          "category": "Repair",
-         "CurrentLevel": 0
+         "CurrentLevel": 0,
+         "LockedMessage": "Locked Until Level 0"
       },
       "1": {
          "name": "Repair Station",
@@ -80,7 +81,7 @@
                "costToUpgradeType": "Coins",
                "CostToUpgrade": 1000,
                "IconSpritePath": "BuildingIcons/RepairStation/RepairStation0",
-               "PrefabPath": ""
+               "PrefabPath": "UnlockableItems/UnlockableBuildings/RepairStation/RepairStation0"
             },
             "1": {
                "CardsToNextLevel": 20,
@@ -129,7 +130,8 @@
             }
          },
          "category": "Repair",
-         "CurrentLevel": 0
+         "CurrentLevel": 0,
+         "LockedMessage": "Locked Until Level 0"
       },
       "2": {
          "name": "Private Sale Office",
@@ -145,7 +147,7 @@
                "costToUpgradeType": "Coins",
                "CostToUpgrade": 1000,
                "IconSpritePath": "BuildingIcons/PrivateSaleOffice/PrivateSaleOffice0",
-               "PrefabPath": ""
+               "PrefabPath": "UnlockableItems/UnlockableBuildings/PrivateSaleOffice/PrivateSaleOffice0"
             },
             "1": {
                "CardsToNextLevel": 20,
@@ -194,7 +196,8 @@
             }
          },
          "category": "Business",
-         "CurrentLevel": 0
+         "CurrentLevel": 0,
+         "LockedMessage": "Locked Until Level 0"
       },
       "3": {
          "name": "Toilet Station",
@@ -210,7 +213,7 @@
                "costToUpgradeType": "Coins",
                "CostToUpgrade": 1000,
                "IconSpritePath": "BuildingIcons/ToiletStation/ToiletStation0",
-               "PrefabPath": ""
+               "PrefabPath": "UnlockableItems/UnlockableBuildings/ToiletStation/ToiletStation0"
             },
             "1": {
                "CardsToNextLevel": 20,
@@ -259,7 +262,8 @@
             }
          },
          "category": "Lodging",
-         "CurrentLevel": 0
+         "CurrentLevel": 0,
+         "LockedMessage": "Locked Until Level 0"
       },
       "4": {
          "name": "Rescue Station",
@@ -275,7 +279,7 @@
                "costToUpgradeType": "Coins",
                "CostToUpgrade": 1000,
                "IconSpritePath": "BuildingIcons/RescueStation/RescueStation0",
-               "PrefabPath": ""
+               "PrefabPath": "UnlockableItems/UnlockableBuildings/RescueStation/RescueStation0"
             },
             "1": {
                "CardsToNextLevel": 20,
@@ -324,7 +328,8 @@
             }
          },
          "category": "Repair",
-         "CurrentLevel": 0
+         "CurrentLevel": 0,
+         "LockedMessage": "Locked Until Level 0"
       },
       "5": {
          "name": "Convinence Store",
@@ -340,7 +345,7 @@
                "costToUpgradeType": "Coins",
                "CostToUpgrade": 1000,
                "IconSpritePath": "BuildingIcons/ConvinenceStore/ConvinenceStore0",
-               "PrefabPath": ""
+               "PrefabPath": "UnlockableItems/UnlockableBuildings/ConvinenceStore/ConvinenceStore0"
             },
             "1": {
                "CardsToNextLevel": 20,
@@ -389,7 +394,8 @@
             }
          },
          "category": "Food",
-         "CurrentLevel": 0
+         "CurrentLevel": 0,
+         "LockedMessage": "Locked Until Level 0"
       },
       "6": {
          "name": "Vistor Berth",
@@ -405,7 +411,7 @@
                "costToUpgradeType": "Premium",
                "CostToUpgrade": 1000,
                "IconSpritePath": "BuildingIcons/VistorBerth/VistorBerth0",
-               "PrefabPath": ""
+               "PrefabPath": "UnlockableItems/UnlockableBuildings/VistorBerth/VistorBerth0"
             },
             "1": {
                "CardsToNextLevel": 20,
@@ -454,7 +460,8 @@
             }
          },
          "category": "Berth",
-         "CurrentLevel": 0
+         "CurrentLevel": 0,
+         "LockedMessage": "Locked Until Level 0"
       }
    }
 }

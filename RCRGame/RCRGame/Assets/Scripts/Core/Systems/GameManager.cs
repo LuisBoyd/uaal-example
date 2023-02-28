@@ -41,6 +41,7 @@ namespace RCRCoreLib.Core.Systems
 
         private void Start()
         {
+            Cursor.lockState = CursorLockMode.Confined; //Make's sense for a mobile game.
             saveData = SaveSystem.SaveSystem.Load();
             if(!UnlockSystem.LoadUnlocks())
                 Debug.LogError($"Failed To Load Unlock Tree");

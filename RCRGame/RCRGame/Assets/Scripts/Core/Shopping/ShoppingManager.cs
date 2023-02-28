@@ -35,8 +35,9 @@ namespace RCRCoreLib.Core.Shopping
 
         private List<CardView> CurrentVisableCards = new List<CardView>();
 
-        private Dictionary<UnlockablePlaceables, Sprite> IconSprite
-            = new Dictionary<UnlockablePlaceables, Sprite>();
+        // private Dictionary<UnlockablePlaceables, Sprite> IconSprite
+        //     = new Dictionary<UnlockablePlaceables, Sprite>();
+        
 
         [SerializeField] 
         private ScrollRect CardViewSlider;
@@ -45,6 +46,13 @@ namespace RCRCoreLib.Core.Shopping
         private RectTransform BuildingCategoryButtonGroup;
         [SerializeField] 
         private RectTransform DecorationCategoryButtonGroup;
+
+        [SerializeField] 
+        private Canvas mainCanvas;
+        public Canvas MainCanvas
+        {
+            get => mainCanvas;
+        }
 
             //END NEW
         [SerializeField] private RectTransform CatergoryPannel;
@@ -127,8 +135,17 @@ namespace RCRCoreLib.Core.Shopping
             {
                 BuildingShopItems[unlockableBuilding.category].Add(unlockableBuilding);
                 Sprite loadedSprite = Resources.Load<Sprite>(unlockableBuilding.SpriteIconPath); //TODO Later for More Level's Change Icon
-                if (loadedSprite != null)
-                    IconSprite.Add(unlockableBuilding, loadedSprite);
+                GameObject loadedPrefab = Resources.Load<GameObject>(unlockableBuilding.prefabPath);
+                // if (loadedSprite != null)
+                // {
+                //     IconSprite.Add(unlockableBuilding, loadedSprite); //TODO potentially remove
+                // }
+
+                if (loadedPrefab != null && loadedSprite != null)
+                {
+                    unlockableBuilding.LoadIn(loadedPrefab, loadedSprite);
+                    Debug.Log($"{unlockableBuilding.name} has been assigned {loadedPrefab.name} and {loadedSprite.name}");
+                }
             }
 
             var structures = UnlockSystem.GetUnlockableStructures();
@@ -136,8 +153,15 @@ namespace RCRCoreLib.Core.Shopping
             {
                 StructureShopItems[unlockableStructure.Category].Add(unlockableStructure);
                 Sprite loadedSprite = Resources.Load<Sprite>(unlockableStructure.SpriteIconPath);
-                if (loadedSprite != null)
-                    IconSprite.Add(unlockableStructure, loadedSprite);
+                GameObject loadedPrefab = Resources.Load<GameObject>(unlockableStructure.prefabPath);
+                // if (loadedSprite != null)
+                //     IconSprite.Add(unlockableStructure, loadedSprite);
+                
+                if (loadedPrefab != null && loadedSprite != null)
+                {
+                    unlockableStructure.LoadIn(loadedPrefab, loadedSprite);
+                    Debug.Log($"{unlockableStructure.name} has been assigned {loadedPrefab.name} and {loadedSprite.name}");
+                }
             }
         }
 
@@ -179,7 +203,7 @@ namespace RCRCoreLib.Core.Shopping
                 }
                 cardView.Initialize(
                     true,
-                    IconSprite[unlockableBuilding],
+                    unlockableBuilding,
                     currencyIcon,
                     unlockableBuilding.CurrentLevelInfo.CostToBuild,
                     unlockableBuilding.name,
@@ -212,7 +236,7 @@ namespace RCRCoreLib.Core.Shopping
                 }
                 cardView.Initialize(
                     false,
-                    IconSprite[unlockableStructure],
+                    unlockableStructure,
                     currencyIcon,
                     unlockableStructure.CostToBuild,
                     unlockableStructure.name
@@ -228,17 +252,17 @@ namespace RCRCoreLib.Core.Shopping
         }
 
 
-        private bool Dragging;
-        public void OnBeginDrag() => Dragging = true;
-        public void OnEndDrag() => Dragging = false;
-
-        public void OnPointerClick()
-        {
-            if (!Dragging)
-            {
-                OnShop_Btn_clicked();
-            }
-        }
+        // private bool Dragging;
+        // public void OnBeginDrag() => Dragging = true;
+        // public void OnEndDrag() => Dragging = false;
+        //
+        // public void OnPointerClick()
+        // {
+        //     if (!Dragging)
+        //     {
+        //         OnShop_Btn_clicked();
+        //     }
+        // }
 
         private void OnLevelChanged(LevelChangedGameEvent evnt)
         {

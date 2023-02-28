@@ -15,6 +15,25 @@ namespace RCRCoreLib.Core.Systems.Unlockable
 
         public int CurrentLevel { get; private set; }
 
+        private string _spriteIconPath;
+        public override string SpriteIconPath
+        {
+            get
+            {
+                StructureLevel currentStructureLevel = BuildingLevelInfo[CurrentLevel];
+                return currentStructureLevel.IconSpritePath;
+            }
+            //TODO Check to when De-serialized this is fine.
+        }
+        public override string prefabPath
+        {
+            get
+            {
+                StructureLevel currentStructureLevel = BuildingLevelInfo[CurrentLevel];
+                return currentStructureLevel.PrefabPath;
+            }
+            //TODO Check to when De-serialized this is fine.
+        }
         public StructureLevel CurrentLevelInfo
         {
             get => BuildingLevelInfo[CurrentLevel];

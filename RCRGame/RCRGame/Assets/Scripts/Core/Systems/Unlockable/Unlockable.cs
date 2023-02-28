@@ -8,5 +8,6 @@ namespace RCRCoreLib.Core.Systems.Unlockable
         public string name;
         public int ID;
         public bool Unlocked;
+        public string LockedMessage;
     }
 }
