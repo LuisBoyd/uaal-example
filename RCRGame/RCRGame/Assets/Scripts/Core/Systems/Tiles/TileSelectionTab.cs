@@ -12,10 +12,6 @@ namespace RCRCoreLib.Core.Systems.Tiles
     {
         [SerializeField] 
         protected TileSelectionOptions option;
-
-        [SerializeField] 
-        protected TileBase tileBase;
-        
         
         [SerializeField] 
         protected Vector2 SelectedSizeScale;
@@ -30,10 +26,7 @@ namespace RCRCoreLib.Core.Systems.Tiles
         [SerializeField] 
         protected Image Buttonbackground;
 
-        public TileBase TileBase
-        {
-            get => tileBase;
-        }
+
 
         protected override void OnEnable()
         {
@@ -49,7 +42,7 @@ namespace RCRCoreLib.Core.Systems.Tiles
 
         public override void OnPointerDown(PointerEventData eventData)
         {
-            var TileSelectedEvent = new NewTilePaintBrushSelected(TileBase, option);
+            var TileSelectedEvent = new NewTilePaintBrushSelected(option);
             EventManager.Instance.QueueEvent(TileSelectedEvent);
         }
 

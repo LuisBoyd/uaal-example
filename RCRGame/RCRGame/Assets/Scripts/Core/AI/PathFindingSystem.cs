@@ -31,7 +31,11 @@ namespace RCRCoreLib.Core.AI
         private Node start, end;
         private int safeGuard = 1000;
 
-        public Tilemap map;
+        [SerializeField] 
+        private Grid Maingrid;
+        
+        [SerializeField]
+        public List<Tilemap> maps = new List<Tilemap>();
         public List<TileBase> WaterTile = new List<TileBase>();
         public List<TileBase> LandTile = new List<TileBase>();
 
@@ -50,16 +54,17 @@ namespace RCRCoreLib.Core.AI
 
         private void Start()
         {
-            map = BuildingSystem.Instance.MainTilemap;
-            foreach (var Pos in map.cellBounds.allPositionsWithin)
+            foreach (Tilemap map in maps)
             {
-                TileBase TileAtLocation = map.GetTile(Pos);
-                if (WaterTile.Contains(TileAtLocation))
-                    SetWaterTilePosition(new Vector2Int(Pos.x, Pos.y));
-                else if (LandTile.Contains(TileAtLocation))
-                    SetLandTilePosition(new Vector2Int(Pos.x, Pos.y));
+                foreach (var Pos in map.cellBounds.allPositionsWithin)
+                {
+                    TileBase TileAtLocation = map.GetTile(Pos);
+                    if (WaterTile.Contains(TileAtLocation))
+                        SetWaterTilePosition(new Vector2Int(Pos.x, Pos.y));
+                    else if (LandTile.Contains(TileAtLocation))
+                        SetLandTilePosition(new Vector2Int(Pos.x, Pos.y));
+                }
             }
-
         }
 
         private void SetWaterTilePosition(Vector2Int coord)
@@ -195,7 +200,7 @@ namespace RCRCoreLib.Core.AI
                 while (!currentCoord.Equals(start.coord))
                 {
                     currentCoord = nodes[currentCoord].parent;
-                    Vector3 currentTileWorldPos = map.CellToWorld(new Vector3Int(currentCoord.x, currentCoord.y)); 
+                    Vector3 currentTileWorldPos = Maingrid.CellToWorld(new Vector3Int(currentCoord.x, currentCoord.y)); 
                     Path.Add(currentTileWorldPos);
                 }
             }
@@ -210,15 +215,15 @@ namespace RCRCoreLib.Core.AI
         }
         public List<Vector3> FindPath(Transform startlocation, Transform endlocation, PathFindingMode mode)
         {
-            Vector3Int StartCell = map.WorldToCell(startlocation.position);
-            Vector3Int EndCell = map.WorldToCell(endlocation.position);
+            Vector3Int StartCell = Maingrid.WorldToCell(startlocation.position);
+            Vector3Int EndCell = Maingrid.WorldToCell(endlocation.position);
             return FindPath(StartCell, EndCell, mode);
         }
 
         public List<Vector3> FindPath(Transform startlocation, Vector3 endlocation, PathFindingMode mode)
         {
-            Vector3Int StartCell = map.WorldToCell(startlocation.position);
-            Vector3Int EndCell = map.WorldToCell(endlocation);
+            Vector3Int StartCell = Maingrid.WorldToCell(startlocation.position);
+            Vector3Int EndCell = Maingrid.WorldToCell(endlocation);
             return FindPath(StartCell, EndCell, mode);
         }
         //[BurstCompile(CompileSynchronously = true)]

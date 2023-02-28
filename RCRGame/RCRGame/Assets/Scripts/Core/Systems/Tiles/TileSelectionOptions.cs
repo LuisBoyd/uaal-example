@@ -2,7 +2,7 @@
 {
     public enum TileSelectionOptions
     {
-        None,
+        Camera,
         Water,
         Path,
         PathStone,

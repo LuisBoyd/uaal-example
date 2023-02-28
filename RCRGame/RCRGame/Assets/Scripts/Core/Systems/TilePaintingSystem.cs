@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RCRCoreLib.Core.Systems.Tiles;
 using RCRCoreLib.MapModification;
+using RCRCoreLib.TilePaintingSystem;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
@@ -29,14 +30,40 @@ namespace RCRCoreLib.Core.Systems
         [SerializeField] private List<TileBase> ImmutableTiles
             = new List<TileBase>();
 
+        // [SerializeField] 
+        // private List<TileBase> NoN_EraseableTiles
+        //     = new List<TileBase>();
+
         private HashSet<Vector3Int> ImmutablePositions = new HashSet<Vector3Int>();
 
         [SerializeField] 
         private Tilemap LogicTilemap;
 
         public TilePair CurrentTilePair { get; private set; }
+        public bool HasCurrentTileSet
+        {
+            get
+            {
+                if (CurrentTilePair != null)
+                    return true;
+                return false;
+            }
+        }
+        
+        public bool EarserModeActive { get; private set; }
+        public bool CameraModeActive { get; private set; }
 
-        public bool DisablePaintBrush { get; private set; }
+        private bool _SystemEnabled;
+        public bool SystemEnabled
+        {
+            get => _SystemEnabled;
+            private set
+            {
+                _SystemEnabled = value;
+                var evnt = new PainterActiveStateSwitchEvent(value);
+                EventManager.Instance.QueueEvent(evnt);
+            }
+        }
 
         private Material GridOutlineMatireal
         {
@@ -58,7 +85,7 @@ namespace RCRCoreLib.Core.Systems
         private void Start()
         {
             EventManager.Instance.AddListener<NewTilePaintBrushSelected>(On_NewtileBrushSelected);
-            DisablePaintBrush = true;
+            SystemEnabled = false;
             Collection.Init();
             CompileImmutablePositions();
         }
@@ -84,24 +111,45 @@ namespace RCRCoreLib.Core.Systems
 
         public bool IsImmutablePosition(Vector3Int pos) => ImmutablePositions.Contains(pos);
 
+        // public bool CanEraseTile(Vector3Int pos)
+        // {
+        //     TileBase CellTile = LogicTilemap.GetTile(pos);
+        //     if (NoN_EraseableTiles.Contains(CellTile))
+        //         return false;
+        //     return true;
+        // }
+
         private void On_NewtileBrushSelected(NewTilePaintBrushSelected evnt)
         {
-            Debug.Log($"New Tile Brush {evnt.option.ToString()}");
-            DisablePaintBrush = false;
+            //Debug.Log($"New Tile Brush {evnt.option.ToString()}");
+            EarserModeActive = false;
+            CameraModeActive = false;
+            switch (evnt.option)
+            {
+                case TileSelectionOptions.Camera:
+                    SystemEnabled = false;
+                    CameraModeActive = true;
+                    return;
+                    break;
+                case TileSelectionOptions.Eraser:
+                    EarserModeActive = true;
+                    break;
+            }
             CurrentTilePair = Collection.LookUp(evnt.option);
             if (CurrentTilePair == null)
             {
-                Debug.Log("CurrentTilePair Was Null");
-                DisablePaintBrush = true;
+                //Debug.Log("CurrentTilePair Was Null");
+                SystemEnabled = false;
                 return;
             }
+            SystemEnabled = true;
         }
 
         public void OnTilePaint_Btn_Clicked()
         {
             if (!isOpened)
             {
-                DisablePaintBrush = false;
+                SystemEnabled = true;
                 isOpened = true;
                 GridOutlineMatireal.SetKeyword(OutlineEnabledKeyWord, isOpened);
                 Debug.Log("Open");
@@ -111,7 +159,7 @@ namespace RCRCoreLib.Core.Systems
             }
             else
             {
-                DisablePaintBrush = true;
+                SystemEnabled = false;
                 isOpened = false;
                 Debug.Log("Close");
                 GridOutlineMatireal.SetKeyword(OutlineEnabledKeyWord, isOpened);

@@ -5,12 +5,10 @@ namespace RCRCoreLib.MapModification
 {
     public class NewTilePaintBrushSelected : GameEvent
     {
-        public TileBase tile;
         public TileSelectionOptions option;
 
-        public NewTilePaintBrushSelected(TileBase tile, TileSelectionOptions option)
+        public NewTilePaintBrushSelected(TileSelectionOptions option)
         {
-            this.tile = tile;
             this.option = option;
         }
     }

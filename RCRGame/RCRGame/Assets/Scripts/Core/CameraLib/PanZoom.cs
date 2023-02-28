@@ -58,13 +58,16 @@ namespace RCRCoreLib.Core.CameraLib
                 //     Vector3 pos = camera.ScreenToWorldPoint(objectToFollow.position);
                 //     prevPos = pos;
                 // }
+                Debug.Log("Object To Follow");
                 return;
             }
 
             if (Input.touchCount > 0)
             {
+                Debug.Log("Touch More than 0");
                 if (Input.touchCount == 2)
                 {
+                    Debug.Log("Touch is 2");
                     Touch touchZero = Input.GetTouch(0);
                     Touch touchOne = Input.GetTouch(1);
 
@@ -93,6 +96,7 @@ namespace RCRCoreLib.Core.CameraLib
                         case TouchPhase.Began:
                             if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
                             {
+                                Debug.Log("Touch Over Object Not allowed");
                                 moveAllowed = false;
                             }
                             else
