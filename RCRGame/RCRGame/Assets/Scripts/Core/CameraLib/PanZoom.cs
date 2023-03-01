@@ -62,14 +62,14 @@ namespace RCRCoreLib.Core.CameraLib
                 return;
             }
 
-            if (Input.touchCount > 0)
+            if (UnityEngine.Input.touchCount > 0)
             {
                 Debug.Log("Touch More than 0");
-                if (Input.touchCount == 2)
+                if (UnityEngine.Input.touchCount == 2)
                 {
                     Debug.Log("Touch is 2");
-                    Touch touchZero = Input.GetTouch(0);
-                    Touch touchOne = Input.GetTouch(1);
+                    Touch touchZero = UnityEngine.Input.GetTouch(0);
+                    Touch touchOne = UnityEngine.Input.GetTouch(1);
 
                     if (EventSystem.current.IsPointerOverGameObject(touchOne.fingerId)
                         || EventSystem.current.IsPointerOverGameObject(touchZero.fingerId))
@@ -89,7 +89,7 @@ namespace RCRCoreLib.Core.CameraLib
                 }
                 else
                 {
-                    Touch touch = Input.GetTouch(0);
+                    Touch touch = UnityEngine.Input.GetTouch(0);
 
                     switch (touch.phase)
                     {

@@ -92,7 +92,7 @@ namespace RCRCoreLib.Core.Systems
 
         private void OnDisable()
         {
-            GridOutlineMatireal.SetKeyword(OutlineEnabledKeyWord, false);
+            //GridOutlineMatireal.SetKeyword(OutlineEnabledKeyWord, false); //TODO This can't get called at destroy time
             EventManager.Instance.RemoveListener<NewTilePaintBrushSelected>(On_NewtileBrushSelected);
         }
 

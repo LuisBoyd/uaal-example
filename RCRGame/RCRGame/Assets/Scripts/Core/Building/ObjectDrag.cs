@@ -10,7 +10,7 @@ namespace RCRCoreLib.Core.Building
 
         private void Start()
         {
-            startPos = Input.mousePosition;
+            startPos = UnityEngine.Input.mousePosition;
             startPos = Camera.main.ScreenToWorldPoint(startPos);
 
             deltaX = startPos.x - transform.position.x;
@@ -19,7 +19,7 @@ namespace RCRCoreLib.Core.Building
 
         private void Update()
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
             Vector3 pos = new Vector3(mousePos.x - deltaX, mousePos.y - deltaY);
 
             Vector3Int cellPos = BuildingSystem.Instance.gridLayout.WorldToCell(pos);
@@ -28,7 +28,7 @@ namespace RCRCoreLib.Core.Building
 
         private void LateUpdate()
         {
-            if (Input.GetMouseButtonUp(0))
+            if (UnityEngine.Input.GetMouseButtonUp(0))
             {
                 gameObject.GetComponent<PlaceableObject>().CheckPlacement();
                 Destroy(this);

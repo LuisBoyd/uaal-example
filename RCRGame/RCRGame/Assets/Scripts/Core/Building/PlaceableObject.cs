@@ -102,10 +102,10 @@ namespace RCRCoreLib.Core.Building
         {
             if (!touching && Placed)
             {
-                if (Input.GetMouseButtonDown(0))
+                if (UnityEngine.Input.GetMouseButtonDown(0))
                 {
                     time = 0f;
-                }else if (Input.GetMouseButton(0))
+                }else if (UnityEngine.Input.GetMouseButton(0))
                 {
                     time += Time.deltaTime;
 
@@ -120,7 +120,7 @@ namespace RCRCoreLib.Core.Building
                 }
             }
 
-            if (touching && Input.GetMouseButtonUp(0))
+            if (touching && UnityEngine.Input.GetMouseButtonUp(0))
             {
                 touching = false;
             }
