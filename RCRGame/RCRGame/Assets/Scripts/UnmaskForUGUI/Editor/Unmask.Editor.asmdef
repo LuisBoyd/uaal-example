@@ -1,0 +1,16 @@
+{
+    "name": "Unmask.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d24dcad3d2c05f444926330c91df7132"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

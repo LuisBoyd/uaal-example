@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using RCRCoreLib.Core.Optimisation.Patterns.Command;
 using RCRCoreLib.TilePaintingSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,7 +9,7 @@ using UnityEngine.Tilemaps;
 namespace RCRCoreLib.Core.Systems.Tiles
 {
     [RequireComponent(typeof(Tilemap))]
-    public class TilemapInteractor : MonoBehaviour, IBeginDragHandler,IDragHandler,IEndDragHandler
+    public class TilemapInteractor : MonoBehaviour, IBeginDragHandler,IDragHandler,IEndDragHandler, ITileCommandHandler
     {
 
         [SerializeField]
@@ -27,11 +29,13 @@ namespace RCRCoreLib.Core.Systems.Tiles
         private void Start()
         {
             EventManager.Instance.AddListener<PainterActiveStateSwitchEvent>(On_PainterSwitchActiveState);
+            EventManager.Instance.AddListener<PainterClosedEvent>(On_Cancelled_Paint);
         }
 
         private void OnDisable()
         {
             EventManager.Instance.RemoveListener<PainterActiveStateSwitchEvent>(On_PainterSwitchActiveState);
+            EventManager.Instance.RemoveListener<PainterClosedEvent>(On_Cancelled_Paint);
         }
 
         private void On_PainterSwitchActiveState(PainterActiveStateSwitchEvent evnt)
@@ -61,8 +65,18 @@ namespace RCRCoreLib.Core.Systems.Tiles
                 return;
             }
             //Debug.Log($"Cell Space of Pointer {CellPos}");
+            TilePaintingSystem.Instance.RecordTile(CellPos);
             VisualTileMap.SetTile(CellPos, TilePaintingSystem.Instance.CurrentTilePair.VisualTile);
-            LogicTileMap.SetTile(CellPos, TilePaintingSystem.Instance.CurrentTilePair.VisualTile);
+            LogicTileMap.SetTile(CellPos, TilePaintingSystem.Instance.CurrentTilePair.LogicTile);
+        }
+
+        private void On_Cancelled_Paint(PainterClosedEvent evnt)
+        {
+            foreach (Vector3Int pos in evnt.positions)
+            {
+                VisualTileMap.SetTile(pos, null);
+                LogicTileMap.SetTile(pos,null);
+            }
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -106,5 +120,59 @@ namespace RCRCoreLib.Core.Systems.Tiles
             if(!EnableInteraction)
                 return;
         }
+
+        #region CommandHandler
+        
+        private LinkedList<TileCommand> m_commandBuffer = new LinkedList<TileCommand>();
+        public LinkedList<TileCommand> CommandBuffer
+        {
+            get => m_commandBuffer;
+        }
+
+        private LinkedListNode<TileCommand> m_head;
+        public LinkedListNode<TileCommand> Head
+        {
+            get => m_head;
+            set => m_head = value;
+        }
+
+        public void Record(TileCommand command)
+        {
+            CommandBuffer.AddLast(command);
+        }
+        public void Undo(int steps = 1)
+        {
+            for (int i = 0; i < steps; i++)
+            {
+                Head.Value.Undo(this);
+                Head = Head.Previous;
+            }
+        }
+        public void Redo(int steps = 1)
+        {
+            for (int i = 0; i < steps; i++)
+            {
+                Head = Head.Next;
+                Head.Value.Execute(this);
+            }
+        }
+
+        public void PlaceTile(Vector3Int cellPos, TileBase tile)
+        {
+            VisualTileMap.SetTile(cellPos, tile);
+            LogicTileMap.SetTile(cellPos, tile);
+        }
+
+        public void RemoveTile(Vector3Int cellPos)
+        {
+            VisualTileMap.SetTile(cellPos, null);
+            LogicTileMap.SetTile(cellPos, null);
+        }
+
+        public TileBase CheckTile(Vector3Int cellPos)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

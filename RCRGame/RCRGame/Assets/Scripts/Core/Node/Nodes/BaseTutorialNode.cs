@@ -12,6 +12,11 @@ namespace RCRCoreLib.Core.Node.Nodes
     {
         [Input] public int entry;
         [Output] public int exit;
+        
+        [TextArea]
+        public string Message; //The Text that you want displayed in the text box.
+        public bool HorizontalFlipped = false; // Should we reverse the order so that the avatar and text box appear in reverse order.
+        public Vector2 LocationOnScreen; //Where should the UI pop up.
 
         //Initialization
         protected override void Init()
@@ -22,9 +27,7 @@ namespace RCRCoreLib.Core.Node.Nodes
         {
             NextNode("exit");
         }
-
-        public abstract void Update();
-        public void NextNode(string _exit)
+        public virtual void NextNode(string _exit)
         {
             BaseTutorialNode b = null;
             foreach (NodePort port in this.Ports)

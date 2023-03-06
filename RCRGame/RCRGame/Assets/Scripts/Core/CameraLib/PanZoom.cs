@@ -13,6 +13,7 @@ namespace RCRCoreLib.Core.CameraLib
         private Camera mainCamera;
 
         private bool moveAllowed;
+        public bool MoveEnabled;
 
         [SerializeField] private float LeftLimit;
         [SerializeField] private float RightLimit;
@@ -61,13 +62,16 @@ namespace RCRCoreLib.Core.CameraLib
                 Debug.Log("Object To Follow");
                 return;
             }
+            
+            if(!MoveEnabled)
+                return;
 
             if (UnityEngine.Input.touchCount > 0)
             {
-                Debug.Log("Touch More than 0");
+               
                 if (UnityEngine.Input.touchCount == 2)
                 {
-                    Debug.Log("Touch is 2");
+                   
                     Touch touchZero = UnityEngine.Input.GetTouch(0);
                     Touch touchOne = UnityEngine.Input.GetTouch(1);
 

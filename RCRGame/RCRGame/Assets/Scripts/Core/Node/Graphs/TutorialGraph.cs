@@ -19,10 +19,5 @@ namespace RCRCoreLib.Core.Node.Graphs
         {
             currentNode.Execute();
         }
-
-        public void Update()
-        {
-            currentNode.Update();
-        }
     }
 }

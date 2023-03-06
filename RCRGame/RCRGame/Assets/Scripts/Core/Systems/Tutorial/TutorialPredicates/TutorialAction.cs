@@ -1,9 +1,18 @@
 ﻿using System;
+using System.Collections;
+using UnityEngine;
 
 namespace RCRCoreLib.Core.Systems.Tutorial.TutorialPredicates
 {
-    public abstract class TutorialAction
+    public abstract class TutorialAction : CustomYieldInstruction
     {
-        public abstract bool KeepWaiting();
+        public override bool keepWaiting { get; }
+        //protected Action<string> OnCompletedCallback;
+
+        // protected TutorialAction(Action<string> onCompletedCallback)
+        // {
+        //     this.OnCompletedCallback = onCompletedCallback;
+        // }
+        
     }
 }

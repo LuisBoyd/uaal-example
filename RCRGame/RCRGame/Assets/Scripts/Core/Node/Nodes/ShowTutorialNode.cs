@@ -7,11 +7,6 @@ namespace RCRCoreLib.Core.Node.Nodes
 {
     public class ShowTutorialNode : BaseTutorialNode
     {
-        [TextArea]
-        public string Message; //The Text that you want displayed in the text box.
-        public bool HorizontalFlipped = false; // Should we reverse the order so that the avatar and text box appear in reverse order.
-        public Vector2 LocationOnScreen; //Where should the UI pop up.
-
         public override object GetValue(NodePort port)
         {
             return base.GetValue(port);
@@ -30,11 +25,7 @@ namespace RCRCoreLib.Core.Node.Nodes
             TutorialGuide.Instance.ContinueButton.onClick.AddListener(Continue);
             TutorialGuide.Instance.SkipButton.onClick.AddListener(Skip);
         }
-
-        public override void Update()
-        {
-            throw new System.NotImplementedException();
-        }
+        
 
         private void Continue()
         {

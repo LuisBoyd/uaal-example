@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3435852648296480075
+--- !u!114 &-9113652144120144238
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,30 +9,80 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0f815c6e7c641d480cff98b031267f4, type: 3}
-  m_Name: Show Tutorial
+  m_Script: {fileID: 11500000, guid: c1a7d943c0e14ea6abbd087b3b39d909, type: 3}
+  m_Name: Tutorial Zoom
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 238.51631, y: -29.364187}
+  position: {x: 45.000015, y: -235.59999}
   ports:
     keys:
     - entry
     - exit
     values:
     - _fieldName: entry
-      _node: {fileID: -3435852648296480075}
+      _node: {fileID: -9113652144120144238}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: exit
-        node: {fileID: 6523241896387952441}
+        node: {fileID: 3906982119566804438}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: exit
-      _node: {fileID: -3435852648296480075}
+      _node: {fileID: -9113652144120144238}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: -8310603736946014729}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  exit: 0
+  Message: PINCH and SPREAD to zoom in and out
+  HorizontalFlipped: 0
+  LocationOnScreen: {x: 0, y: -200}
+  ShowSkipOrContinueButton: 0
+  Limit: 20
+--- !u!114 &-8310603736946014729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 849464ae66a94016a6be4ef079a3badc, type: 3}
+  m_Name: Tutorial Node Button
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 344, y: -232}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: -8310603736946014729}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: exit
+        node: {fileID: -9113652144120144238}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: -8310603736946014729}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections: []
@@ -42,9 +92,15 @@ MonoBehaviour:
       _dynamic: 0
   entry: 0
   exit: 0
-  Message: I am now Flipped hahaha
-  HorizontalFlipped: 1
-  LocationOnScreen: {x: 0, y: -200}
+  Message: Click The Sopping Button
+  HorizontalFlipped: 0
+  LocationOnScreen: {x: 0, y: 0}
+  ShowSkipOrContinueButton: 0
+  type: 0
+  FingerPos: {x: -445, y: -975}
+  FingerRotation: -90
+  Topos: -643
+  FingerIsHorizontal: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,9 +115,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: 6523241896387952441}
-  - {fileID: -3435852648296480075}
-  startNode: {fileID: 0}
-  currentNode: {fileID: 0}
+  - {fileID: 3906982119566804438}
+  - {fileID: -9113652144120144238}
+  - {fileID: -8310603736946014729}
+  startNode: {fileID: 6523241896387952441}
+  currentNode: {fileID: 6523241896387952441}
+--- !u!114 &3906982119566804438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b7d64f3c3f4493972efc7f719b5fa0, type: 3}
+  m_Name: Tutorial Pan
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -264, y: -312}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 3906982119566804438}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: exit
+        node: {fileID: 6523241896387952441}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 3906982119566804438}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: -9113652144120144238}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  exit: 0
+  Message: DRAG to move the camera
+  HorizontalFlipped: 0
+  LocationOnScreen: {x: 0, y: -200}
+  ShowSkipOrContinueButton: 0
+  Limit: 3
 --- !u!114 &6523241896387952441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,7 +183,7 @@ MonoBehaviour:
   m_Name: Show Tutorial
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -216, y: -104}
+  position: {x: -548, y: -321.80002}
   ports:
     keys:
     - entry
@@ -96,7 +204,7 @@ MonoBehaviour:
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: entry
-        node: {fileID: -3435852648296480075}
+        node: {fileID: 3906982119566804438}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -104,6 +212,9 @@ MonoBehaviour:
       _dynamic: 0
   entry: 0
   exit: 0
-  Message: Welcome To The Game
+  Message: 'Welcome To The Marina
+
+
+    First, let me show you how to move around.'
   HorizontalFlipped: 0
   LocationOnScreen: {x: 0, y: -200}

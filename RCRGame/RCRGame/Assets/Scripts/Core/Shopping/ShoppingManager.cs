@@ -19,21 +19,21 @@ using UnityEngine.UI;
 namespace RCRCoreLib.Core.Shopping
 {
     [RequireComponent(typeof(CardUIViewPool), typeof(CardUIViewFactory))]
-    public class ShoppingManager : Singelton<ShoppingManager>, IInteractable
+    public class ShoppingManager : Singelton<ShoppingManager>
     {
         private bool isOpened;
-        private bool isInteractable;
+        //private bool isInteractable;
 
-        public bool IsInteractable
-        {
-            get => isInteractable;
-            set => isInteractable = value;
-        }
+        // public bool IsInteractable
+        // {
+        //     get => isInteractable;
+        //     set => isInteractable = value;
+        // }
 
-        public IInteractable Self
-        {
-            get => this as IInteractable;
-        }
+        // public IInteractable Self
+        // {
+        //     get => this as IInteractable;
+        // }
         //NEW
 
         private Dictionary<BuildingCategory, List<UnlockableBuilding>> BuildingShopItems
@@ -96,7 +96,7 @@ namespace RCRCoreLib.Core.Shopping
 
         private void Start()
         {
-            Self.SetUpListeners();
+            //Self.SetUpListeners();
             EventManager.Instance.AddListener<ShoppingTabGroupClicked>(ShoppingTabCategoryClicked);
             EventManager.Instance.AddListener<ClearCardViewUI>(ClearCardUIs);
             EventManager.Instance.AddListener<RefreshShopBuildingUI>(RefreshBuildingShopUI);
@@ -107,7 +107,7 @@ namespace RCRCoreLib.Core.Shopping
 
         private void OnDisable()
         {
-            Self.RemoveListeners();
+            //Self.RemoveListeners();
             EventManager.Instance.RemoveListener<ShoppingTabGroupClicked>(ShoppingTabCategoryClicked);
             EventManager.Instance.RemoveListener<ClearCardViewUI>(ClearCardUIs);
             EventManager.Instance.RemoveListener<RefreshShopBuildingUI>(RefreshBuildingShopUI);
@@ -116,13 +116,12 @@ namespace RCRCoreLib.Core.Shopping
 
         public void OnShop_Btn_clicked()
         {
-            Debug.Log(IsInteractable);
-            if(!IsInteractable)
-                return;
+            // Debug.Log(IsInteractable);
+            // if(!IsInteractable)
+            //     return;
             
             if (!isOpened)
             {
-                EventManager.Instance.QueueEvent(new StartTutorialEvent(TutorialType.WelcomeNewPerson)); //TODO This is a test function
                 isOpened = true;
                 BuildingsTab.gameObject.SetActive(true);
                 CatergoryPannel.gameObject.SetActive(true);

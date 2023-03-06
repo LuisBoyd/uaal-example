@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RCRCoreLib.Core.Systems.Tiles;
 using RCRCoreLib.MapModification;
 using RCRCoreLib.TilePaintingSystem;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 namespace RCRCoreLib.Core.Systems
 {
@@ -22,6 +24,13 @@ namespace RCRCoreLib.Core.Systems
         private RectTransform TilePlacementMenu;
         [SerializeField] 
         private RectTransform ConstructionTab;
+
+        [SerializeField] 
+        private RectTransform ConfirmMenu;
+        [SerializeField] 
+        private Button ConfirmBtn;
+        [SerializeField] 
+        private Button DenyBtn;
         
 
         [SerializeField] 
@@ -52,7 +61,12 @@ namespace RCRCoreLib.Core.Systems
         
         public bool EarserModeActive { get; private set; }
         public bool CameraModeActive { get; private set; }
+        
+        public readonly IList<Vector3Int> _recordedTilePos
+            = new List<Vector3Int>();
 
+        public bool TilemapDirty { get; private set; }
+        
         private bool _SystemEnabled;
         public bool SystemEnabled
         {
@@ -149,23 +163,64 @@ namespace RCRCoreLib.Core.Systems
         {
             if (!isOpened)
             {
-                SystemEnabled = true;
-                isOpened = true;
-                GridOutlineMatireal.SetKeyword(OutlineEnabledKeyWord, isOpened);
-                Debug.Log("Open");
-                TilePlacementMenu.gameObject.SetActive(true);
-                ConstructionTab.gameObject.SetActive(false);
-                //TODO in case object is not enabled at start compensate for this.
+                EnableTilePaint();
             }
             else
             {
-                SystemEnabled = false;
-                isOpened = false;
-                Debug.Log("Close");
-                GridOutlineMatireal.SetKeyword(OutlineEnabledKeyWord, isOpened);
-                TilePlacementMenu.gameObject.SetActive(false);
-                ConstructionTab.gameObject.SetActive(true);
+                if (TilemapDirty && !ConfirmMenu.gameObject.activeSelf)
+                {
+                    ConfirmMenu.gameObject.SetActive(true);
+                }
+                else
+                {
+                    DisableTilePaint();
+                }
             }
+        }
+
+        private void EnableTilePaint()
+        {
+            SystemEnabled = true;
+            isOpened = true;
+            GridOutlineMatireal.SetKeyword(OutlineEnabledKeyWord, isOpened);
+            Debug.Log("Open");
+            TilePlacementMenu.gameObject.SetActive(true);
+            ConstructionTab.gameObject.SetActive(false);
+            //TODO in case object is not enabled at start compensate for this.
+        }
+
+        private void DisableTilePaint()
+        {
+            SystemEnabled = false;
+            isOpened = false;
+            Debug.Log("Close");
+            GridOutlineMatireal.SetKeyword(OutlineEnabledKeyWord, isOpened);
+            TilePlacementMenu.gameObject.SetActive(false);
+            ConstructionTab.gameObject.SetActive(true);
+        }
+
+        public void ConfirmDirtyTiles()
+        {
+            _recordedTilePos.Clear();
+            TilemapDirty = false;
+            ConfirmMenu.gameObject.SetActive(false);
+            DisableTilePaint();
+        }
+
+        public void DenyDirtyTiles()
+        {
+            PainterClosedEvent evnt = new PainterClosedEvent(_recordedTilePos.ToArray());
+            EventManager.Instance.QueueEvent(evnt);
+            _recordedTilePos.Clear();
+            TilemapDirty = false;
+            ConfirmMenu.gameObject.SetActive(false);
+            DisableTilePaint();
+        }
+        
+        public void RecordTile(Vector3Int tilePos)
+        {
+            _recordedTilePos.Add(tilePos);
+            TilemapDirty = true;
         }
     }
 }

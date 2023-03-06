@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RCRCoreLib.Core.CameraLib;
 using RCRCoreLib.Core.Events.Input;
 using RCRCoreLib.Core.Node.Graphs;
 using RCRCoreLib.Core.Node.Nodes;
+using RCRCoreLib.Core.Systems.Tutorial.Enum;
 using RCRCoreLib.Core.UI;
+using RCRCoreLib.Core.Utilities.SerializableDictionary;
 using RCRCoreLib.TutorialEvents;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnmaskForUGUI;
 using XNode;
 
 namespace RCRCoreLib.Core.Systems.Tutorial
@@ -27,7 +31,6 @@ namespace RCRCoreLib.Core.Systems.Tutorial
         public bool playOnce = false;
         private bool played = false;
         private RectTransform OwnTransfrom;
-        
 
         [SerializeField] 
         private TextMeshProUGUI tutorialSpeechBubbleText;
@@ -35,6 +38,9 @@ namespace RCRCoreLib.Core.Systems.Tutorial
         [SerializeField] 
         private RectTransform TutorialSpritesContainer;
 
+        [SerializeField] 
+        private RectTransform TutorialPointer;
+        
         [SerializeField] 
         private Button continueButton;
 
@@ -49,6 +55,29 @@ namespace RCRCoreLib.Core.Systems.Tutorial
         public Button SkipButton
         {
             get => skipButton;
+        }
+
+        [SerializeField] 
+        private Unmask unmask;
+        public Unmask Unmask
+        {
+            get => unmask;
+        }
+
+        public GameObject Unmask_Parent
+        {
+            get
+            {
+                return unmask.transform.parent.gameObject;
+            }
+        }
+
+        [SerializeField] 
+        private TutBtnDictionary m_tutBtnDictionary = null;
+        public IDictionary<TutorialBtnType, Button> TutBtnDictionary
+        {
+            get { return m_tutBtnDictionary; }
+            set{m_tutBtnDictionary.CopyFrom(value);}
         }
 
         [SerializeField] 
@@ -78,13 +107,43 @@ namespace RCRCoreLib.Core.Systems.Tutorial
             {
                 child.gameObject.SetActive(false);
             }
+            EventManager.Instance.QueueEvent(new StartTutorialEvent(TutorialType.WelcomeNewPerson)); //TODO This is a test function
+            DisableOnStartUp();
         }
 
-        private void Update()
+        private void DisableOnStartUp()
         {
-            if(Graph != null)
-                Graph.Update();
+            Unmask_Parent.SetActive(false);
+            
         }
+
+        public void EnableUnmask(RectTransform toFit)
+        {
+            Unmask_Parent.SetActive(true);
+            Unmask.fitTarget = toFit;
+        }
+        public LTDescr EnableUnmask(RectTransform toFit, Vector2 fingerPos, float fingerRotation,float toPos ,bool horizontal = false)
+        {
+            Unmask_Parent.SetActive(true);
+            Unmask.fitTarget = toFit;
+
+            TutorialPointer.localPosition = fingerPos;
+            TutorialPointer.rotation = Quaternion.Euler(0,0, fingerRotation);
+            LTDescr descr = null;
+            if (horizontal)
+                descr = LeanTween.moveX(TutorialPointer, toPos, 1.2f).setLoopPingPong();
+            else
+            {
+                descr = LeanTween.moveY(TutorialPointer, toPos, 1.2f).setLoopPingPong();
+            }
+            return descr;
+        }
+
+        public void DisableUnmask()
+        {
+            Unmask_Parent.SetActive(false);
+        }
+        
 
         private void On_hideTutorialinterace(HideTutorialinterface e)
         {
@@ -98,6 +157,8 @@ namespace RCRCoreLib.Core.Systems.Tutorial
             {
                 child.gameObject.SetActive(false);
             }
+
+            DisableUnmask();
         }
 
         private void On_showTutorialinterface(ShowTutorialInterface e)
@@ -113,6 +174,11 @@ namespace RCRCoreLib.Core.Systems.Tutorial
             {
                 child.gameObject.SetActive(true);
             }
+            if (!e.SkipOrContinue)
+            {
+                SkipButton.gameObject.SetActive(false);
+                ContinueButton.gameObject.SetActive(false);
+            }
             // skipButton.gameObject.SetActive(true);
             // continueButton.gameObject.SetActive(true);
             // TutorialSpritesContainer.gameObject.SetActive(true);
@@ -125,13 +191,23 @@ namespace RCRCoreLib.Core.Systems.Tutorial
         {
             //TODO some sort of check to see if we have played this one before...
             Graph.startNode = tutorial_Lookup[evnt.type];
-            EventManager.Instance.QueueEvent(new SetInputState(false));
+            PanZoom.Instance.MoveEnabled = false;
+            foreach (Button button in TutBtnDictionary.Values)
+            {
+                button.interactable = false;
+            }
+            // EventManager.Instance.QueueEvent(new SetInputState(false));
             Graph.Start();
         }
 
         private void On_GraphFinished(EndTutorialEvent evnt)
         {
-            EventManager.Instance.QueueEvent(new SetInputState(true));
+            // EventManager.Instance.QueueEvent(new SetInputState(true));
+            PanZoom.Instance.MoveEnabled = true;
+            foreach (Button button in TutBtnDictionary.Values)
+            {
+                button.interactable = true;
+            }
         }
     }
 }
