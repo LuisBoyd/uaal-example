@@ -20,7 +20,14 @@ namespace AI.Utilities
         protected IDictionary<string, int> _intLookUp;
         protected IDictionary<string, float> _floatLookUp;
         protected IDictionary<string, byte> _byteLookUp;
-
+        public static BT_Context BTEmpty
+        {
+            get
+            {
+                return new BT_Context();
+            }
+        }
+        
         public BT_Context()
         {
             _boolLookUp = new Dictionary<string, bool>();

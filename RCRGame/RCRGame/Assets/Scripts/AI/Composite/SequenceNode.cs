@@ -1,41 +1,72 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AI.TaskLibary;
+using XNode;
 
 namespace AI.Composite
 {
     public class SequenceNode : BaseCompositeNode
     {
-        protected IEnumerator<BaseNode> currentChild;
-
-        public override void Initialize()
-        {
-            currentChild = children.GetEnumerator();
-        }
+        protected IEnumerator<NodePort> currentChild;
+        
 
         protected override TaskStatus Process()
         {
-            while (true)
+            if (currentChild == null)
             {
-                if (currentChild.Current != null)
+                //Means there are no children return success??
+                return TaskStatus.Success;
+            }
+            while (currentChild.MoveNext())
+            {
+                if (AbortFlag)
                 {
-                    TaskStatus status = currentChild.Current!.Tick(); //Could be Null.
-                    if (status != TaskStatus.Success)
-                        return status;
+                    OnTerminate();
+                    return TaskStatus.Failed;
                 }
-
-                if (!currentChild.MoveNext())
-                    return TaskStatus.Success; //We have Reached the end of the children node with none of them failing.
+                if (currentChild.Current != null && currentChild.Current.node is BaseNode)
+                {
+                    BaseNode connectedNode = currentChild.Current.node as BaseNode;
+                    if (connectedNode != null)
+                    {
+                        TaskStatus status = connectedNode.Tick(); //Could be Null.
+                        if (status != TaskStatus.Success)
+                            return status;
+                    }
+                    else
+                    {
+                        throw new Exception("Connected Node is not of type BaseNode");
+                    }
+                }
+            }
+            return TaskStatus.Success; //We have Reached the end of the children node with none of them failing.
+        }
+        
+        public override void OnTerminate()
+        {
+            base.OnTerminate();
+            foreach (NodePort output in Outputs)
+            {
+                if (output.node != null && output.node is BaseNode)
+                {
+                    (output.node as BaseNode).Abort();
+                }
             }
         }
 
-        public override void OnTerminate()
+        public override void Initialize()
         {
-            throw new System.NotImplementedException();
+            children.Clear();
+            NodePort outputPort = GetPort(OutputPortName);
+            if (outputPort != null)
+            {
+                for (int i = 0; i < outputPort.ConnectionCount; i++)
+                {
+                    children.Add(outputPort.GetConnection(i));
+                }
+            }
+            currentChild = children.GetEnumerator();
         }
-
-        public override void OnComplete()
-        {
-            throw new System.NotImplementedException();
-        }
+        
     }
 }

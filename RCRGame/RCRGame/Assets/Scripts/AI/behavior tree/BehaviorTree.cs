@@ -8,7 +8,6 @@ namespace AI.behavior_tree
     [CreateAssetMenu(fileName = "New_BT", menuName = "AI/BT/BehaviorTree", order = 0)]
     public class BehaviorTree : NodeGraph
     {
-
         protected BaseNode RootNode
         {
             get => _rootNode;
@@ -31,11 +30,13 @@ namespace AI.behavior_tree
             _rootNode.Tick();
         }
 
-    }
+#if UNITY_EDITOR
+        [ContextMenu("Run Tree Once")]
+        public void DebugTree()
+        {
+            Tick();
+        }
+#endif
 
-    [System.Serializable]
-    public class BT_DataStructure
-    {
-        
     }
 }

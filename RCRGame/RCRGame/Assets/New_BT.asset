@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: 973779291686864492}
+  - {fileID: 9166172768701450843}
+  - {fileID: 6508884176931947493}
+  - {fileID: 6355847318528216986}
   _rootNode: {fileID: 973779291686864492}
 --- !u!114 &973779291686864492
 MonoBehaviour:
@@ -28,7 +31,7 @@ MonoBehaviour:
   m_Name: Sequence
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -440, y: -104}
+  position: {x: -648, y: -232}
   ports:
     keys:
     - outputResult
@@ -38,7 +41,13 @@ MonoBehaviour:
       _node: {fileID: 973779291686864492}
       _typeQualifiedName: AI.Utilities.BT_Context, AI, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: inputResult
+        node: {fileID: 6508884176931947493}
+        reroutePoints: []
+      - fieldName: inputResult
+        node: {fileID: 6355847318528216986}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -52,5 +61,114 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  children: []
+  Status: 2
   maxChildren: 2
+--- !u!114 &6355847318528216986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12a08505044e4320b9a084bd7bea1f0d, type: 3}
+  m_Name: Debug String
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -360, y: -152}
+  ports:
+    keys:
+    - inputResult
+    values:
+    - _fieldName: inputResult
+      _node: {fileID: 6355847318528216986}
+      _typeQualifiedName: AI.Utilities.BT_Context, AI, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: outputResult
+        node: {fileID: 973779291686864492}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  Status: 0
+  message: 
+--- !u!114 &6508884176931947493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8340c0c510a34baba61696ee5a6886da, type: 3}
+  m_Name: Repeat X
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -344, y: -408}
+  ports:
+    keys:
+    - outputResult
+    - inputResult
+    values:
+    - _fieldName: outputResult
+      _node: {fileID: 6508884176931947493}
+      _typeQualifiedName: AI.Utilities.BT_Context, AI, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inputResult
+        node: {fileID: 9166172768701450843}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: inputResult
+      _node: {fileID: 6508884176931947493}
+      _typeQualifiedName: AI.Utilities.BT_Context, AI, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: outputResult
+        node: {fileID: 973779291686864492}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  Status: 0
+  repeatTimes: 0
+--- !u!114 &9166172768701450843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12a08505044e4320b9a084bd7bea1f0d, type: 3}
+  m_Name: Debug String
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 8, y: -408}
+  ports:
+    keys:
+    - inputResult
+    values:
+    - _fieldName: inputResult
+      _node: {fileID: 9166172768701450843}
+      _typeQualifiedName: AI.Utilities.BT_Context, AI, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: outputResult
+        node: {fileID: 6508884176931947493}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  Status: 2
+  message: This is the first string

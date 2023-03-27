@@ -9,11 +9,11 @@ namespace AI.Composite
 {
     public abstract class BaseCompositeNode : BaseNode
     {
-        [SerializeField]
-        protected List<BaseNode> children;
-
         [Output] public BT_Context outputResult;
         
+
+        protected IList<NodePort> children = new List<NodePort>();
+
         public int MaxChildren
         {
             get => maxChildren;
@@ -23,75 +23,62 @@ namespace AI.Composite
 
         protected BaseCompositeNode()
         {
-            children = new List<BaseNode>();
             maxChildren = 1;
         }
-
-        public bool AddChild(BaseNode node)
-        {
-            if(children.Contains(node))
-                return false;
-            
-            children.Add(node);
-            return true;
-        }
-
-        public bool RemoveChild(BaseNode node)
-        {
-           if(!children.Contains(node))
-               return false;
-
-           return children.Remove(node);
-        }
-
-        public void ClearChildren()
-        {
-            children.Clear();
-        }
-
-        public void ValidateChildren(NodePort port)
-        {
-            var toRemoveList = new List<BaseNode>();
-            foreach (BaseNode child in children)
-            {
-                //Check if this child node is currently connected to this node.
-                NodePort childInputPort = child.GetInputPort("inputResult");
-                if(childInputPort == null)
-                    continue;
-                if (!port.IsConnectedTo(childInputPort))
-                {
-                    toRemoveList.Add(childInputPort.node as BaseNode);
-                }
-            }
-            children = children.Except(toRemoveList).ToList();
-        }
+        
 
         public override object GetValue(NodePort port)
         {
             return inputResult;
         }
 
+#if UNITY_EDITOR
         public override void OnCreateConnection(NodePort from, NodePort to)
         {
-            if(to.node == this) //The Connection is from Parent To Child aka from Parent Node (of this one) to this node
-                return;
-            var t = to.node.GetType();
-            if (to.node.GetType().IsSubclassOf(typeof(BaseNode)) && children.Count < MaxChildren)
+            // if (to.ConnectionCount > 1)
+            // {
+            //     to.Disconnect(from);
+            //     Debug.Log($"Disconnected {from.node.name} from {to.node.name}");
+            //     return;
+            // }
+            // if (from.ConnectionCount > MaxChildren)
+            // {
+            //     from.Disconnect(to);
+            //     Debug.Log($"Disconnected {from.node.name} from {to.node.name}");
+            //     return;
+            // }
+            switch (from.direction)
             {
-                AddChild(to.node as BaseNode);
-                Debug.Log("Added Child");
+                case NodePort.IO.Output:
+                    //Make sure that I am not Giving out more connections from output than there should be children.
+                    if(from.ConnectionCount > MaxChildren && from.node == this)
+                        from.Disconnect(to); 
+                    return;
+                    break;
+                case NodePort.IO.Input:
+                    //Make sure there is only 1 input going into a node
+                    if(from.ConnectionCount > 1 && from.node == this)
+                        from.Disconnect(to);
+                    return;
+                    break;
+                
             }
-            else
+            switch (to.direction)
             {
-                from.Disconnect(to);
-                Debug.Log("Disconnect");
+                case NodePort.IO.Output:
+                    //Make sure that I am not Giving out more connections from output than there should be children.
+                    if(to.ConnectionCount > MaxChildren && to.node == this)
+                        to.Disconnect(from); 
+                    return;
+                    break;
+                case NodePort.IO.Input:
+                    //Make sure there is only 1 input going into a node
+                    if(to.ConnectionCount > 1 && to.node == this)
+                        to.Disconnect(from);
+                    return;
+                    break;
             }
-           
         }
-
-        public override void OnRemoveConnection(NodePort port)
-        {
-            ValidateChildren(port);
-        }
+#endif
     }
 }
