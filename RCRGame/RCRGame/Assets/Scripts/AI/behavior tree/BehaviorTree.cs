@@ -1,5 +1,6 @@
 ﻿using System;
 using AI.TaskLibary;
+using AI.Utilities;
 using UnityEngine;
 using XNode;
 
@@ -15,7 +16,8 @@ namespace AI.behavior_tree
         }
         [SerializeField]
         private BaseNode _rootNode;
-        
+
+        public BT_Context globalContext;
         
         public override Node AddNode(Type type)
         {
@@ -23,6 +25,11 @@ namespace AI.behavior_tree
             if (RootNode == null) //If We Don't Currently Have A Root Node then set it.
                 RootNode = (BaseNode)node;
             return node;
+        }
+
+        public void Start()
+        {
+            globalContext = BT_Context.BTEmpty;
         }
 
         public void Tick()

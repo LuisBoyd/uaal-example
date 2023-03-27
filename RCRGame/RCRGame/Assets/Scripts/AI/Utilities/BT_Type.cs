@@ -1,6 +1,6 @@
 ﻿namespace AI.Utilities
 {
-    public enum BT_Types
+    public enum BT_Type
     {
         String,
         Byte,

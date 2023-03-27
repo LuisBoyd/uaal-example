@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AI.Utilities
 {
@@ -13,8 +14,8 @@ namespace AI.Utilities
     /// BT_Context Support's string based lookup however in derived classes you can implement whatever is better, but string is recommended.
     /// BT_Context Support's most value types as well as strings.
     /// </summary>
-    [Serializable]
-    public class BT_Context : IDisposable
+    [Serializable][CreateAssetMenu(fileName = "New_BlackBoard", menuName = "AI/BT/BlackBoard", order = 0)]
+    public class BT_Context : ScriptableObject ,IDisposable
     {
         protected IDictionary<string, bool> _boolLookUp;
         protected IDictionary<string, int> _intLookUp;
@@ -35,6 +36,7 @@ namespace AI.Utilities
             _floatLookUp = new Dictionary<string, float>();
             _byteLookUp = new Dictionary<string, byte>();
         }
+        
 
         public void Dispose()
         {
@@ -131,7 +133,5 @@ namespace AI.Utilities
                 _intLookUp[valueName] = value;
             }
         }
-        
-        
     }
 }
