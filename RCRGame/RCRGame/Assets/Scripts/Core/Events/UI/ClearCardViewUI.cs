@@ -1,4 +1,4 @@
-﻿namespace RCRCoreLib.UI
+﻿namespace RCRCoreLib.Core.Events.UI
 {
     public class ClearCardViewUI : GameEvent
     {

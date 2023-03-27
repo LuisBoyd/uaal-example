@@ -1,4 +1,4 @@
-﻿namespace RCRCoreLib.TilePaintingSystem
+﻿namespace RCRCoreLib.Core.Events.TilePaintingSystem
 {
     public class PainterActiveStateSwitchEvent : GameEvent
     {

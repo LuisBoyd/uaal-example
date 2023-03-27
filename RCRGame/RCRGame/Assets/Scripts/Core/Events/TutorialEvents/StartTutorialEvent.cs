@@ -1,6 +1,6 @@
 ﻿using RCRCoreLib.Core.Systems.Tutorial;
 
-namespace RCRCoreLib.TutorialEvents
+namespace RCRCoreLib.Core.Events.TutorialEvents
 {
     public class StartTutorialEvent : TutorialEvent
     {

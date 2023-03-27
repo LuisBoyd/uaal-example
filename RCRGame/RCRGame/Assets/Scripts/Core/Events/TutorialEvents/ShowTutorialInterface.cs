@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RCRCoreLib.TutorialEvents
+namespace RCRCoreLib.Core.Events.TutorialEvents
 {
     public class ShowTutorialInterface : TutorialEvent
     {

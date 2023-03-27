@@ -1,4 +1,4 @@
-﻿namespace RCRCoreLib.TutorialEvents
+﻿namespace RCRCoreLib.Core.Events.TutorialEvents
 {
     public class HideTutorialinterface : TutorialEvent
     {

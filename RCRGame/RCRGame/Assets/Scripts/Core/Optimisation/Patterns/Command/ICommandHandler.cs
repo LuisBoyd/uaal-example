@@ -4,6 +4,7 @@ namespace RCRCoreLib.Core.Optimisation.Patterns.Command
 {
     public interface ICommandHandler<T> where T : Command
     {
+        public int CommandBufferSize { get; }
         public LinkedList<T> CommandBuffer { get; }
         
         public LinkedListNode<T> Head { get; }

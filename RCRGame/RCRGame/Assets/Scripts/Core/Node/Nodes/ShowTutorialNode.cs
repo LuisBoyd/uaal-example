@@ -1,5 +1,6 @@
-﻿using RCRCoreLib.Core.Systems.Tutorial;
-using RCRCoreLib.TutorialEvents;
+﻿using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.TutorialEvents;
+using RCRCoreLib.Core.Systems.Tutorial;
 using UnityEngine;
 using XNode;
 

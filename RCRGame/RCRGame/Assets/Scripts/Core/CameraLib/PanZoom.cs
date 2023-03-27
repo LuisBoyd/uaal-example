@@ -1,5 +1,6 @@
 ﻿using System;
 using Cinemachine;
+using RCRCoreLib.Core.Systems;
 using RCRCoreLib.Core.Timers;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,13 +8,15 @@ using UnityEngine.EventSystems;
 namespace RCRCoreLib.Core.CameraLib
 {
     [RequireComponent(typeof(CinemachineVirtualCamera))]
-    public class PanZoom: Singelton<PanZoom>
+    public class PanZoom: Singelton<PanZoom>, ISystem
     {
         private CinemachineVirtualCamera camera;
         private Camera mainCamera;
 
         private bool moveAllowed;
-        public bool MoveEnabled;
+        
+        [SerializeField]
+        public bool MoveEnabled = true;
 
         [SerializeField] private float LeftLimit;
         [SerializeField] private float RightLimit;
@@ -34,6 +37,11 @@ namespace RCRCoreLib.Core.CameraLib
             base.Awake();
             camera = GetComponent<CinemachineVirtualCamera>();
             mainCamera = Camera.main;
+        }
+
+        private void Start()
+        {
+            GameManager.Instance.RegisterSystem(SystemType.CameraSystem, this);
         }
 
         private void Update()
@@ -171,6 +179,16 @@ namespace RCRCoreLib.Core.CameraLib
                    (UpperLimit - Mathf.Abs(BottomLimit)/2.0f)),
                new Vector3(RightLimit - LeftLimit, UpperLimit - BottomLimit)
                );
+        }
+
+        public void EnableSystem()
+        {
+            MoveEnabled = true;
+        }
+
+        public void DisableSystem()
+        {
+            MoveEnabled = false;
         }
     }
 }

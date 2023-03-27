@@ -1,4 +1,4 @@
-﻿namespace RCRCoreLib.UnlockableEvents
+﻿namespace RCRCoreLib.Core.Events.UnlockableEvents
 {
     public class UnlockedItemEvent : GameEvent
     {

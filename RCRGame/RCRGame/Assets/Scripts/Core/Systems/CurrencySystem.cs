@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using RCRCoreLib.Core.Enums;
-using RCRCoreLib.Currency;
+using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.Currency;
 using UnityEngine;
 using TMPro;
 
 namespace RCRCoreLib.Core.Systems
 {
-    public class CurrencySystem : Singelton<CurrencySystem>
+    public class CurrencySystem : Singelton<CurrencySystem>, ISystem
     {
         private Dictionary<CurrencyType, int> CurrencyAmounts;
 
@@ -31,6 +32,7 @@ namespace RCRCoreLib.Core.Systems
 
         private void Start()
         {
+            GameManager.Instance.RegisterSystem(SystemType.CurrencySystem, this);
             EventManager.Instance.AddListener<CurrencyChangedGameEvent>(OnCurrencyChanged);
             EventManager.Instance.AddListener<NotEnoughCurrencyGameEvent>(OnNotEnoughCurrency);
         }
@@ -44,6 +46,16 @@ namespace RCRCoreLib.Core.Systems
         private void OnNotEnoughCurrency(NotEnoughCurrencyGameEvent evnt)
         {
             Debug.Log($"Not Enough Currency {evnt.amount}, {evnt.currencyType}");
+        }
+
+        public void EnableSystem()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableSystem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

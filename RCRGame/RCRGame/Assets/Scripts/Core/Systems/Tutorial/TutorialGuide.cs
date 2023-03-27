@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using RCRCoreLib.Core.CameraLib;
+using RCRCoreLib.Core.Events;
 using RCRCoreLib.Core.Events.Input;
+using RCRCoreLib.Core.Events.TutorialEvents;
 using RCRCoreLib.Core.Node.Graphs;
 using RCRCoreLib.Core.Node.Nodes;
 using RCRCoreLib.Core.Systems.Tutorial.Enum;
 using RCRCoreLib.Core.UI;
 using RCRCoreLib.Core.Utilities.SerializableDictionary;
-using RCRCoreLib.TutorialEvents;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +19,7 @@ using XNode;
 namespace RCRCoreLib.Core.Systems.Tutorial
 {
     [RequireComponent(typeof(RectTransform))]
-    public class TutorialGuide : Singelton<TutorialGuide>
+    public class TutorialGuide : Singelton<TutorialGuide>, ISystem
     {
         public TutorialGraph Graph
         {
@@ -99,6 +100,7 @@ namespace RCRCoreLib.Core.Systems.Tutorial
 
         private void Start()
         {
+            GameManager.Instance.RegisterSystem(SystemType.TutorialSystem, this);
             EventManager.Instance.AddListener<StartTutorialEvent>(On_startTutorialRequested);
             EventManager.Instance.AddListener<EndTutorialEvent>(On_GraphFinished);
             EventManager.Instance.AddListener<ShowTutorialInterface>(On_showTutorialinterface);
@@ -208,6 +210,16 @@ namespace RCRCoreLib.Core.Systems.Tutorial
             {
                 button.interactable = true;
             }
+        }
+
+        public void EnableSystem()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableSystem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

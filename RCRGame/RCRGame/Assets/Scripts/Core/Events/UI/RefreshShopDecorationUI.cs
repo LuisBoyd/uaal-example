@@ -1,6 +1,6 @@
 ﻿using RCRCoreLib.Core.Shopping.Category;
 
-namespace RCRCoreLib.UI
+namespace RCRCoreLib.Core.Events.UI
 {
     public class RefreshShopDecorationUI : GameEvent
     {

@@ -1,13 +1,15 @@
 ﻿using System;
 using RCRCoreLib.Core.Enums;
-using RCRCoreLib.Currency;
+using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.Currency;
+using RCRCoreLib.Core.Systems;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace RCRCoreLib.Core.Timers
 {
-    public class TimerToolTip : Singelton<TimerToolTip>
+    public class TimerToolTip : Singelton<TimerToolTip>, ISystem
     {
         private Timer Timer;
         [SerializeField] private Camera uiCamera;
@@ -24,6 +26,11 @@ namespace RCRCoreLib.Core.Timers
         {
             base.Awake();
             Parent.gameObject.SetActive(false);
+        }
+
+        private void Start()
+        {
+            GameManager.Instance.RegisterSystem(SystemType.TimerViewerSystem, this);
         }
 
         private void ShowTimer(GameObject caller)
@@ -91,6 +98,16 @@ namespace RCRCoreLib.Core.Timers
         public static void HideTimer_Static()
         {
             Instance.HideTimer();
+        }
+
+        public void EnableSystem()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableSystem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

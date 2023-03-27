@@ -1,6 +1,7 @@
 ﻿using System;
 using RCRCoreLib.Core.Enums;
-using RCRCoreLib.UnlockableEvents;
+using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.UnlockableEvents;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

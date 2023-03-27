@@ -1,6 +1,7 @@
 ﻿using System;
 using RCRCoreLib.Core.Building;
 using RCRCoreLib.Core.Systems.Unlockable;
+using RCRCoreLib.Core.UI.UISystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ namespace RCRCoreLib.Core.Shopping
         {
             rt = GetComponent<RectTransform>();
             cg = GetComponent<CanvasGroup>();
-            canvas = ShoppingManager.Instance.MainCanvas;
+            canvas = UIManager.Instance.MainCanvas;
             img = GetComponent<Image>();
             Collider2D = GetComponent<CircleCollider2D>();
             orginPos = rt.anchoredPosition;

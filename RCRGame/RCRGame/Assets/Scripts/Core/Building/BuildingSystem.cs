@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using RCRCoreLib.Core.CameraLib;
+using RCRCoreLib.Core.Systems;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace RCRCoreLib.Core.Building
 {
-    public class BuildingSystem : Singelton<BuildingSystem>
+    public class BuildingSystem : Singelton<BuildingSystem>, ISystem
     {
         public GridLayout gridLayout;
         public Tilemap MainTilemap;
         public TileBase takenTile;
         public Vector3 Point = Vector3.zero;
+
+        private void Start()
+        {
+            GameManager.Instance.RegisterSystem(SystemType.BuildingSystem, this);
+        }
 
         #region TileMap Management
 
@@ -125,6 +131,16 @@ namespace RCRCoreLib.Core.Building
         {
             Gizmos.color = Color.red;
             Gizmos.DrawCube(Point, new Vector3(1,1,1));
+        }
+
+        public void EnableSystem()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableSystem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

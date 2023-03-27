@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using RCRCoreLib.Core.Enums;
+using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.UI;
+using RCRCoreLib.Core.Events.XPLevel;
 using RCRCoreLib.Core.Input;
 using RCRCoreLib.Core.Optimisation.Patterns.Factory;
 using RCRCoreLib.Core.Optimisation.Patterns.ObjectPooling;
@@ -10,16 +13,14 @@ using RCRCoreLib.Core.Systems;
 using RCRCoreLib.Core.Systems.Tutorial;
 using RCRCoreLib.Core.Systems.Unlockable;
 using RCRCoreLib.Core.UI;
-using RCRCoreLib.TutorialEvents;
-using RCRCoreLib.UI;
-using RCRCoreLib.XPLevel;
+using RCRCoreLib.Core.UI.UISystem;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace RCRCoreLib.Core.Shopping
 {
     [RequireComponent(typeof(CardUIViewPool), typeof(CardUIViewFactory))]
-    public class ShoppingManager : Singelton<ShoppingManager>
+    public class ShoppingManager : Singelton<ShoppingManager>, ISystem
     {
         private bool isOpened;
         //private bool isInteractable;
@@ -53,20 +54,20 @@ namespace RCRCoreLib.Core.Shopping
         //     = new Dictionary<UnlockablePlaceables, Sprite>();
         
 
-        [SerializeField] 
-        private ScrollRect CardViewSlider;
+        // [SerializeField] 
+        // private ScrollRect CardViewSlider;
+        //
+        // [SerializeField] 
+        // private RectTransform BuildingCategoryButtonGroup;
+        // [SerializeField] 
+        // private RectTransform DecorationCategoryButtonGroup;
 
-        [SerializeField] 
-        private RectTransform BuildingCategoryButtonGroup;
-        [SerializeField] 
-        private RectTransform DecorationCategoryButtonGroup;
-
-        [SerializeField] 
-        private Canvas mainCanvas;
-        public Canvas MainCanvas
-        {
-            get => mainCanvas;
-        }
+        // [SerializeField] 
+        // private Canvas mainCanvas;
+        // public Canvas MainCanvas
+        // {
+        //     get => mainCanvas;
+        // }
 
             //END NEW
         [SerializeField] private RectTransform CatergoryPannel;
@@ -97,7 +98,8 @@ namespace RCRCoreLib.Core.Shopping
         private void Start()
         {
             //Self.SetUpListeners();
-            EventManager.Instance.AddListener<ShoppingTabGroupClicked>(ShoppingTabCategoryClicked);
+            //EventManager.Instance.AddListener<ShoppingTabGroupClicked>(ShoppingTabCategoryClicked);
+            GameManager.Instance.RegisterSystem(SystemType.ShoppingSystem, this);
             EventManager.Instance.AddListener<ClearCardViewUI>(ClearCardUIs);
             EventManager.Instance.AddListener<RefreshShopBuildingUI>(RefreshBuildingShopUI);
             EventManager.Instance.AddListener<RefreshShopDecorationUI>(RefreshDecorationsUI);
@@ -108,7 +110,7 @@ namespace RCRCoreLib.Core.Shopping
         private void OnDisable()
         {
             //Self.RemoveListeners();
-            EventManager.Instance.RemoveListener<ShoppingTabGroupClicked>(ShoppingTabCategoryClicked);
+            //EventManager.Instance.RemoveListener<ShoppingTabGroupClicked>(ShoppingTabCategoryClicked);
             EventManager.Instance.RemoveListener<ClearCardViewUI>(ClearCardUIs);
             EventManager.Instance.RemoveListener<RefreshShopBuildingUI>(RefreshBuildingShopUI);
             EventManager.Instance.RemoveListener<RefreshShopDecorationUI>(RefreshDecorationsUI);
@@ -122,21 +124,21 @@ namespace RCRCoreLib.Core.Shopping
             
             if (!isOpened)
             {
-                isOpened = true;
-                BuildingsTab.gameObject.SetActive(true);
-                CatergoryPannel.gameObject.SetActive(true);
-                HorizontalShopBar.gameObject.SetActive(true);
-                ShoppingTabCategoryClicked(new ShoppingTabGroupClicked(ShoppingTabGroup.Building));
-                ConstructionTab.gameObject.SetActive(false);
+                // isOpened = true;
+                // BuildingsTab.gameObject.SetActive(true);
+                // CatergoryPannel.gameObject.SetActive(true);
+                // HorizontalShopBar.gameObject.SetActive(true);
+                // ShoppingTabCategoryClicked(new ShoppingTabGroupClicked(ShoppingTabGroup.Building));
+                // ConstructionTab.gameObject.SetActive(false);
             }
             else
             {
-                ConstructionTab.gameObject.SetActive(true);
-                HorizontalShopBar.gameObject.SetActive(false);
-                BuildingsTab.gameObject.SetActive(false);
-                CatergoryPannel.gameObject.SetActive(false);
-                EventManager.Instance.QueueEvent(new ClearCardViewUI());
-                isOpened = false;
+                // ConstructionTab.gameObject.SetActive(true);
+                // HorizontalShopBar.gameObject.SetActive(false);
+                // BuildingsTab.gameObject.SetActive(false);
+                // CatergoryPannel.gameObject.SetActive(false);
+                // EventManager.Instance.QueueEvent(new ClearCardViewUI());
+                // isOpened = false;
             }
         }
 
@@ -185,26 +187,26 @@ namespace RCRCoreLib.Core.Shopping
             }
         }
 
-        private void ShoppingTabCategoryClicked(ShoppingTabGroupClicked evnt)
-        {
-            switch (evnt.group)
-            {
-                case ShoppingTabGroup.Building:
-                    BuildingCategoryButtonGroup.gameObject.SetActive(true);
-                    DecorationCategoryButtonGroup.gameObject.SetActive(false);
-                    break;
-                case ShoppingTabGroup.Decoration:
-                    BuildingCategoryButtonGroup.gameObject.SetActive(false);
-                    DecorationCategoryButtonGroup.gameObject.SetActive(true);
-                    break;
-            }
-        }
+        // private void ShoppingTabCategoryClicked(ShoppingTabGroupClicked evnt)
+        // {
+        //     switch (evnt.group)
+        //     {
+        //         case ShoppingTabGroup.Building:
+        //             BuildingCategoryButtonGroup.gameObject.SetActive(true);
+        //             DecorationCategoryButtonGroup.gameObject.SetActive(false);
+        //             break;
+        //         case ShoppingTabGroup.Decoration:
+        //             BuildingCategoryButtonGroup.gameObject.SetActive(false);
+        //             DecorationCategoryButtonGroup.gameObject.SetActive(true);
+        //             break;
+        //     }
+        // }
 
         private void RefreshBuildingShopUI(RefreshShopBuildingUI evnt)
         {
             CardViewpool.Return(CurrentVisableCards);
             CurrentVisableCards.Clear();
-            RefreshCardUI();
+            EventManager.Instance.QueueEvent(new ActivateUIEvent(true, UIType.CardViewMenu));
             foreach (UnlockableBuilding unlockableBuilding in BuildingShopItems[evnt.category])
             {
                 CardView cardView = CardViewpool.Request();
@@ -237,7 +239,7 @@ namespace RCRCoreLib.Core.Shopping
         {
             CardViewpool.Return(CurrentVisableCards);
             CurrentVisableCards.Clear();
-            RefreshCardUI();
+            EventManager.Instance.QueueEvent(new ActivateUIEvent(true, UIType.CardViewMenu));
             foreach (UnlockableStructure unlockableStructure in StructureShopItems[evnt.category])
             {
                 CardView cardView = CardViewpool.Request();
@@ -263,12 +265,11 @@ namespace RCRCoreLib.Core.Shopping
                 );
             }
         }
-        private void RefreshCardUI() => CardViewSlider.gameObject.SetActive(true);
         private void ClearCardUIs(ClearCardViewUI evnt)
         {
             CardViewpool.Return(CurrentVisableCards);
             CurrentVisableCards.Clear();
-            CardViewSlider.gameObject.SetActive(false);
+            EventManager.Instance.QueueEvent(new ActivateUIEvent(false, UIType.CardViewMenu));
         }
 
 
@@ -285,6 +286,16 @@ namespace RCRCoreLib.Core.Shopping
         // }
 
         private void OnLevelChanged(LevelChangedGameEvent evnt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnableSystem()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableSystem()
         {
             throw new NotImplementedException();
         }

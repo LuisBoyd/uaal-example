@@ -1,6 +1,6 @@
 ﻿using RCRCoreLib.Core.Enums;
 
-namespace RCRCoreLib.Currency
+namespace RCRCoreLib.Core.Events.Currency
 {
     public class CurrencyChangedGameEvent : GameEvent
     {

@@ -1,5 +1,6 @@
-﻿using RCRCoreLib.Core.Shopping.Category;
-using RCRCoreLib.UI;
+﻿using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.UI;
+using RCRCoreLib.Core.Shopping.Category;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,16 +11,16 @@ namespace RCRCoreLib.Core.Shopping
         [SerializeField] 
         private DecorationCategory Category;
 
-        protected override void OnEnable()
+        protected  void OnEnable()
         {
-            base.OnEnable();
+            
             EventManager.Instance.AddListener<RefreshShopDecorationUI>(On_BuildingBtnClicked);
         }
 
-        protected override void OnDisable()
+        protected  void OnDisable()
         {
             EventManager.Instance.RemoveListener<RefreshShopDecorationUI>(On_BuildingBtnClicked);
-            base.OnDisable();
+           
         }
 
         public override void OnPointerDown(PointerEventData eventData)
@@ -33,50 +34,21 @@ namespace RCRCoreLib.Core.Shopping
         private void On_BuildingBtnClicked(RefreshShopDecorationUI evnt)
         {
             if(evnt.category == Category)
-                Selected();
+                Open();
             else
             {
-                Unselected();
+                Close();
             }
-        } 
-        
-        public override void SlideIn()
-        {
-            throw new System.NotImplementedException();
         }
 
-        public override void SlideOut()
+        public override void Open()
         {
-            throw new System.NotImplementedException();
+          
         }
 
-        public override void FadeIn()
+        public override void Close()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public override void FadeOut()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void ScaleIn()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void ScaleOut()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void Selected()
-        {
-            
-        }
-
-        public override void Unselected()
-        {
+           
         }
     }
 }

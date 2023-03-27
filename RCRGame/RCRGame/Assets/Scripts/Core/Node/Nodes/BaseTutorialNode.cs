@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
+using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.TutorialEvents;
 using RCRCoreLib.Core.Node.Graphs;
 using RCRCoreLib.Core.Systems.Tutorial.TutorialPredicates;
-using RCRCoreLib.TutorialEvents;
 using UnityEngine;
 using XNode;
 

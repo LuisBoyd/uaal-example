@@ -1,4 +1,4 @@
-﻿namespace RCRCoreLib.XPLevel
+﻿namespace RCRCoreLib.Core.Events.XPLevel
 {
     public class LevelChangedGameEvent : GameEvent
     {

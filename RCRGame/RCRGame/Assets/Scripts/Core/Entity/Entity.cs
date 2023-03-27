@@ -43,6 +43,13 @@ namespace RCRCoreLib.Core.Entity
         public void MoveTo(Vector3 position, Action onArrivedAtPosition = null)
         {
             Path = PathFindingSystem.Instance.FindPath(transform, position, m_entityType.PathFindingMode);
+
+            var path = Path.ToArray();
+            for (var i = 0; i < path.Length - 1; i++)
+            {
+                Debug.DrawLine(path[i], path[i + 1], Color.red, 5f);
+            }
+            
             LTDescr d = LeanTween.moveSpline(gameObject, Path.ToArray(),  Path.Count() / m_entityType.MovementSpeed);
             IsometricAnimatorController.CurrentPosition = transform.position;
             d.setOnUpdate(IsometricAnimatorController.SetDirection);

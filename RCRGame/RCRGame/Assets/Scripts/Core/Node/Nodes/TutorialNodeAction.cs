@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.TutorialEvents;
 using RCRCoreLib.Core.Systems.Tutorial.TutorialPredicates;
-using RCRCoreLib.TutorialEvents;
 
 namespace RCRCoreLib.Core.Node.Nodes
 {

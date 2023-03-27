@@ -1,7 +1,6 @@
 ﻿using RCRCoreLib.Core.Systems.Tiles;
-using UnityEngine.Tilemaps;
 
-namespace RCRCoreLib.MapModification
+namespace RCRCoreLib.Core.Events.MapModification
 {
     public class NewTilePaintBrushSelected : GameEvent
     {

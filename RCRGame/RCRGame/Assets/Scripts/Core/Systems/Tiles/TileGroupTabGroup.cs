@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.MapModification;
+using RCRCoreLib.Core.Events.UI;
 using RCRCoreLib.Core.Shopping;
-using RCRCoreLib.MapModification;
+using RCRCoreLib.Core.Utilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,55 +19,109 @@ namespace RCRCoreLib.Core.Systems.Tiles
         private RectTransform Indicator;
 
         [SerializeField] 
-        private List<TileSelectionOptions> UIIgnoreTypes
-             = new List<TileSelectionOptions>();
+        private List<SubTileSelectionTab> UIIgnoreTypes
+             = new List<SubTileSelectionTab>();
 
-        private bool CurrentlySelected = false;
+        private int TapCount = 0;
 
-        protected override void OnEnable()
+        private void Start()
         {
-            base.OnEnable();
-            TabGroup.gameObject.SetActive(false);
-            Indicator.gameObject.SetActive(false);
+            foreach (SubTileSelectionTab tileSelectionTab in UIIgnoreTypes)
+            {
+                tileSelectionTab.OnPressed += SubStates;
+            }
         }
 
-        protected override void OnNewTilePaintBrushSelected(NewTilePaintBrushSelected evnt)
+        private void SubStates(object sender, SubTileSelectionTab e)
         {
-            if (evnt.option == option)
+            foreach (SubTileSelectionTab subTileSelectionTab in UIIgnoreTypes)
             {
-                Selected();
+                subTileSelectionTab.Close();
+            }
+            e.Open();
+        }
+
+        // protected override void OnNewTilePaintBrushSelected(NewTilePaintBrushSelected evnt)
+        // {
+        //     if (evnt.option == option)
+        //     {
+        //         Open();
+        //     }
+        //     else
+        //     {
+        //         if (!UIIgnoreTypes.Contains(evnt.option))
+        //         {
+        //             Close();
+        //             CurrentlySelected = false;
+        //         }
+        //     }
+        // }
+        //
+        // public override void Open()
+        // {
+        //     base.Open();
+        //     Indicator.gameObject.SetActive(true);
+        //     if (!CurrentlySelected)
+        //     {
+        //         TabGroup.gameObject.SetActive(false);
+        //         CurrentlySelected = true;
+        //     }
+        //     else
+        //     {
+        //         TabGroup.gameObject.SetActive(true);
+        //         CurrentlySelected = false;
+        //     }
+        // }
+
+        public override void OnPointerDown(PointerEventData eventData)
+        {
+            if (TapCount == 0)
+            {
+                EventManager.Instance.QueueEvent(new GroupTabSelectedEvent(this));
             }
             else
             {
-                if (!UIIgnoreTypes.Contains(evnt.option))
-                {
-                    Unselected();
-                    CurrentlySelected = false;
-                }
+                Open();
             }
         }
 
-        public override void Unselected()
+        public override void Open()
         {
-            base.Unselected();
-            TabGroup.gameObject.SetActive(false);
+            TapCount++;
+            if (TapCount > 2)
+            {
+                CloseSubMenu();
+                return;
+            }
+            Debug.Log($"This is the Tap Count {TapCount.ToString()}");
+            switch (TapCount)
+            {
+                case 1: //HighLight Button, ShowIndication
+                    Extenstions.ScaleGUI(selfTransform, SelectedSizeScale, time_to_lerp);
+                    Buttonbackground.color = SelectedColor;
+                    Indicator.gameObject.SetActive(true);
+                    break;
+                case 2: //Reveal SubTile's
+                    TabGroup.gameObject.SetActive(true);
+                    break;
+            }
+            EventManager.Instance.QueueEvent(new NewTilePaintBrushSelected(option));
+        }
+
+        public override void Close()
+        {
+            CloseSubMenu();
+        }
+
+
+        private void CloseSubMenu()
+        {
+            TapCount = 0;
+            Extenstions.ScaleGUI(selfTransform, UnSelectedSizeScale, time_to_lerp);
+            Buttonbackground.color = UnSelectedColor;
             Indicator.gameObject.SetActive(false);
+            TabGroup.gameObject.SetActive(false);
         }
-
-        public override void Selected()
-        {
-            base.Selected();
-            Indicator.gameObject.SetActive(true);
-            if (!CurrentlySelected)
-            {
-                TabGroup.gameObject.SetActive(false);
-                CurrentlySelected = true;
-            }
-            else
-            {
-                TabGroup.gameObject.SetActive(true);
-                CurrentlySelected = false;
-            }
-        }
+        
     }
 }

@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using RCRCoreLib.Core.Building;
+using RCRCoreLib.Core.Systems;
+using RCRCoreLib.Core.Tiles;
+using RCRCoreLib.Core.Tiles.TilemapSystem;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -11,7 +14,7 @@ using UnityEngine.Tilemaps;
 
 namespace RCRCoreLib.Core.AI
 {
-    public class PathFindingSystem : Singelton<PathFindingSystem>
+    public class PathFindingSystem : Singelton<PathFindingSystem>, ISystem
     {
         public struct Node
         {
@@ -54,44 +57,83 @@ namespace RCRCoreLib.Core.AI
 
         private void Start()
         {
+            GameManager.Instance.RegisterSystem(SystemType.PathFindingSystem, this);
             foreach (Tilemap map in maps)
             {
                 foreach (var Pos in map.cellBounds.allPositionsWithin)
                 {
-                    TileBase TileAtLocation = map.GetTile(Pos);
-                    if (WaterTile.Contains(TileAtLocation))
+                    //TileBase t = map.GetTile(Pos);
+                    WorldTile WorldTileAtLocation = map.GetTile<WorldTile>(Pos);
+                    if ((WorldTileAtLocation.pathAffector & WorldTilePathAffector.WaterPathFindable) == WorldTilePathAffector.WaterPathFindable)
+                    {
                         SetWaterTilePosition(new Vector2Int(Pos.x, Pos.y));
-                    else if (LandTile.Contains(TileAtLocation))
+                    }
+
+                    if ((WorldTileAtLocation.pathAffector & WorldTilePathAffector.LandPathFindable) ==
+                        WorldTilePathAffector.LandPathFindable)
+                    {
                         SetLandTilePosition(new Vector2Int(Pos.x, Pos.y));
+                    }
                 }
             }
         }
 
-        private void SetWaterTilePosition(Vector2Int coord)
+        public void SetWaterTilePositions(IEnumerable<Vector2Int> coords)
+        {
+            foreach (Vector2Int coord in coords)
+            {
+                SetWaterTilePosition(coord);
+            }
+        }
+        public void SetLandTilePositions(IEnumerable<Vector2Int> coords)
+        {
+            foreach (Vector2Int coord in coords)
+            {
+                SetLandTilePosition(coord);
+            }
+        }
+
+        public void SetWaterTilePosition(Vector2Int coord)
         {
             if (!WatertilePositions.Contains(coord))
                 WatertilePositions.Add(coord);
         }
+        
+        public void RemoveWaterTilesPosition(IEnumerable<Vector2Int> coords)
+        {
+            foreach (Vector2Int coord in coords)
+            {
+                RemoveWaterTilePosition(coord);
+            }
+        }
+        
+        public void RemoveLandTilesPosition(IEnumerable<Vector2Int> coords)
+        {
+            foreach (Vector2Int coord in coords)
+            {
+                RemoveLandTilePosition(coord);
+            }
+        }
 
-        private void RemoveWaterTilePosition(Vector2Int coord)
+        public void RemoveWaterTilePosition(Vector2Int coord)
         {
             if (WatertilePositions.Contains(coord))
                 WatertilePositions.Remove(coord);
         }
 
-        private void SetLandTilePosition(Vector2Int coord)
+        public void SetLandTilePosition(Vector2Int coord)
         {
             if (!PathtilePositions.Contains(coord))
                 PathtilePositions.Add(coord);
         }
 
-        private void RemoveLandTilePosition(Vector2Int coord)
+        public void RemoveLandTilePosition(Vector2Int coord)
         {
             if (PathtilePositions.Contains(coord))
                 PathtilePositions.Remove(coord);
         }
 
-        private void ClearTilePositions()
+        public void ClearTilePositions()
         {
             WatertilePositions.Clear();
             PathtilePositions.Clear();
@@ -182,17 +224,17 @@ namespace RCRCoreLib.Core.AI
             JobHandle handle = astar.Schedule();
             handle.Complete();
             NativeArray<Node> nodeArray = nodes.GetValueArray(Allocator.TempJob);
-            for (int i = 0; i < nodeArray.Length; i++)
-            {
-                Vector3Int currentNode = new Vector3Int(nodeArray[i].coord.x,
-                    nodeArray[i].coord.y);
-                if (!start.coord.Equals(nodeArray[i].coord) &&
-                    !end.coord.Equals(nodeArray[i].coord) &&
-                    !obstacles.ContainsKey(nodeArray[i].coord))
-                {
-                    //Others
-                }
-            }
+            // for (int i = 0; i < nodeArray.Length; i++)
+            // {
+            //     Vector3Int currentNode = new Vector3Int(nodeArray[i].coord.x,
+            //         nodeArray[i].coord.y);
+            //     if (!start.coord.Equals(nodeArray[i].coord) &&
+            //         !end.coord.Equals(nodeArray[i].coord) &&
+            //         !obstacles.ContainsKey(nodeArray[i].coord))
+            //     {
+            //         //Others
+            //     }
+            // } //EDITIDE
 
             if (nodes.ContainsKey(end.coord))
             {
@@ -322,6 +364,15 @@ namespace RCRCoreLib.Core.AI
                 return result.coord;
             }
         }
-        
+
+        public void EnableSystem()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableSystem()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

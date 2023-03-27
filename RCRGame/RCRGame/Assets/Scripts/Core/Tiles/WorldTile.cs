@@ -8,6 +8,6 @@ namespace RCRCoreLib.Core.Tiles
     public class WorldTile : Tile
     {
         public WorldTileLockFlag lockFlag;
-        public WorldTileEffectFlags effectFlags;
+        public WorldTilePathAffector pathAffector;
     }
 }

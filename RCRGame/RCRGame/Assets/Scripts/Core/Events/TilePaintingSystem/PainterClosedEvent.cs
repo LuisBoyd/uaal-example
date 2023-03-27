@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace RCRCoreLib.TilePaintingSystem
+namespace RCRCoreLib.Core.Events.TilePaintingSystem
 {
     public class PainterClosedEvent : GameEvent
     {

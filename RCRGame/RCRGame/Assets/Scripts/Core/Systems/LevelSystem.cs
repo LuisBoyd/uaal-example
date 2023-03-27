@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using RCRCoreLib.Core.Enums;
-using RCRCoreLib.Currency;
-using RCRCoreLib.XPLevel;
+using RCRCoreLib.Core.Events;
+using RCRCoreLib.Core.Events.Currency;
+using RCRCoreLib.Core.Events.XPLevel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace RCRCoreLib.Core.Systems
 {
-    public class LevelSystem : Singelton<LevelSystem>
+    public class LevelSystem : Singelton<LevelSystem>, ISystem
     {
         private int XPnow;
         public int Level { get; private set; }
@@ -61,6 +62,7 @@ namespace RCRCoreLib.Core.Systems
 
         private void Start()
         {
+            GameManager.Instance.RegisterSystem(SystemType.LevelSystem, this);
             EventManager.Instance.AddListener<XPAddedGameEvent>(onXpAdded);
             EventManager.Instance.AddListener<LevelChangedGameEvent>(OnLevelChanged);
             UpdateUI();
@@ -110,6 +112,16 @@ namespace RCRCoreLib.Core.Systems
             EventManager.Instance.QueueEvent(currencyChangedGameEvent);
             currencyChangedGameEvent = new CurrencyChangedGameEvent(lvlReward[evnt.newLevel][0], CurrencyType.Coins);
             EventManager.Instance.QueueEvent(currencyChangedGameEvent);
+        }
+
+        public void EnableSystem()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableSystem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

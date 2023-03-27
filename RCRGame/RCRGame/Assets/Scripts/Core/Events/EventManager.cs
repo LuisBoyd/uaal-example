@@ -1,15 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
-using System.Linq;
-using Cysharp.Threading.Tasks.Linq;
-using RCRCoreLib.Core;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
-namespace RCRCoreLib
+namespace RCRCoreLib.Core.Events
 {
     public  class EventManager : Singelton<EventManager> //Only really needs to be static as only ever going to be one EventManager Instance.
     {
@@ -20,10 +14,10 @@ namespace RCRCoreLib
         public delegate void EventDelegate<T>(T e) where T : GameEvent;
         private delegate void EventDelegate(GameEvent e);
 
-        private  Dictionary<System.Type, EventDelegate> ms_delegates = new Dictionary<Type, EventDelegate>();
-        private  Dictionary<System.Delegate, EventDelegate> ms_delegateLookUp =
+        private  Dictionary<Type, EventDelegate> ms_delegates = new Dictionary<Type, EventDelegate>();
+        private  Dictionary<Delegate, EventDelegate> ms_delegateLookUp =
             new Dictionary<Delegate, EventDelegate>();
-        private  Dictionary<System.Delegate, System.Delegate> ms_onceLookups = new Dictionary<Delegate, Delegate>();
+        private  Dictionary<Delegate, Delegate> ms_onceLookups = new Dictionary<Delegate, Delegate>();
 
         private  EventDelegate AddDelegate<T>(EventDelegate<T> del) where T : GameEvent
         {
