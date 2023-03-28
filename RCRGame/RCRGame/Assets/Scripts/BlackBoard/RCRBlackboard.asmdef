@@ -2,7 +2,8 @@
     "name": "RC",
     "rootNamespace": "",
     "references": [
-        "GUID:0c448b5810613d1418cdde6e519dff5b"
+        "GUID:0c448b5810613d1418cdde6e519dff5b",
+        "GUID:ea6a6314f279f814facc8c48a7d3c9f1"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
