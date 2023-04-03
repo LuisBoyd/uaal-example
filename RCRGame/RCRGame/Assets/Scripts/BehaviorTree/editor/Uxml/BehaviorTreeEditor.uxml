@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Scripts/BehaviorTree/editor/Uxml/BehaviorTreeEditor.uss?fileID=7433441132597879392&amp;guid=0b6112806f8a947439cc53adc74da6b8&amp;type=3#BehaviorTreeEditor" />
+    <uie:Toolbar>
+        <uie:ToolbarMenu tabindex="-1" display-tooltip-when-elided="true" text="Assets" />
+    </uie:Toolbar>
+    <Utilities.editor.SplitView fixed-pane-initial-dimension="300">
+        <ui:VisualElement name="Left-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-shrink: 1;">
+            <ui:Label tabindex="-1" text="Inspector" display-tooltip-when-elided="true" name="Tittle-Box" class="Tittle-Box" />
+            <Utilities.editor.InspectorView name="InspectorView" class="InspectorView" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Right-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-shrink: 1;">
+            <ui:Label tabindex="-1" text="Tree View" display-tooltip-when-elided="true" name="Tittle-Box" class="Tittle-Box" />
+            <BehaviorTree.editor.BehaviorTreeView focusable="true" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </Utilities.editor.SplitView>
+</ui:UXML>

@@ -1,0 +1,17 @@
+{
+    "name": "RCR.BehaviorTree.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:201fa5db260d8dd4dab9f588214a2bd4",
+        "GUID:e575f27c5af195e43b2556f3963a048a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
