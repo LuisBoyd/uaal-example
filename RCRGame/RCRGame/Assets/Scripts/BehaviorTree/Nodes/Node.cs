@@ -51,16 +51,6 @@ namespace BehaviorTree.Nodes
         protected abstract State OnUpdate();
 
         public abstract Node DeepCopy();
-        protected T ApplyDefaults<T>(T node) where T : Node
-        {
-            node.guid = Guid.NewGuid().ToString();
-            node.Position.x = this.Position.x;
-            node.Position.y = this.Position.y;
-            node.state = State.Running;
-            node.started = false;
-            node.name = String.Copy(this.name);
-            return node;
-        }
 
         public virtual object Clone() => DeepCopy();
 

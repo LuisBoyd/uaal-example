@@ -35,6 +35,14 @@ namespace BehaviorTree.editor
             styleSheets.Add(styleSheet);
             var blackboard = new Blackboard(this);
             Add(blackboard);
+
+            Undo.undoRedoPerformed += UndoRedoPerformed;
+        }
+
+        private void UndoRedoPerformed()
+        {
+            PopulateView(tree);
+            AssetDatabase.SaveAssets();
         }
 
         private BehaviorTreeNodeView FindNodeView(Node node)
@@ -110,6 +118,15 @@ namespace BehaviorTree.editor
                     tree.AddChild(parentView.node, childView.node);
                 });
             }
+
+            if (graphviewchange.movedElements != null)
+            {
+                nodes.ForEach(n =>
+                {
+                    BehaviorTreeNodeView view = n as BehaviorTreeNodeView;
+                    view.SortChildren();
+                });
+            }
             return graphviewchange;
         }
 
@@ -156,6 +173,15 @@ namespace BehaviorTree.editor
             BehaviorTreeNodeView nodeView = new BehaviorTreeNodeView(node);
             nodeView.OnNodeSelected = OnNodeSelected;
             AddElement(nodeView);
+        }
+
+        public void UpdateNodeStates()
+        {
+            nodes.ForEach(n =>
+            {
+                BehaviorTreeNodeView view = n as BehaviorTreeNodeView;
+                view.UpdateState();
+            });
         }
     }
 }

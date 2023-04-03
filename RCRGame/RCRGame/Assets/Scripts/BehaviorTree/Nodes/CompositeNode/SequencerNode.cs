@@ -33,18 +33,7 @@ namespace BehaviorTree.Nodes.CompositeNode
             }
             return current == children.Count ? State.Success : State.Running;
         }
-
-        public override Node DeepCopy()
-        {
-            SequencerNode NewInstance = ApplyDefaults(ScriptableObject.CreateInstance<SequencerNode>());
-            children.ForEach(n =>
-            {
-                Node copiedChild = n.DeepCopy();
-                NewInstance.children.Add(copiedChild);
-            });
-            return NewInstance;
-        }
-
+        
         public override object Clone() => DeepCopy();
     }
 }

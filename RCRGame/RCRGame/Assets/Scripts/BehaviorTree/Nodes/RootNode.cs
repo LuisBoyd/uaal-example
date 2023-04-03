@@ -13,12 +13,9 @@ namespace BehaviorTree.Nodes
         protected override State OnUpdate() => child.Update();
         public override Node DeepCopy()
         {
-            RootNode NewInstance = ApplyDefaults(ScriptableObject.CreateInstance<RootNode>());
-            Node child = this.child.DeepCopy();
-            NewInstance.child = child;
-            return NewInstance;
+            RootNode node = ScriptableObject.Instantiate(this);
+            node.child = this.child.DeepCopy();
+            return node;
         }
-
-        public override object Clone() => DeepCopy();
     }
 }

@@ -5,8 +5,7 @@ namespace BehaviorTree
 {
     public class BehaviourTreeRunner : MonoBehaviour
     {
-        [SerializeField]
-        private BehaviorTree tree;
+        public BehaviorTree tree;
 
         private void Start()
         {

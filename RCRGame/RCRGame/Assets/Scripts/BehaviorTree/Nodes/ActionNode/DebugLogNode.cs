@@ -22,14 +22,6 @@ namespace BehaviorTree.Nodes.ActionNode
             return State.Success;
         }
 
-        public override Node DeepCopy()
-        {
-            DebugLogNode newInstance = ApplyDefaults(ScriptableObject.CreateInstance<DebugLogNode>());
-           
-            newInstance.message = new string(message);
-            return newInstance;
-        }
-
         public override object Clone() => DeepCopy();
     }
 }
