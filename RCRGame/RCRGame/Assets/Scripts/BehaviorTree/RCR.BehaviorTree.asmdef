@@ -1,3 +1,16 @@
 {
-	"name": "RCR.BehaviorTree"
+    "name": "RCR.BehaviorTree",
+    "rootNamespace": "",
+    "references": [
+        "GUID:eac0a3ca4955ee947acb343455a372fa"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

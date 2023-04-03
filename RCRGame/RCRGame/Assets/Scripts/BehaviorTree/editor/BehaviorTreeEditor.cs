@@ -9,7 +9,7 @@ using BehaviorTree;
 public class BehaviorTreeEditor : BaseEditorWindow
 {
     private BehaviorTreeView treeView;
-    private InspectorView InspectorView;
+    private BehaviorTreeInspectorView InspectorView;
     
     [MenuItem("Window/UI Toolkit/BehaviorTreeEditor")]
     public static void ShowExample()
@@ -31,7 +31,8 @@ public class BehaviorTreeEditor : BaseEditorWindow
     protected override void InitializeEditor()
     {
         treeView = Root.Q<BehaviorTreeView>();
-        InspectorView = Root.Q<InspectorView>();
+        treeView.OnNodeSelected = OnNodeSelectionChanged;
+        InspectorView = Root.Q<BehaviorTreeInspectorView>();
     }
 
     protected override void Compose()
@@ -51,9 +52,19 @@ public class BehaviorTreeEditor : BaseEditorWindow
     private void OnSelectionChange()
     {
         BehaviorTree.BehaviorTree tree = Selection.activeObject as BehaviorTree.BehaviorTree;
-        if (tree)
+        if (tree && (AssetDatabase.CanOpenAssetInEditor(tree.GetInstanceID()) || (tree.ValidateTree() && Application.isPlaying)))
         {
             treeView.PopulateView(tree);
         }
+        else
+        {
+            treeView.ClearGraph();
+            InspectorView.Clear();
+        }
+    }
+
+    private void OnNodeSelectionChanged(BehaviorTreeNodeView node)
+    {
+        InspectorView.UpdateSelection(node);
     }
 }

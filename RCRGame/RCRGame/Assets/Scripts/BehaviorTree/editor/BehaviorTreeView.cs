@@ -1,10 +1,15 @@
-﻿using BehaviorTree.Nodes.ActionNode;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using BehaviorTree.Nodes;
+using BehaviorTree.Nodes.ActionNode;
 using BehaviorTree.Nodes.CompositeNode;
 using BehaviorTree.Nodes.DecoratorNode;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using Node = BehaviorTree.Nodes.Node;
+using Edge = UnityEditor.Experimental.GraphView.Edge;
 
 namespace BehaviorTree.editor
 {
@@ -12,6 +17,7 @@ namespace BehaviorTree.editor
     {
         public new class UxmlFactory: UxmlFactory<BehaviorTreeView, GraphView.UxmlTraits>{}
 
+        public Action<BehaviorTreeNodeView> OnNodeSelected;
         private BehaviorTree tree;
         
         public BehaviorTreeView()
@@ -31,13 +37,48 @@ namespace BehaviorTree.editor
             Add(blackboard);
         }
 
+        private BehaviorTreeNodeView FindNodeView(Node node)
+        {
+            return GetNodeByGuid(node.guid) as BehaviorTreeNodeView;
+        }
+
         internal void PopulateView(BehaviorTree tree)
         {
             this.tree = tree;
             graphViewChanged -= onGraphViewChanged;
             DeleteElements(graphElements);
             graphViewChanged += onGraphViewChanged;
+
+            if (tree.rootNode == null)
+            {
+                tree.rootNode = tree.CreateNode(typeof(RootNode)) as RootNode;
+                EditorUtility.SetDirty(tree);
+                AssetDatabase.SaveAssets();
+            }
+
+            //Create Node View's
             tree.nodes.ForEach(n => CreateNodeView(n));
+            
+            //Create Node Edges
+            tree.nodes.ForEach(n =>
+            {
+                var children = tree.GetChildren(n);
+                children.ForEach(c =>
+                {
+                   BehaviorTreeNodeView parentView = FindNodeView(n);
+                   BehaviorTreeNodeView childView = FindNodeView(c);
+
+                  Edge edge = parentView.output.ConnectTo(childView.input);
+                  AddElement(edge);
+                });
+            });
+        }
+
+        internal void ClearGraph()
+        {
+            graphViewChanged -= onGraphViewChanged;
+            DeleteElements(graphElements);
+            graphViewChanged += onGraphViewChanged;
         }
 
         private GraphViewChange onGraphViewChanged(GraphViewChange graphviewchange)
@@ -46,9 +87,27 @@ namespace BehaviorTree.editor
             {
                 graphviewchange.elementsToRemove.ForEach(elem =>
                 {
-                    BehaviorTreeNodeView nodeView = elem as BehaviorTreeNodeView;
-                    if(nodeView != null)
+                    if(elem is BehaviorTreeNodeView nodeView)
                         tree.DeleteNode(nodeView.node);
+
+
+                    if (elem is Edge edge)
+                    {
+                        BehaviorTreeNodeView parentView = edge.output.node as BehaviorTreeNodeView;
+                        BehaviorTreeNodeView childView = edge.input.node as BehaviorTreeNodeView;
+                        tree.RemoveChild(parentView.node, childView.node);
+                    }
+                        
+                });
+            }
+
+            if (graphviewchange.edgesToCreate != null)
+            {
+                graphviewchange.edgesToCreate.ForEach(edge =>
+                {
+                    BehaviorTreeNodeView parentView = edge.output.node as BehaviorTreeNodeView;
+                    BehaviorTreeNodeView childView = edge.input.node as BehaviorTreeNodeView;
+                    tree.AddChild(parentView.node, childView.node);
                 });
             }
             return graphviewchange;
@@ -80,6 +139,12 @@ namespace BehaviorTree.editor
             }
         }
 
+        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+        {
+            return ports.ToList().Where(endport => endport.direction != startPort.direction &&
+                                                   endport != startPort).ToList();
+        }
+
         internal void CreateNode(System.Type type)
         {
             Node node = tree.CreateNode(type);
@@ -89,6 +154,7 @@ namespace BehaviorTree.editor
         internal void CreateNodeView(Node node)
         {
             BehaviorTreeNodeView nodeView = new BehaviorTreeNodeView(node);
+            nodeView.OnNodeSelected = OnNodeSelected;
             AddElement(nodeView);
         }
     }

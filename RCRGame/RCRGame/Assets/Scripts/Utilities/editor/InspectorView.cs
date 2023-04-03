@@ -4,8 +4,8 @@ namespace Utilities.editor
 {
     public class InspectorView : VisualElement
     {
-        
-        public new class UxmlFactory : UxmlFactory<InspectorView, VisualElement.UxmlTraits>{}
+        //Base Inspector View Class
+        public new class UxmlFactory : UxmlFactory<InspectorView, InspectorView.UxmlTraits>{}
         
         public InspectorView()
         {

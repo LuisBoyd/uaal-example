@@ -1,4 +1,6 @@
-﻿namespace BehaviorTree.Nodes.CompositeNode
+﻿using UnityEngine;
+
+namespace BehaviorTree.Nodes.CompositeNode
 {
     /// <summary>
     /// Executes children from 0 to n (n being the length of the child list) and returns success if all children succeed or failure if otherwise.
@@ -11,8 +13,6 @@
         {
             current = 0;
         }
-     
-
         protected override void OnStop(){}
 
 
@@ -33,6 +33,18 @@
             }
             return current == children.Count ? State.Success : State.Running;
         }
-  
+
+        public override Node DeepCopy()
+        {
+            SequencerNode NewInstance = ApplyDefaults(ScriptableObject.CreateInstance<SequencerNode>());
+            children.ForEach(n =>
+            {
+                Node copiedChild = n.DeepCopy();
+                NewInstance.children.Add(copiedChild);
+            });
+            return NewInstance;
+        }
+
+        public override object Clone() => DeepCopy();
     }
 }

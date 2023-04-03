@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using BehaviorTree.Nodes;
@@ -11,6 +12,7 @@ namespace BehaviorTree.editor
 {
     public class BehaviorTreeNodeView : UnityEditor.Experimental.GraphView.Node
     {
+        public Action<BehaviorTreeNodeView> OnNodeSelected;
         public Node node;
         public Port input;
         public Port output;
@@ -34,11 +36,15 @@ namespace BehaviorTree.editor
                 case ActionNode actionNode:
                     break;
                 case CompositeNode compositeNode:
-                    output = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi,
+                    output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi,
                         typeof(bool));
                     break;
                 case DecoratorNode decoratorNode:
-                    output = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single,
+                    output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single,
+                        typeof(bool));
+                    break;
+                case RootNode rootNode:
+                    output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single,
                         typeof(bool));
                     break;
             }
@@ -79,6 +85,15 @@ namespace BehaviorTree.editor
             base.SetPosition(newPos);
             node.Position.x = newPos.xMin;
             node.Position.y = newPos.yMin;
+        }
+
+        public override void OnSelected()
+        {
+            base.OnSelected();
+            if (OnNodeSelected != null)
+            {
+                OnNodeSelected.Invoke(this);
+            }
         }
     }
 }

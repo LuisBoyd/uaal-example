@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Utilities;
 
 namespace BehaviorTree.Nodes
 {
-    public abstract class Node : ScriptableObject
+    public abstract class Node : ScriptableObject, ICopy<Node>
     {
         public enum State
         {
@@ -15,17 +17,17 @@ namespace BehaviorTree.Nodes
         /// <summary>
         /// The state the node is in currently
         /// </summary>
-        public State state = State.Running;
+        [HideInInspector]public State state = State.Running;
 
         /// <summary>
         /// Flag to indicate if the node has ran before.
         /// </summary>
-        public bool started = false;
+        [HideInInspector]public bool started = false;
 
-        public string guid;
+        [HideInInspector]public string guid;
 
-        public Vector2 Position;
-        
+        [HideInInspector]public Vector2 Position;
+
         public State Update()
         {
             if (!started)
@@ -47,5 +49,20 @@ namespace BehaviorTree.Nodes
         protected abstract void OnStart();
         protected abstract void OnStop();
         protected abstract State OnUpdate();
+
+        public abstract Node DeepCopy();
+        protected T ApplyDefaults<T>(T node) where T : Node
+        {
+            node.guid = Guid.NewGuid().ToString();
+            node.Position.x = this.Position.x;
+            node.Position.y = this.Position.y;
+            node.state = State.Running;
+            node.started = false;
+            node.name = String.Copy(this.name);
+            return node;
+        }
+
+        public virtual object Clone() => DeepCopy();
+
     }
 }

@@ -6,11 +6,11 @@
     <Utilities.editor.SplitView fixed-pane-initial-dimension="300">
         <ui:VisualElement name="Left-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-shrink: 1;">
             <ui:Label tabindex="-1" text="Inspector" display-tooltip-when-elided="true" name="Tittle-Box" class="Tittle-Box" />
-            <Utilities.editor.InspectorView name="InspectorView" class="InspectorView" />
+            <BehaviorTree.editor.BehaviorTreeInspectorView name="InspectorView" class="InspectorView" style="flex-grow: 1;" />
         </ui:VisualElement>
         <ui:VisualElement name="Right-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-shrink: 1;">
             <ui:Label tabindex="-1" text="Tree View" display-tooltip-when-elided="true" name="Tittle-Box" class="Tittle-Box" />
-            <BehaviorTree.editor.BehaviorTreeView focusable="true" style="flex-grow: 1;" />
+            <BehaviorTree.editor.BehaviorTreeView focusable="true" name="BehaviorTreeView" style="flex-grow: 1;" />
         </ui:VisualElement>
     </Utilities.editor.SplitView>
 </ui:UXML>
