@@ -18,6 +18,8 @@ namespace BehaviorTree.editor
         public Node node;
         public Port input;
         public Port output;
+        
+        
         public BehaviorTreeNodeView(Node node) : base("Assets/Scripts/BehaviorTree/editor/Uxml/NodeView.uxml") //UI file for NodeView Apperance.
         {
             this.node = node;

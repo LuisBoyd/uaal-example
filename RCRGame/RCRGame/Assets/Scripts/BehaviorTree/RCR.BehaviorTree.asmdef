@@ -2,7 +2,9 @@
     "name": "RCR.BehaviorTree",
     "rootNamespace": "",
     "references": [
-        "GUID:eac0a3ca4955ee947acb343455a372fa"
+        "GUID:eac0a3ca4955ee947acb343455a372fa",
+        "GUID:fc313dcd094acc946bcf724764f6e6a1",
+        "GUID:df756ef1b55138c4da6db4b7fed02a5e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

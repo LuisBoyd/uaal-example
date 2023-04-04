@@ -15,7 +15,9 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 04947c351b5ab614a96b08da6b281279
-  Position: {x: -227.90749, y: 496.8725}
+  Position: {x: -178.00002, y: 508}
+  blackboard: {fileID: 0}
+  agent: {fileID: 0}
   message: asfasf
 --- !u!114 &-4588405888348883911
 MonoBehaviour:
@@ -33,6 +35,8 @@ MonoBehaviour:
   started: 0
   guid: c50000f6da5b3eb498d35aa851457b11
   Position: {x: -35.725178, y: 280.84497}
+  blackboard: {fileID: 0}
+  agent: {fileID: 0}
   children:
   - {fileID: -5480409370314333376}
   - {fileID: 3305446643265927086}
@@ -51,7 +55,9 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 45fea45cf4d847b45a4b27cbef563537
-  Position: {x: 0, y: 0}
+  Position: {x: -59, y: 13}
+  blackboard: {fileID: 0}
+  agent: {fileID: 0}
   child: {fileID: -4588405888348883911}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -72,6 +78,19 @@ MonoBehaviour:
   - {fileID: -4588405888348883911}
   - {fileID: -5480409370314333376}
   - {fileID: 3305446643265927086}
+  blackboard: {fileID: 247547485635075505}
+--- !u!114 &247547485635075505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2871adc9dffd4016ac19ddeb152b22f9, type: 3}
+  m_Name: new_BTBlackBoard
+  m_EditorClassIdentifier: 
 --- !u!114 &3305446643265927086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,5 +106,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 84658c25a68d5ae4982116489e4dae7c
-  Position: {x: 58.25499, y: 499.8642}
+  Position: {x: 83.00001, y: 516}
+  blackboard: {fileID: 0}
+  agent: {fileID: 0}
   message: dsfgsd

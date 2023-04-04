@@ -5,13 +5,16 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Utilities.editor;
 using BehaviorTree;
+using BlackBoard.editor;
 using UnityEditor.Callbacks;
 
 public class BehaviorTreeEditor : BaseEditorWindow
 {
     private BehaviorTreeView treeView;
     private BehaviorTreeInspectorView InspectorView;
-    
+    private BlackboardInspectorView BlackboardInspectorView;
+    private BlackboardKeyView BlackboardKeyView;
+
     [MenuItem("Window/UI Toolkit/BehaviorTreeEditor")]
     public static void OpenWindow()
     {
@@ -64,6 +67,8 @@ public class BehaviorTreeEditor : BaseEditorWindow
         treeView = Root.Q<BehaviorTreeView>();
         treeView.OnNodeSelected = OnNodeSelectionChanged;
         InspectorView = Root.Q<BehaviorTreeInspectorView>();
+        BlackboardInspectorView = Root.Q<BlackboardInspectorView>();
+        BlackboardKeyView = Root.Q<BlackboardKeyView>();
     }
 
     protected override void Compose()
@@ -98,6 +103,8 @@ public class BehaviorTreeEditor : BaseEditorWindow
             if (tree)
             {
                 treeView.PopulateView(tree);
+                if(tree.blackboard)
+                    BlackboardKeyView.PoulateKeyView(tree.blackboard);
             }
         }
         else
@@ -105,6 +112,8 @@ public class BehaviorTreeEditor : BaseEditorWindow
             if (tree && AssetDatabase.CanOpenAssetInEditor(tree.GetInstanceID()))
             {
                 treeView.PopulateView(tree);
+                if(tree.blackboard)
+                    BlackboardKeyView.PoulateKeyView(tree.blackboard);
             }
         }
     }

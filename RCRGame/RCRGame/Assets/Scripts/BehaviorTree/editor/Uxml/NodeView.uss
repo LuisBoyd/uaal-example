@@ -100,8 +100,22 @@
     min-height: 20px;
 }
 
+#state-node {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
 .running #state-node {
-    background-color: rgb(253, 255, 0);
+    background-color: rgb(231, 255, 0);
 }
 
 .failure #state-node {
@@ -109,30 +123,9 @@
 }
 
 .success #state-node {
-    background-color: rgb(10, 255, 0);
+    background-color: rgb(56, 255, 0);
 }
 
 .aborted #state-node {
-    background-color: rgb(149, 0, 255);
-}
-
-#state-node {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgb(255, 0, 0);
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-}
-
-.staternode {
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(215, 0, 255);
 }

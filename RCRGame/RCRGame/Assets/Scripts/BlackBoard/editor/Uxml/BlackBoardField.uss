@@ -1,0 +1,30 @@
+#background-fieldname {
+    flex-grow: 1;
+    background-color: rgb(32, 32, 32);
+    min-height: 10%;
+    max-height: 20%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#TypeIcon {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    min-width: 20%;
+    max-width: 30%;
+}
+
+#FieldName {
+    flex-grow: 1;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    font-size: 36px;
+    -unity-font-style: normal;
+}
+
+:hover > #blackboard {
+    background-color: rgb(96, 96, 96);
+}

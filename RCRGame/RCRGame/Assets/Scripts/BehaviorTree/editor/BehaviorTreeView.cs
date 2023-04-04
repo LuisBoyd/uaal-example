@@ -7,6 +7,7 @@ using BehaviorTree.Nodes.CompositeNode;
 using BehaviorTree.Nodes.DecoratorNode;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Node = BehaviorTree.Nodes.Node;
 using Edge = UnityEditor.Experimental.GraphView.Edge;
@@ -60,6 +61,13 @@ namespace BehaviorTree.editor
             if (tree.rootNode == null)
             {
                 tree.rootNode = tree.CreateNode(typeof(RootNode)) as RootNode;
+                EditorUtility.SetDirty(tree);
+                AssetDatabase.SaveAssets();
+            }
+
+            if (tree.blackboard == null)
+            {
+                tree.blackboard = tree.CreateBlackBoard();
                 EditorUtility.SetDirty(tree);
                 AssetDatabase.SaveAssets();
             }

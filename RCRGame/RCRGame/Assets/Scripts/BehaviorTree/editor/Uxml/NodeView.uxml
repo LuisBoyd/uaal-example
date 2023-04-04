@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Scripts/BehaviorTree/editor/Uxml/NodeView.uss?fileID=7433441132597879392&amp;guid=2f2901ecf82f6ee45a42f1c0e21f9e27&amp;type=3#NodeView" />
-    <ui:VisualElement name="state-node" class="staternode" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;" />
+    <ui:VisualElement name="state-node" class="state-node" />
     <ui:VisualElement name="node-border">
         <ui:VisualElement name="contents">
             <ui:VisualElement name="top">

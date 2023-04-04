@@ -18,3 +18,26 @@ GridBackground {
     margin-top: 0;
     margin-bottom: 0;
 }
+
+#KeyViewButton {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    max-width: 10%;
+    max-height: 30%;
+    -unity-text-align: middle-center;
+}
+
+#KeyListView {
+    flex-grow: 1;
+    flex-direction: column;
+    padding-top: 10px;
+}
+
+#RootBtnView {
+    flex-grow: 1;
+    min-height: 10%;
+    max-height: 10%;
+    flex-direction: row;
+}

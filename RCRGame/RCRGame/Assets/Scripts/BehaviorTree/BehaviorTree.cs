@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using AI;
 using BehaviorTree.Nodes;
 using BehaviorTree.Nodes.CompositeNode;
 using BehaviorTree.Nodes.DecoratorNode;
+using BlackBoard;
 using UnityEditor;
 using UnityEngine;
 using Utilities;
@@ -15,6 +17,7 @@ namespace BehaviorTree
         public Node rootNode;
         public Node.State treeState = Node.State.Running;
         public List<Node> nodes = new List<Node>();
+        public Blackboard blackboard;
 
         public Node.State Update()
         {
@@ -35,6 +38,20 @@ namespace BehaviorTree
             Undo.RegisterCreatedObjectUndo(node, "Behavior Tree CreateNode()");
             AssetDatabase.SaveAssets();
             return node;
+        }
+
+        public BlackBoard.Blackboard CreateBlackBoard()
+        {
+            Blackboard board = ScriptableObject.CreateInstance<Blackboard>();
+            board.name = $"{this.name}BlackBoard";
+            if (!Application.isPlaying)
+            {
+                AssetDatabase.AddObjectToAsset(board,this);
+            }
+            Undo.RegisterCreatedObjectUndo(board, "Behavior Tree CreateBlackBoard()");
+            AssetDatabase.SaveAssets();
+            return board;
+            
         }
 
         public void DeleteNode(Node node)
@@ -113,6 +130,24 @@ namespace BehaviorTree
             return children;
         }
 
+        /// <summary>
+        /// Run a Action on each node as it traverses down the tree.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="vistor"></param>
+        public void Traverse(Node node, Action<Node> vistor)
+        {
+            if (node)
+            {
+                vistor.Invoke(node);
+                var children = GetChildren(node);
+                children.ForEach((n) =>
+                {
+                    Traverse(n,vistor);
+                });
+            }
+        }
+
         public BehaviorTree DeepCopy()
         {
             BehaviorTree newTree = ScriptableObject.CreateInstance<BehaviorTree>();
@@ -145,6 +180,16 @@ namespace BehaviorTree
                 return false;
             return true;
         }
+
+        public void Bind(AiAgent agent)
+        {
+            Traverse(rootNode, node =>
+            {
+                node.agent = agent;
+                node.blackboard = blackboard;
+            });
+        }
+        
 
         public object Clone() => DeepCopy();
     }

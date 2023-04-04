@@ -5,8 +5,24 @@
     </uie:Toolbar>
     <Utilities.editor.SplitView fixed-pane-initial-dimension="300">
         <ui:VisualElement name="Left-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-shrink: 1;">
-            <ui:Label tabindex="-1" text="Inspector" display-tooltip-when-elided="true" name="Tittle-Box" class="Tittle-Box" />
-            <BehaviorTree.editor.BehaviorTreeInspectorView name="InspectorView" class="InspectorView" style="flex-grow: 1;" />
+            <Utilities.editor.SplitView orientation="Vertical" fixed-pane-initial-dimension="200">
+                <ui:VisualElement name="Up-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:Label tabindex="-1" text="Inspector" display-tooltip-when-elided="true" name="Tittle-Box" class="Tittle-Box" />
+                    <BehaviorTree.editor.BehaviorTreeInspectorView name="InspectorView" class="InspectorView" style="flex-grow: 1;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Down-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <Utilities.editor.SplitView>
+                        <ui:VisualElement name="Left-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                            <ui:Label tabindex="-1" text="Key View" display-tooltip-when-elided="true" name="Tittle-Box" class="Tittle-Box" />
+                            <BlackBoard.editor.BlackboardKeyView name="BlackboardKeyView" class="InspectorView" style="flex-grow: 1; flex-direction: column;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Right-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                            <ui:Label tabindex="-1" text="BlackBoard Inspector" display-tooltip-when-elided="true" name="Tittle-Box" class="Tittle-Box" />
+                            <BlackBoard.editor.BlackboardInspectorView name="BlackboardInspectorView" class="InspectorView" style="flex-grow: 1;" />
+                        </ui:VisualElement>
+                    </Utilities.editor.SplitView>
+                </ui:VisualElement>
+            </Utilities.editor.SplitView>
         </ui:VisualElement>
         <ui:VisualElement name="Right-Pane" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-shrink: 1;">
             <ui:Label tabindex="-1" text="Tree View" display-tooltip-when-elided="true" name="Tittle-Box" class="Tittle-Box" />

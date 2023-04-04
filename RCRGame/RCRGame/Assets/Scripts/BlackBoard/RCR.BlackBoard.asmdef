@@ -1,0 +1,17 @@
+{
+    "name": "RC",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0c448b5810613d1418cdde6e519dff5b",
+        "GUID:eac0a3ca4955ee947acb343455a372fa"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

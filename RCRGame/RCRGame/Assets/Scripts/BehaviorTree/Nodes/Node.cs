@@ -1,4 +1,6 @@
 ﻿using System;
+using AI;
+using BlackBoard;
 using UnityEngine;
 using Utilities;
 
@@ -27,6 +29,10 @@ namespace BehaviorTree.Nodes
         [HideInInspector]public string guid;
 
         [HideInInspector]public Vector2 Position;
+
+        [HideInInspector] public Blackboard blackboard;
+
+        [HideInInspector] public AiAgent agent;
 
         public State Update()
         {

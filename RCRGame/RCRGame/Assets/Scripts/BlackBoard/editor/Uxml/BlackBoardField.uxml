@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Scripts/BlackBoard/editor/Uxml/BlackBoardField.uss?fileID=7433441132597879392&amp;guid=8cf0050b81fad474d8b9d52cd981508f&amp;type=3#BlackBoardField" />
+    <ui:VisualElement name="background" class="background" style="flex-direction: row;">
+        <ui:VisualElement name="TypeIcon" picking-mode="Ignore" class="TypeIcon" style="flex-direction: row;" />
+        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="FieldName" picking-mode="Ignore" class="FieldName" />
+    </ui:VisualElement>
+</ui:UXML>

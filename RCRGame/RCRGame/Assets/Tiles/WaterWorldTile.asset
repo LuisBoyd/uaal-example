@@ -35,4 +35,4 @@ MonoBehaviour:
   m_Flags: 1
   m_ColliderType: 1
   lockFlag: 1
-  effectFlags: 1
+  pathAffector: 1

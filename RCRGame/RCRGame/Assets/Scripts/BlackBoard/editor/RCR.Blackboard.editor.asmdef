@@ -1,0 +1,18 @@
+{
+    "name": "RCRBlackboard.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0c448b5810613d1418cdde6e519dff5b",
+        "GUID:df756ef1b55138c4da6db4b7fed02a5e",
+        "GUID:201fa5db260d8dd4dab9f588214a2bd4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
