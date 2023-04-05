@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace BehaviorTree
 {
-    [RequireComponent(typeof(AiAgent))]
     public class BehaviourTreeRunner : MonoBehaviour
     {
         public BehaviorTree tree;

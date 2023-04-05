@@ -1,7 +1,10 @@
 {
     "name": "RCR.AI",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:0c448b5810613d1418cdde6e519dff5b",
+        "GUID:e713606661ddc594ca15bfd40969c23d"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

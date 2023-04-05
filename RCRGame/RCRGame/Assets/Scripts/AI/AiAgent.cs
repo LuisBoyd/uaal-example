@@ -2,7 +2,8 @@
 
 namespace AI
 {
-    public class AiAgent : MonoBehaviour
+    public abstract class AiAgent : MonoBehaviour
     {
+        
     }
 }
