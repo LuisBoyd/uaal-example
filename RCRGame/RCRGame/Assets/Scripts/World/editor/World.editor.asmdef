@@ -1,0 +1,17 @@
+{
+    "name": "World.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f10d1e5fc8f0b32488c92cd7dd1e04fb",
+        "GUID:cdef8389859a67543be47c154e6ca56b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

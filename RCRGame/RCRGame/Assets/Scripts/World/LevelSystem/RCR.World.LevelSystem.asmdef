@@ -1,0 +1,16 @@
+{
+    "name": "RCR.World.LevelSystem",
+    "rootNamespace": "",
+    "references": [
+        "RCR.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
