@@ -1,0 +1,12 @@
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\bin\Debug\net6.0\SharedLibrary.deps.json
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\bin\Debug\net6.0\SharedLibrary.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\bin\Debug\net6.0\SharedLibrary.pdb
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\obj\Debug\net6.0\SharedLibrary.csproj.AssemblyReference.cache
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\obj\Debug\net6.0\SharedLibrary.GeneratedMSBuildEditorConfig.editorconfig
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\obj\Debug\net6.0\SharedLibrary.AssemblyInfoInputs.cache
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\obj\Debug\net6.0\SharedLibrary.AssemblyInfo.cs
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\obj\Debug\net6.0\SharedLibrary.csproj.CoreCompileInputs.cache
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\obj\Debug\net6.0\SharedLibrary.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\obj\Debug\net6.0\refint\SharedLibrary.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\obj\Debug\net6.0\SharedLibrary.pdb
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\obj\Debug\net6.0\ref\SharedLibrary.dll
