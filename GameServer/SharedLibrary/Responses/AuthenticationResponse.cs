@@ -1,6 +1,8 @@
-﻿namespace SharedLibrary.Responses;
+﻿using SharedLibrary.models;
+
+namespace SharedLibrary.Responses;
 
 public class AuthenticationResponse
 {
-    public string Token { get; set; }
+    private JwToken Token { get; set; }
 }

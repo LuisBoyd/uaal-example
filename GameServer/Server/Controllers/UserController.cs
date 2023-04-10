@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.Services;
 using SharedLibrary;
+using SharedLibrary.models;
 
 namespace Server.Controllers;
 
@@ -18,7 +19,7 @@ public class UserController : ControllerBase
         _userService = userService;
         _context = context;
 
-        var user = new User()
+        var user = new UserTestData()
         {
             Id = 69,
             PasswrodHash = "CoolPasswordHash",
@@ -30,9 +31,9 @@ public class UserController : ControllerBase
     }
     
     [HttpGet]
-    public User Get([FromQuery] int id)
+    public UserTestData Get([FromQuery] int id)
     {
-        var user = new User(){Id = id,Level = 0};
+        var user = new UserTestData(){Id = id,Level = 0};
 
         _userService.Dosomething();
         
@@ -40,9 +41,9 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public User Post(User user)
+    public UserTestData Post(UserTestData userTestData)
     {
         Console.WriteLine("User has been added to the DB");
-        return user;
+        return userTestData;
     }
 }

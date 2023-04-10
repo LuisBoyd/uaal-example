@@ -52,3 +52,8 @@ F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\S
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll

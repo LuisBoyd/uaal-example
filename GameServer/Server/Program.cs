@@ -1,14 +1,17 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using Server;
 using Server.Models;
 using Server.Services;
+using SharedLibrary.models;
 
 //Start of Program.cs
 
+#region Configure Service
 var builder = WebApplication.CreateBuilder(args); //Dependency Injection Container Object
 
 /*
@@ -19,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args); //Dependency Injection Contain
 var settings = new Settings();
 builder.Configuration.Bind("Settings",settings);
 builder.Services.AddSingleton(settings);
+
 
 // Add services to the container.
 
@@ -39,6 +43,24 @@ var connectionString = builder.Configuration.GetConnectionString("Db");
 builder.Services.AddDbContext<GameDbContext>(o =>
     o.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+/*
+ * add Identity of type User and give it roles the user is what we use to interact with the api
+ * the user itself can have many different role's and those roles can have claims allowing for further
+ * customisable authorization level's
+ */
+// builder.Services.AddIdentity<UserTestData, IdentityRole>()
+//     .AddEntityFrameworkStores<GameDbContext>();
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    //options.Password.RequireDigit = true; //Password Requires a digit in it
+   //options.Password.RequireLowercase = true; //Password requires a lower Case character
+    //options.Password.RequireNonAlphanumeric = true; //password requires a non aplhanumeric (?,#,\)
+    //options.Password.RequireUppercase = true; //password requires a upperCase character
+    //options.Password.RequiredLength = 6; //Minimum length for a password must be 6
+    //options.Password.RequiredUniqueChars = 1; //there must at least be 1 unique character
+}).AddEntityFrameworkStores<GameDbContext>();
+
+builder.Services.AddControllers();
 builder.Services.AddControllers().AddNewtonsoftJson(o =>
 {
   
@@ -48,6 +70,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
 // builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserService, UserService>(); //User service Injection (App User's)
+builder.Services.AddScoped<IMapService, MapService>(); //Map Service Injection (User Maps)
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>(); //Custom Authentication Injection
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
@@ -55,12 +78,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     o.TokenValidationParameters = new TokenValidationParameters()
     {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.BearerKey)),
+        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidateAudience = false,
-        ValidateIssuer = false
+        ValidateIssuer = false,
     };
 }); //Authentication Injection
 
+// builder.Services.AddIdentity<User,IdentityUser>(o =>
+//     {
+//         
+//     })
+//     .AddRoles<IdentityRole>();
+
+#endregion
+
+#region Configure HTTP pipeline
 var app = builder.Build(); //Build the Dependency injection container.
 //app.Urls.Add("http://192.168.56.101:5024"); //Ubuntu ip development test
 
@@ -71,7 +104,6 @@ var app = builder.Build(); //Build the Dependency injection container.
  * after the request has been passed through all the middleware it returns the request.
  */
 
-#region Pipeline
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
