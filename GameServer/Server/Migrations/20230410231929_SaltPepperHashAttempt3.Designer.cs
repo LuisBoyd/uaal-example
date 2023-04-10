@@ -11,8 +11,8 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    [Migration("20230410182834_AuthenticationRequest")]
-    partial class AuthenticationRequest
+    [Migration("20230410231929_SaltPepperHashAttempt3")]
+    partial class SaltPepperHashAttempt3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -206,12 +206,16 @@ namespace Server.Migrations
                     b.Property<int>("Premium_Currency")
                         .HasColumnType("int");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Role")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Salt")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("SecurityStamp")
@@ -238,9 +242,9 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0415e51e-03d3-4850-bca1-cd2561d1a10e",
+                            Id = "57ef5e58-3bca-4cee-b37c-514cc73f8adb",
                             AccessFailedCount = 2,
-                            ConcurrencyStamp = "4fe1e0cc-d7e1-4dbd-9f47-a35c6e1808bf",
+                            ConcurrencyStamp = "c46f7d64-9c4f-4207-bb81-da1260f814b0",
                             Current_Exp = 0,
                             EmailConfirmed = false,
                             Freemium_Currency = 0,
@@ -249,9 +253,10 @@ namespace Server.Migrations
                             Max_Allowed_Marina_Count = 0,
                             PhoneNumberConfirmed = false,
                             Premium_Currency = 0,
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = "",
                             Salt = "",
-                            SecurityStamp = "107d0191-f4bb-4a85-bdb4-09154f5d26d9",
+                            SecurityStamp = "96171e97-cee5-4fae-9765-d033f5987cf6",
                             TwoFactorEnabled = false
                         });
                 });

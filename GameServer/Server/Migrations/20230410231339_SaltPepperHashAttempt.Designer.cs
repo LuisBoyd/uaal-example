@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server;
 
@@ -10,9 +11,10 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    partial class GameDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230410231339_SaltPepperHashAttempt")]
+    partial class SaltPepperHashAttempt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,9 +242,9 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "57ef5e58-3bca-4cee-b37c-514cc73f8adb",
+                            Id = "98e2be65-fc22-4d64-bb17-2add0b1baa33",
                             AccessFailedCount = 2,
-                            ConcurrencyStamp = "c46f7d64-9c4f-4207-bb81-da1260f814b0",
+                            ConcurrencyStamp = "f9bc2584-d281-445d-93a3-6fbca4cf3393",
                             Current_Exp = 0,
                             EmailConfirmed = false,
                             Freemium_Currency = 0,
@@ -254,7 +256,7 @@ namespace Server.Migrations
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = "",
                             Salt = "",
-                            SecurityStamp = "96171e97-cee5-4fae-9765-d033f5987cf6",
+                            SecurityStamp = "b23b213d-7da8-4212-b2cf-53dd19a29760",
                             TwoFactorEnabled = false
                         });
                 });

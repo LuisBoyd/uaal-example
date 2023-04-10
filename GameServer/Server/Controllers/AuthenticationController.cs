@@ -1,10 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Server.Models;
+using Server.Requests;
 using Server.Services;
 using SharedLibrary.models;
 using SharedLibrary.Requests;
@@ -16,68 +19,194 @@ namespace Server.Controllers;
 [Route("[controller]")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly IAuthenticationService _authService;
+    private readonly Settings _settings;
     private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AuthenticationController(IAuthenticationService authService, UserManager<User> userManager)
+    public AuthenticationController(Settings settings, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
     {
-        _authService = authService;
+        _settings = settings;
         _userManager = userManager;
+        _roleManager = roleManager;
     }
     
-    [HttpPost("register")]
-    public async Task<ActionResult<User>> Register(AuthenticationRequest request)
+    [HttpPost()]
+    [Route("register")]
+    public async Task<IActionResult> Register(UserCreationRequest request)
     {
-        var userResult = await _authService.Register(request.Username, request.Password);
-        if (!userResult.Success) return BadRequest(userResult.Message);
-        var user = userResult.User;
-        //Create the user in the userManager
-        var UserDBCreationResult = await _userManager.CreateAsync(
-            new User()
-            {
-                UserName = user.UserName, PasswordHash = user.PasswordHash, Role = UserRoles.BaseUser,
-                Salt = user.Salt
-            } //Any additions to BASE USER REGISTERING GOES HERE.
-        );
+        var userExists = await _userManager.FindByNameAsync(request.Username);
+        if (userExists != null)
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new Response.Response() {Status = "Error", Message = "User already exists"});
 
-        if (!UserDBCreationResult.Succeeded) return BadRequest(UserDBCreationResult.Errors);
+        Models.User user = new()
+        {
+            Email = request.Email,
+            SecurityStamp = Guid.NewGuid().ToString(),
+            UserName = request.Username,
+            PasswordHash = request.Password
+        };
+        user.ProvideSaltAndHash(_settings.PepperKey);
+        var result = await _userManager.CreateAsync(user, user.PasswordHash);
+        if (!result.Succeeded)
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new Response.Response()
+                    {Status = "Error", Message = "User creation failed! Please check user details and try again."});
+
+        return Ok(new Response.Response() {Status = "Success", Message = "User created successfully"});
+    }
+
+    [HttpPost]
+    [Route("login")]
+    public async Task<IActionResult> Login(AuthenticationRequest request)
+    {
+        var user = await _userManager.FindByNameAsync(request.Username);
+        if (user == null) return Unauthorized();
+#pragma warning disable CS8604
+        var passwordHash = AuthenticationHelpers.ComputeHash(request.Password, user.Salt, _settings.PepperKey); //The salt should be set otherwise there would be no user
+#pragma warning restore CS8604
+        if (!await _userManager.CheckPasswordAsync(user, passwordHash)) return Unauthorized();
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        var authClaims = new List<Claim>()
+        {
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
         
-        var result =  await Login(request); //log in straight away
-        return result;
+        foreach (var userRole in userRoles)
+        {
+            authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+        }
+
+        var token = CreateToken(authClaims);
+        var refreshToken = GenerateRefreshToken();
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = DateTime.Now.AddDays(_settings.RefreshTokenExpiryDays);
+
+        await _userManager.UpdateAsync(user);
+
+        return Ok(new
+        {
+            Token = new JwtSecurityTokenHandler().WriteToken(token),
+            RefreshToken = refreshToken,
+            Expiration = token.ValidTo
+        });
     }
 
-    [HttpPost("login")]
-    public async Task<ActionResult> Login(AuthenticationRequest request)
+    [HttpPost]
+    [Route("refresh-token")]
+    public async Task<IActionResult> RefreshToken(JwToken token)
     {
-        var LoginResult = await _authService.Login(request.Username, request.Password);
-        if (!LoginResult.Success) return BadRequest(LoginResult.Message);
+        if (token is null)
+            return BadRequest("Invalid client request");
 
-        return Ok(LoginResult.JwTtoken);
-    }
-
-    [HttpPost("refresh-token")]
-    public async Task<ActionResult> RefreshToken(JwToken token)
-    {
-        if (token == null)
-            return BadRequest("Access token is missing");
-
-        string? accessToken = token.Token;
+        string? accessToken = token.AccessToken;
         string? refreshToken = token.RefreshToken;
 
-        var principal = _authService.GetPrincipalFromExpiredToken(accessToken);
+        var principal = GetPrincipalFromExpiredToken(accessToken);
         if (principal == null)
         {
             return BadRequest("Invalid access token or refreshToken");
         }
 
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         string username = principal.Identity.Name;
-
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+        
         var user = await _userManager.FindByNameAsync(username);
 
         if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             return BadRequest("Invalid access or refresh token"); //Only expired token can be used otherwise returns bad request.
-        
-        var newAcessToken = _authService.GenerateJwtToken(principal.)
+
+        var newAccessToken = CreateToken(principal.Claims.ToList());
+        var newRefreshToken = GenerateRefreshToken();
+
+        user.RefreshToken = newRefreshToken;
+        await _userManager.UpdateAsync(user);
+
+        return new ObjectResult(new
+        {
+            accessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
+            refreshToken = newRefreshToken
+        });
+    }
+
+    [Authorize]
+    [HttpPost]
+    [Route("revoke")]
+    public async Task<IActionResult> Revoke(string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null) return BadRequest("Invalid User name");
+
+        user.RefreshToken = null;
+        await _userManager.UpdateAsync(user);
+
+        return NoContent();
+    }
+
+    [Authorize]
+    [HttpPost]
+    [Route("revokeall")]
+    public async Task<IActionResult> RevokeAll()
+    {
+        var users = _userManager.Users.ToList();
+        foreach (var user in users)
+        {
+            user.RefreshToken = null;
+            await _userManager.UpdateAsync(user);
+        }
+
+        return NoContent();
+    }
+    
+    private JwtSecurityToken CreateToken(List<Claim> authClaims)
+    {
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.BearerKey));
+
+        var token = new JwtSecurityToken(
+            issuer: _settings.ValidIssuer,
+            audience: _settings.ValidAudience,
+            expires: DateTime.Now.AddHours(_settings.AccessTokenExpiryHours),
+            claims: authClaims,
+            signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256Signature)
+        );
+        return token;
+    }
+    
+    private string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[64];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
+    
+    private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters()
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_settings.BearerKey)),
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = false,
+            ValidateIssuer = false,
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+        if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(
+                SecurityAlgorithms.HmacSha256Signature,
+                StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenExpiredException("Invalid Token");
+        }
+
+        return principal;
     }
     
 }

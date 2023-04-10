@@ -1,9 +1,14 @@
-﻿using SharedLibrary.models;
+﻿using System.ComponentModel.DataAnnotations;
+using SharedLibrary.models;
 
 namespace Server.Requests;
 
-public class LoginRequest : BaseRequest
+public class LoginRequest
 {
-    public JwToken JwTtoken { get; set; }
+    [Required(ErrorMessage = "Username is Required")]
+    public string? Username { get; set; }
+    
+    [Required(ErrorMessage = "Password is Required")]
+    public string? Password { get; set; }
 
 }

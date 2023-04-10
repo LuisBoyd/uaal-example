@@ -47,6 +47,9 @@ namespace Server.Migrations
                     Max_Allowed_Marina_Count = table.Column<int>(type: "int", nullable: false),
                     Freemium_Currency = table.Column<int>(type: "int", nullable: false),
                     Premium_Currency = table.Column<int>(type: "int", nullable: false),
+                    RefreshToken = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -342,8 +345,8 @@ namespace Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Current_Exp", "Email", "EmailConfirmed", "Freemium_Currency", "Level", "LockoutEnabled", "LockoutEnd", "Max_Allowed_Marina_Count", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Premium_Currency", "Role", "Salt", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "21f90e07-57eb-400d-a4ff-eadfc40d349d", 2, "3027633a-1c88-4846-840f-3e2b7961e18d", 0, null, false, 0, 0, false, null, 0, null, null, null, null, false, 0, "", "", "b53a15bc-d6a8-4370-bdb6-a7e0c6b565fe", false, null });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Current_Exp", "Email", "EmailConfirmed", "Freemium_Currency", "Level", "LockoutEnabled", "LockoutEnd", "Max_Allowed_Marina_Count", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Premium_Currency", "RefreshToken", "RefreshTokenExpiryTime", "Role", "Salt", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "9a947593-608f-4758-b00f-b28aed5be4d9", 2, "77311881-2eab-4bfd-beda-891e9dab0e0b", 0, null, false, 0, 0, false, null, 0, null, null, null, null, false, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "", "996295c1-0554-4f59-b2cf-27b34bfd84b8", false, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

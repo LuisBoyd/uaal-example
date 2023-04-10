@@ -5,9 +5,9 @@ namespace Server.Models;
 
 public class User : IdentityUser
 {
-    public string Salt { get; set; }
+    public string? Salt { get; set; }
     public int Level { get; set; } //Foreign Key
-    public string Role { get; set; }
+    public string? Role { get; set; }
     public int Current_Exp { get; set; }
     
     public int Max_Allowed_Marina_Count { get; set; }

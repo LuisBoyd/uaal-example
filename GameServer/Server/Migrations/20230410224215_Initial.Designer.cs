@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server;
 
@@ -10,9 +11,10 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    partial class GameDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230410224215_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,9 +213,11 @@ namespace Server.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Role")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Salt")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("SecurityStamp")
@@ -240,9 +244,9 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "57ef5e58-3bca-4cee-b37c-514cc73f8adb",
+                            Id = "9a947593-608f-4758-b00f-b28aed5be4d9",
                             AccessFailedCount = 2,
-                            ConcurrencyStamp = "c46f7d64-9c4f-4207-bb81-da1260f814b0",
+                            ConcurrencyStamp = "77311881-2eab-4bfd-beda-891e9dab0e0b",
                             Current_Exp = 0,
                             EmailConfirmed = false,
                             Freemium_Currency = 0,
@@ -254,7 +258,7 @@ namespace Server.Migrations
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = "",
                             Salt = "",
-                            SecurityStamp = "96171e97-cee5-4fae-9765-d033f5987cf6",
+                            SecurityStamp = "996295c1-0554-4f59-b2cf-27b34bfd84b8",
                             TwoFactorEnabled = false
                         });
                 });

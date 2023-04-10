@@ -11,8 +11,8 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    [Migration("20230410174150_Initial")]
-    partial class Initial
+    [Migration("20230410231617_SaltPepperHashAttempt2")]
+    partial class SaltPepperHashAttempt2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -206,12 +206,16 @@ namespace Server.Migrations
                     b.Property<int>("Premium_Currency")
                         .HasColumnType("int");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Role")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Salt")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("SecurityStamp")
@@ -238,9 +242,9 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "21f90e07-57eb-400d-a4ff-eadfc40d349d",
+                            Id = "09ebccde-c3fb-4fe9-bf86-bb1686e6e7c0",
                             AccessFailedCount = 2,
-                            ConcurrencyStamp = "3027633a-1c88-4846-840f-3e2b7961e18d",
+                            ConcurrencyStamp = "f6ae87a6-32b5-4f7c-a9f1-4c0b0a8a2653",
                             Current_Exp = 0,
                             EmailConfirmed = false,
                             Freemium_Currency = 0,
@@ -249,9 +253,10 @@ namespace Server.Migrations
                             Max_Allowed_Marina_Count = 0,
                             PhoneNumberConfirmed = false,
                             Premium_Currency = 0,
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = "",
                             Salt = "",
-                            SecurityStamp = "b53a15bc-d6a8-4370-bdb6-a7e0c6b565fe",
+                            SecurityStamp = "2850bc33-7f08-42c7-9fb8-1424ffecb4b7",
                             TwoFactorEnabled = false
                         });
                 });

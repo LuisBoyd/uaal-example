@@ -20,7 +20,8 @@ var builder = WebApplication.CreateBuilder(args); //Dependency Injection Contain
  *  the secret key's we need at runtime or any other setting's
  */
 var settings = new Settings();
-builder.Configuration.Bind("Settings",settings);
+builder.Configuration.Bind("JWT",settings);
+settings.PepperKey = builder.Configuration["PepperKey"];
 builder.Services.AddSingleton(settings);
 
 
@@ -58,38 +59,48 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     //options.Password.RequireUppercase = true; //password requires a upperCase character
     //options.Password.RequiredLength = 6; //Minimum length for a password must be 6
     //options.Password.RequiredUniqueChars = 1; //there must at least be 1 unique character
-}).AddEntityFrameworkStores<GameDbContext>();
+}).AddEntityFrameworkStores<GameDbContext>().AddDefaultTokenProviders();
 
-builder.Services.AddControllers();
-builder.Services.AddControllers().AddNewtonsoftJson(o =>
-{
-  
-}); //Adding A Json Serialization and Deserialization library
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 // builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserService, UserService>(); //User service Injection (App User's)
 builder.Services.AddScoped<IMapService, MapService>(); //Map Service Injection (User Maps)
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>(); //Custom Authentication Injection
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
+builder.Services.AddAuthentication(o =>
 {
+    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+    o.SaveToken = true;
+    o.RequireHttpsMetadata = false; //Should be enabled in production enviornmnent.
     o.TokenValidationParameters = new TokenValidationParameters()
     {
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.BearerKey)),
+        ValidateIssuer = true,
+        ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidateAudience = false,
-        ValidateIssuer = false,
+        ClockSkew = TimeSpan.Zero, //Only for development when wanting access token to without any padding room of 5 mins by default
+        
+        ValidAudience = settings.ValidAudience,
+        ValidIssuer = settings.ValidIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.BearerKey))
     };
 }); //Authentication Injection
 
-// builder.Services.AddIdentity<User,IdentityUser>(o =>
-//     {
-//         
-//     })
-//     .AddRoles<IdentityRole>();
+
+builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(o =>
+{
+  
+}); //Adding A Json Serialization and Deserialization library
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 #endregion
 
@@ -107,8 +118,8 @@ var app = builder.Build(); //Build the Dependency injection container.
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // app.UseSwagger();
-    // app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection(); //redirects HTTP to Https
