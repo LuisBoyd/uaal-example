@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Core3.SciptableObjects;
 using UnityEngine;
 using UnityEngine.Networking;
 using Sirenix.Serialization;
@@ -16,6 +17,12 @@ namespace Core.Services
     
     public class HttpClient : IHttpClient
     {
+        private readonly InternalSetting _internalSetting;
+        public HttpClient(InternalSetting setting)
+        {
+            _internalSetting = setting;
+        }
+        
         public  async Task<T> Get<T>(string endPoint)
         {
             var getRequest = CreateRequest(endPoint);

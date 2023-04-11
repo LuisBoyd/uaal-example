@@ -1,4 +1,6 @@
-﻿using Core.Services;
+﻿using System.Threading.Tasks;
+using Core.Services;
+using Core3.SciptableObjects;
 using UI;
 using UnityEngine;
 using VContainer.Unity;
@@ -7,21 +9,28 @@ namespace DefaultNamespace.Server
 {
     public interface ILoginService
     {
-        public void Login(string username, string password);
+        public Task<Response> Login(string username, string password);
     }
     
     public class LoginService : ILoginService
     {
         private readonly IHttpClient _client;
+        private readonly InternalSetting _internalSetting;
 
-        public LoginService(IHttpClient client)
+        public LoginService(IHttpClient client, InternalSetting internalSetting)
         {
             _client = client;
+            _internalSetting = internalSetting;
         }
         
-        public void Login(string username, string password)
+        public async Task<Response> Login(string username, string password)
         {
-            Debug.Log(username);
+            return await _client.Post<Response>(_internalSetting.RootEndPoint + "Authentication/login",
+                new AuthenticationRequest()
+                {
+                    Password = password,
+                    Username = username
+                });
         }
         
     }

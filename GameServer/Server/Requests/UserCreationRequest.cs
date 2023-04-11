@@ -12,5 +12,11 @@ public class UserCreationRequest
     
     [Required(ErrorMessage = "Password is required")]
     public string? Password { get; set; }
+    
+    public static explicit operator UserCreationRequest(AuthenticationRequest lr) => new UserCreationRequest()
+    {
+        Username = lr.Username,
+        Password = lr.Password
+    };
 
 }

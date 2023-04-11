@@ -11,4 +11,10 @@ public class LoginRequest
     [Required(ErrorMessage = "Password is Required")]
     public string? Password { get; set; }
 
+    public static explicit operator LoginRequest(AuthenticationRequest lr) => new LoginRequest()
+    {
+        Username = lr.Username,
+        Password = lr.Password
+    };
+
 }

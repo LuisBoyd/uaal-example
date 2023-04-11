@@ -1,5 +1,6 @@
 ﻿using Core.Services;
 using UI;
+using UnityEngine;
 using VContainer.Unity;
 
 namespace DefaultNamespace.Server
@@ -17,9 +18,14 @@ namespace DefaultNamespace.Server
 
         public void Start()
         {
-            _loginForm._submitButton.onClick.AddListener(() =>
+            _loginForm._submitButton.onClick.AddListener(() => //Whatever 
             {
-                _loginService.Login(_loginForm.Username, _loginForm.Password);
+               var loginTask = _loginService.Login(_loginForm.Username, _loginForm.Password);
+               loginTask.Wait();
+               if (loginTask.IsCompleted)
+               {
+                   Debug.Log("Login Task Completed");
+               }
             });
         }
     }
