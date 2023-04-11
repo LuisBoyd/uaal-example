@@ -20,7 +20,10 @@ var builder = WebApplication.CreateBuilder(args); //Dependency Injection Contain
  *  the secret key's we need at runtime or any other setting's
  */
 var settings = new Settings();
+var corsPolicy = new CorsPolicy();
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Configuration.Bind("JWT",settings);
+builder.Configuration.Bind("Cors", corsPolicy);
 settings.PepperKey = builder.Configuration["PepperKey"];
 builder.Services.AddSingleton(settings);
 
@@ -93,6 +96,17 @@ builder.Services.AddAuthentication(o =>
 }); //Authentication Injection
 
 
+builder.Services.AddCors(o =>
+{
+
+    o.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins(corsPolicy.AllowedOrigins);
+        });
+    
+});//Adding Cors for Cross-origin-resource-sharing
+
 builder.Services.AddControllers();
 builder.Services.AddControllers().AddNewtonsoftJson(o =>
 {
@@ -123,6 +137,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection(); //redirects HTTP to Https
+app.UseRouting(); //Use routing
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication(); //Authentication before Authorization
 app.UseAuthorization();
