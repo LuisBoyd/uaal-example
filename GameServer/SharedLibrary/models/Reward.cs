@@ -1,5 +1,5 @@
 ﻿namespace SharedLibrary.models;
-
+[Serializable]
 public class Reward
 {
     public int Id { get; set; }

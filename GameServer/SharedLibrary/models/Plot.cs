@@ -1,7 +1,7 @@
 ﻿
 
 namespace SharedLibrary.models;
-
+[Serializable]
 public class Plot
 {
     public int Id { get; set; }
