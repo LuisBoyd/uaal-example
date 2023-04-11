@@ -1,0 +1,10 @@
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\bin\Debug\netstandard2.1\SharedServerLibrary1.deps.json
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\bin\Debug\netstandard2.1\SharedServerLibrary1.dll
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\bin\Debug\netstandard2.1\SharedServerLibrary1.pdb
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\obj\Debug\netstandard2.1\SharedServerLibrary1.csproj.AssemblyReference.cache
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\obj\Debug\netstandard2.1\SharedServerLibrary1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\obj\Debug\netstandard2.1\SharedServerLibrary1.AssemblyInfoInputs.cache
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\obj\Debug\netstandard2.1\SharedServerLibrary1.AssemblyInfo.cs
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\obj\Debug\netstandard2.1\SharedServerLibrary1.csproj.CoreCompileInputs.cache
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\obj\Debug\netstandard2.1\SharedServerLibrary1.dll
+C:\Users\Luis\Documents\uaal-example\GameServer\SharedServerLibrary1\obj\Debug\netstandard2.1\SharedServerLibrary1.pdb

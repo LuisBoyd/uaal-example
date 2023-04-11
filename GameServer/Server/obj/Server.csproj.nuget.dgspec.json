@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\Server\\Server.csproj": {}
+    "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\Server\\Server.csproj": {}
   },
   "projects": {
-    "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\Server\\Server.csproj": {
+    "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\Server\\Server.csproj",
-        "packagesPath": "C:\\Users\\luisb\\.nuget\\packages\\",
-        "outputPath": "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\Server\\obj\\",
+        "projectPath": "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\Server\\Server.csproj",
+        "packagesPath": "C:\\Users\\Luis\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\Server\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\luisb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Luis\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,8 +32,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj": {
-                "projectPath": "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj"
+              "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj": {
+                "projectPath": "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj"
               }
             }
           }
@@ -56,6 +60,10 @@
               "target": "Package",
               "version": "[6.0.2, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.2, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -64,15 +72,11 @@
             },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
-              "version": "[6.0.2, )"
+              "version": "[6.0.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
-            },
-            "System.IdentityModel.Tokens.Jwt": {
-              "target": "Package",
-              "version": "[6.28.1, )"
             }
           },
           "imports": [
@@ -81,8 +85,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -94,21 +97,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj": {
+    "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj",
+        "projectUniqueName": "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj",
         "projectName": "SharedServerLibrary",
-        "projectPath": "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj",
-        "packagesPath": "C:\\Users\\luisb\\.nuget\\packages\\",
-        "outputPath": "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedServerLibrary\\obj\\",
+        "projectPath": "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj",
+        "packagesPath": "C:\\Users\\Luis\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Luis\\Documents\\uaal-example\\GameServer\\SharedServerLibrary\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\luisb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Luis\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -139,8 +146,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -149,7 +155,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -7,7 +7,7 @@ using Server;
 
 #nullable disable
 
-namespace Server.Migrations
+namespace Server1.Migrations
 {
     [DbContext(typeof(GameDbContext))]
     partial class GameDbContextModelSnapshot : ModelSnapshot
@@ -16,7 +16,7 @@ namespace Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Friend", b =>
@@ -389,9 +389,9 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fb39a12b-cbd5-4f8a-bed9-89af03eda70e",
+                            Id = "6ad3bb63-58ea-49ee-a663-1d5d1dc74b48",
                             AccessFailedCount = 2,
-                            ConcurrencyStamp = "b13ecdcd-662c-4df3-b68b-d24933363474",
+                            ConcurrencyStamp = "e2638f68-1c85-45cf-8ff9-55f3cfb8082f",
                             Current_Exp = 0,
                             EmailConfirmed = false,
                             Freemium_Currency = 0,
@@ -403,7 +403,7 @@ namespace Server.Migrations
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = "",
                             Salt = "",
-                            SecurityStamp = "b47ae72e-dca4-4fb5-9f0e-778ed83dd11c",
+                            SecurityStamp = "5799b768-f25d-4116-8d73-a6db09c006b2",
                             TwoFactorEnabled = false
                         });
                 });
