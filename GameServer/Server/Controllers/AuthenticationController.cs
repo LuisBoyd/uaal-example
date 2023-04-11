@@ -11,7 +11,6 @@ using Server.Requests;
 using Server.Services;
 using SharedLibrary.models;
 using SharedLibrary.Requests;
-using SharedLibrary.Responses;
 
 namespace Server.Controllers;
 
