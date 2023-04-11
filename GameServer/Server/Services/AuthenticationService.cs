@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Server.Models;
 using Server.Requests;
-using SharedLibrary;
-using SharedLibrary.models;
 
 namespace Server.Services;
 

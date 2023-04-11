@@ -9,8 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using Server.Models;
 using Server.Requests;
 using Server.Services;
-using SharedLibrary.models;
-using SharedLibrary.Requests;
 
 namespace Server.Controllers;
 

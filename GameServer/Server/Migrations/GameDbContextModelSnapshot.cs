@@ -19,6 +19,117 @@ namespace Server.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("Friend", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Friend_Key_One")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Friend_Key_Two")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Friends");
+                });
+
+            modelBuilder.Entity("Level", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("EXPToLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RewardId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Levels");
+                });
+
+            modelBuilder.Entity("Mariana", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("W3W")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("cos_lat")
+                        .HasColumnType("double");
+
+                    b.Property<double>("cos_lng")
+                        .HasColumnType("double");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("facilities")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("latitude")
+                        .HasColumnType("double");
+
+                    b.Property<int>("linkedCanalPointid")
+                        .HasColumnType("int");
+
+                    b.Property<double>("longitude")
+                        .HasColumnType("double");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("p_canal")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("pointOfIntrestID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("s_canal")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("sin_lat")
+                        .HasColumnType("double");
+
+                    b.Property<double>("sin_lng")
+                        .HasColumnType("double");
+
+                    b.Property<string>("telnumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("website")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Marianas");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -147,6 +258,44 @@ namespace Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Plot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("OwningMarinaId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("Plot_index")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<byte[]>("Tile_Data")
+                        .IsRequired()
+                        .HasColumnType("MediumBlob");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Plots");
+                });
+
+            modelBuilder.Entity("Reward", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Freemium_Currency")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Premium_Currency")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rewards");
+                });
+
             modelBuilder.Entity("Server.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -240,9 +389,9 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "57ef5e58-3bca-4cee-b37c-514cc73f8adb",
+                            Id = "fb39a12b-cbd5-4f8a-bed9-89af03eda70e",
                             AccessFailedCount = 2,
-                            ConcurrencyStamp = "c46f7d64-9c4f-4207-bb81-da1260f814b0",
+                            ConcurrencyStamp = "b13ecdcd-662c-4df3-b68b-d24933363474",
                             Current_Exp = 0,
                             EmailConfirmed = false,
                             Freemium_Currency = 0,
@@ -254,161 +403,12 @@ namespace Server.Migrations
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = "",
                             Salt = "",
-                            SecurityStamp = "96171e97-cee5-4fae-9765-d033f5987cf6",
+                            SecurityStamp = "b47ae72e-dca4-4fb5-9f0e-778ed83dd11c",
                             TwoFactorEnabled = false
                         });
                 });
 
-            modelBuilder.Entity("SharedLibrary.models.Friend", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Friend_Key_One")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Friend_Key_Two")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Friends");
-                });
-
-            modelBuilder.Entity("SharedLibrary.models.Level", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("EXPToLevel")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RewardId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Levels");
-                });
-
-            modelBuilder.Entity("SharedLibrary.models.Mariana", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("W3W")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<double>("cos_lat")
-                        .HasColumnType("double");
-
-                    b.Property<double>("cos_lng")
-                        .HasColumnType("double");
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("facilities")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<double>("latitude")
-                        .HasColumnType("double");
-
-                    b.Property<int>("linkedCanalPointid")
-                        .HasColumnType("int");
-
-                    b.Property<double>("longitude")
-                        .HasColumnType("double");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("p_canal")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("pointOfIntrestID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("s_canal")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<double>("sin_lat")
-                        .HasColumnType("double");
-
-                    b.Property<double>("sin_lng")
-                        .HasColumnType("double");
-
-                    b.Property<string>("telnumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("type")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("website")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Marianas");
-                });
-
-            modelBuilder.Entity("SharedLibrary.models.Plot", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("OwningMarinaId")
-                        .HasColumnType("int");
-
-                    b.Property<byte>("Plot_index")
-                        .HasColumnType("tinyint unsigned");
-
-                    b.Property<byte[]>("Tile_Data")
-                        .IsRequired()
-                        .HasColumnType("MediumBlob");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Plots");
-                });
-
-            modelBuilder.Entity("SharedLibrary.models.Reward", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("Freemium_Currency")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Premium_Currency")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Rewards");
-                });
-
-            modelBuilder.Entity("SharedLibrary.models.Structure", b =>
+            modelBuilder.Entity("Structure", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -431,7 +431,7 @@ namespace Server.Migrations
                     b.ToTable("Structures");
                 });
 
-            modelBuilder.Entity("SharedLibrary.models.UserMap", b =>
+            modelBuilder.Entity("UserMap", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

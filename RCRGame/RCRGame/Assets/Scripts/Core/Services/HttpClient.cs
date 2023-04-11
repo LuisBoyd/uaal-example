@@ -5,11 +5,18 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Sirenix.Serialization;
 
-namespace DefaultNamespace.Core3.Systems
+namespace Core.Services
 {
-    public static class HttpClient
+
+    public interface IHttpClient
     {
-        public static async Task<T> Get<T>(string endPoint)
+        public Task<T> Get<T>(string endPoint);
+        public Task<T> Post<T>(string endPoint, object payload);
+    }
+    
+    public class HttpClient : IHttpClient
+    {
+        public  async Task<T> Get<T>(string endPoint)
         {
             var getRequest = CreateRequest(endPoint);
             getRequest.SendWebRequest();
@@ -18,7 +25,7 @@ namespace DefaultNamespace.Core3.Systems
             return SerializationUtility.DeserializeValue<T>(getRequest.downloadHandler.data, DataFormat.JSON);
         }
 
-        public static async Task<T> Post<T>(string endPoint, object payload)
+        public  async Task<T> Post<T>(string endPoint, object payload)
         {
             var postRequest = CreateRequest(endPoint, RequestType.POST, payload);
             postRequest.SendWebRequest();
@@ -28,7 +35,7 @@ namespace DefaultNamespace.Core3.Systems
         }
 
 
-        private static UnityWebRequest CreateRequest(string path, RequestType type = RequestType.GET, object data  = null)
+        private  UnityWebRequest CreateRequest(string path, RequestType type = RequestType.GET, object data  = null)
         {
             var request = new UnityWebRequest(path, type.ToString());
 

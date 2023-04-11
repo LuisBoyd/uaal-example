@@ -811,14 +811,14 @@
           }
         }
       },
-      "SharedLibrary/1.0.0": {
+      "SharedServerLibrary/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
+        "framework": ".NETStandard,Version=v2.1",
         "compile": {
-          "bin/placeholder/SharedLibrary.dll": {}
+          "bin/placeholder/SharedServerLibrary.dll": {}
         },
         "runtime": {
-          "bin/placeholder/SharedLibrary.dll": {}
+          "bin/placeholder/SharedServerLibrary.dll": {}
         }
       }
     }
@@ -2078,10 +2078,10 @@
         "version.txt"
       ]
     },
-    "SharedLibrary/1.0.0": {
+    "SharedServerLibrary/1.0.0": {
       "type": "project",
-      "path": "../SharedLibrary/SharedLibrary.csproj",
-      "msbuildProject": "../SharedLibrary/SharedLibrary.csproj"
+      "path": "../SharedServerLibrary/SharedServerLibrary.csproj",
+      "msbuildProject": "../SharedServerLibrary/SharedServerLibrary.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -2091,7 +2091,7 @@
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 6.0.2",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.2",
       "Pomelo.EntityFrameworkCore.MySql >= 6.0.2",
-      "SharedLibrary >= 1.0.0",
+      "SharedServerLibrary >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.2.3",
       "System.IdentityModel.Tokens.Jwt >= 6.28.1"
     ]
@@ -2123,8 +2123,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedLibrary\\SharedLibrary.csproj": {
-              "projectPath": "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedLibrary\\SharedLibrary.csproj"
+            "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj": {
+              "projectPath": "F:\\Unity-Projects\\Unity-2022-2\\uaal-example\\GameServer\\SharedServerLibrary\\SharedServerLibrary.csproj"
             }
           }
         }

@@ -1,3 +1,0 @@
-F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\bin\Debug\net6.0\publish\SharedLibrary.dll
-F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\bin\Debug\net6.0\publish\SharedLibrary.deps.json
-F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\SharedLibrary\bin\Debug\net6.0\publish\SharedLibrary.pdb

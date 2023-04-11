@@ -1,5 +1,4 @@
 ﻿using System;
-using DefaultNamespace.Core3.Systems;
 using UnityEngine;
 
 namespace Core3.MonoBehaviors

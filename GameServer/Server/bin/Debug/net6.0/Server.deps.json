@@ -13,7 +13,7 @@
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "6.0.2",
           "Microsoft.EntityFrameworkCore.Design": "6.0.2",
           "Pomelo.EntityFrameworkCore.MySql": "6.0.2",
-          "SharedLibrary": "1.0.0",
+          "SharedServerLibrary": "1.0.0",
           "Swashbuckle.AspNetCore": "6.2.3",
           "System.IdentityModel.Tokens.Jwt": "6.28.1"
         },
@@ -424,9 +424,9 @@
       },
       "System.Text.Encodings.Web/4.7.2": {},
       "System.Text.Json/4.7.2": {},
-      "SharedLibrary/1.0.0": {
+      "SharedServerLibrary/1.0.0": {
         "runtime": {
-          "SharedLibrary.dll": {}
+          "SharedServerLibrary.dll": {}
         }
       }
     }
@@ -794,7 +794,7 @@
       "path": "system.text.json/4.7.2",
       "hashPath": "system.text.json.4.7.2.nupkg.sha512"
     },
-    "SharedLibrary/1.0.0": {
+    "SharedServerLibrary/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -9,8 +9,6 @@ F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\M
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\SharedLibrary.dll
-F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\SharedLibrary.pdb
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\obj\Debug\net6.0\Server.csproj.AssemblyReference.cache
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\obj\Debug\net6.0\Server.GeneratedMSBuildEditorConfig.editorconfig
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\obj\Debug\net6.0\Server.AssemblyInfoInputs.cache
@@ -57,3 +55,5 @@ F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\M
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
 F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\SharedServerLibrary.dll
+F:\Unity-Projects\Unity-2022-2\uaal-example\GameServer\Server\bin\Debug\net6.0\SharedServerLibrary.pdb
