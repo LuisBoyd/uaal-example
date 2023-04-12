@@ -23,20 +23,30 @@ namespace Utility
             return fileContents;
         }
 
-        public static void WriteToFile(string path,[CanBeNull] string content, bool append = false)
+        public static bool WriteToFile(string path,[CanBeNull] string content, bool append = false)
         {
             var fullPath = Path.Combine(Application.dataPath, path);
             if (!File.Exists(fullPath))
             {
                 Debug.LogWarning($"file does not exist at {path}");
-                return;
+                return false;
             }
 
-            using (var writer = new StreamWriter(fullPath, append))
+            try
             {
-                writer.Write(content);
-                writer.Flush();
+                using (var writer = new StreamWriter(fullPath, append))
+                {
+                    writer.Write(content);
+                    writer.Flush();
+                }
             }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"file Could not be written to {path}");
+                return false;
+            }
+
+            return true;
         }
     }
 }

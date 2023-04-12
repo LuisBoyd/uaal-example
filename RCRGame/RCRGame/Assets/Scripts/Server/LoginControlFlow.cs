@@ -1,4 +1,7 @@
-﻿using Core.Services;
+﻿using System;
+using System.Threading.Tasks;
+using Core.Services;
+using Cysharp.Threading.Tasks;
 using UI;
 using UnityEngine;
 using VContainer.Unity;
@@ -20,13 +23,15 @@ namespace DefaultNamespace.Server
         {
             _loginForm._submitButton.onClick.AddListener(() => //Whatever 
             {
-               var loginTask = _loginService.Login(_loginForm.Username, _loginForm.Password);
-               loginTask.Wait();
-               if (loginTask.IsCompleted)
-               {
-                   Debug.Log("Login Task Completed");
-               }
+                
+                UniTask<Response> loginTask = _loginService.Login(_loginForm.Username, _loginForm.Password);
+                loginTask.ContinueWith((response) =>
+                {
+                   
+                });
             });
         }
+
+
     }
 }

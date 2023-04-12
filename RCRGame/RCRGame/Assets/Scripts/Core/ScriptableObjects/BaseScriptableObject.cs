@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Core3.SciptableObjects
     {
         public Guid id { get; private set; } //Should Not Change..
 
-        [SerializeField] [ReadOnly] 
+        [SerializeField] [ReadOnly]
         protected string id_display;
         
         public BaseScriptableObject()
