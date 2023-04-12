@@ -15,8 +15,8 @@ public class UserCreationRequest
     
     public static explicit operator UserCreationRequest(AuthenticationRequest lr) => new UserCreationRequest()
     {
-        Username = lr.Username,
-        Password = lr.Password
+        Username = lr.username,
+        Password = lr.password
     };
 
 }

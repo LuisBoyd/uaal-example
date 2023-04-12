@@ -12,12 +12,20 @@ namespace Utility
 {
     public static class ObjectSerializerCreator
     {
-        public static void Serialize <T>(string defaultDestinationPath,T obj, Action<T> onSerializeCompleted = null) 
+        public static void SerializeSave <T>(string defaultDestinationPath,T obj, Action<T> onSerializeCompleted = null) 
             where T : new()
         {
             var container = new ObjectSerializeContainer<T>(defaultDestinationPath, onSerializeCompleted);
-            container.Serialize(obj);
+            container.SerializeSave(obj);
         }
+
+        public static string Serialize<T>(T obj, Action<T> onSerializeCompleted = null)
+        where T : new()
+        {
+            var container = new ObjectSerializeContainer<T>(onSerializeCompleted);
+            return container.Serialize(obj);
+        } 
+        
 #if UNITY_EDITOR
         
         public static void ShowDialog<T>(string defaultDestinationPath,T obj, Action<T> onSerializeCompleted = null) 
@@ -44,7 +52,12 @@ namespace Utility
                 this.defaultDestinationPath = defaultDestinationPath;
             }
 
-            public void Serialize(T data)
+            public ObjectSerializeContainer(Action<T> onSerializeCompleted = null)
+            {
+                this.onSerializeCompleted = onSerializeCompleted;
+            }
+
+            public void SerializeSave(T data)
             {
                 string dest = this.defaultDestinationPath.TrimEnd('/');
                 
@@ -55,6 +68,20 @@ namespace Utility
                     if(onSerializeCompleted != null && written)
                         onSerializeCompleted(data);
                 }
+            }
+            
+            public string Serialize(T data)
+            {
+                string dest = this.defaultDestinationPath.TrimEnd('/');
+                
+                if (!string.IsNullOrEmpty(dest))
+                {
+                    string databytes = SerializeJson(data);
+                    if(onSerializeCompleted != null)
+                        onSerializeCompleted(data);
+                    return databytes;
+                }
+                return string.Empty;
             }
 
             private string SerializeJson(T data)

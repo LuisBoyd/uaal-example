@@ -13,8 +13,8 @@ public class LoginRequest
 
     public static explicit operator LoginRequest(AuthenticationRequest lr) => new LoginRequest()
     {
-        Username = lr.Username,
-        Password = lr.Password
+        Username = lr.username,
+        Password = lr.password
     };
 
 }

@@ -14,7 +14,7 @@ namespace UI
 
         private TMP_InputField _usernameInput;
         private TMP_InputField _passwordInput;
-        private TMP_Text _responseLabel;
+        public TMP_Text _responseLabel;
         [HideInInspector]
         public Button _submitButton;
 
@@ -45,44 +45,6 @@ namespace UI
         {
             _setting = setting;
             _logger = logger;
-        }
-
-        public void DisplayMessage(string message, LogType loglevel)
-        {
-            _responseLabel.text = message;
-            if (_setting == null)
-            {
-                _responseLabel.color = Color.white;
-                return;
-            }
-            switch (loglevel)
-            {
-                case LogType.Assert:
-                    _responseLabel.color = _setting.DebugAssertColor;
-                    break;
-                case LogType.Error:
-                    _responseLabel.color = _setting.DebugErrorColor;
-                    break;
-                case LogType.Exception:
-                    _responseLabel.color = _setting.DebugExceptionColor;
-                    break;
-                case LogType.Log:
-                    _responseLabel.color = _setting.DebugLogColor;
-                    break;
-                case LogType.Warning:
-                    _responseLabel.color = _setting.DebugWarningColor;
-                    break;
-            }
-        }
-
-        private void OnEnable()
-        {
-            _logger.OnRuntimeLog += DisplayMessage;
-        }
-
-        private void OnDisable()
-        {
-            _logger.OnRuntimeLog -= DisplayMessage;
         }
     }
 }

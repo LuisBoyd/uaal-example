@@ -34,7 +34,7 @@ public class AuthenticationController : ControllerBase
         var userExists = await _userManager.FindByNameAsync(request.Username);
         if (userExists != null)
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new Response() {Status = "Error", Message = "User already exists"});
+                new Response() {Success = false, Message = "User already exists"});
 
         Models.User user = new()
         {
@@ -48,9 +48,9 @@ public class AuthenticationController : ControllerBase
         if (!result.Succeeded)
             return StatusCode(StatusCodes.Status500InternalServerError,
                 new Response()
-                    {Status = "Error", Message = "User creation failed! Please check user details and try again."});
+                    {Success = false, Message = "User creation failed! Please check user details and try again."});
 
-        return Ok(new Response() {Status = "Success", Message = "User created successfully"});
+        return Ok(new Response() {Success = false, Message = "User created successfully"});
     }
     
     [HttpPost]
@@ -58,14 +58,14 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> Login(AuthenticationRequest request)
     {
         
-        var user = await _userManager.FindByNameAsync(request.Username);
+        var user = await _userManager.FindByNameAsync(request.username);
         if (user == null) return Unauthorized(new
         {
             Status = "Failed",
             Message = "Username or Password is Invalid"
         });
 #pragma warning disable CS8604
-        var passwordHash = AuthenticationHelpers.ComputeHash(request.Password, user.Salt, _settings.PepperKey); //The salt should be set otherwise there would be no user
+        var passwordHash = AuthenticationHelpers.ComputeHash(request.password, user.Salt, _settings.PepperKey); //The salt should be set otherwise there would be no user
 #pragma warning restore CS8604
         if (!await _userManager.CheckPasswordAsync(user, passwordHash)) return Unauthorized(new
         {
