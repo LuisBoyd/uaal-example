@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Core.Services;
+using Core.Services.Network;
 using Core3.SciptableObjects;
 using Cysharp.Threading.Tasks;
 using UI;
@@ -32,24 +34,34 @@ namespace DefaultNamespace.Server
         
         public async UniTask<Response> Login(string username, string password)
         {
-            return await _client.Post<Response>(_internalSetting.RootEndPoint + "login.php",
-                ObjectSerializerCreator.Serialize<AuthenticationRequest>(new AuthenticationRequest()
-                {
-                    password = password,
-                    username = username
-                })).ContinueWith((response) =>
+            // return await _client.Post<Response>(_internalSetting.RootEndPoint + "login.php",
+            //     new AuthenticationRequest()
+            //     {
+            //         password = password,
+            //         username = username
+            //     }).ContinueWith((response) =>
+            // {
+            //     if (response.Success)
+            //     {
+            //         _displayLogger.GameLog(LogType.Log, "login Successful", _loginForm._responseLabel);
+            //     }
+            //     else
+            //     {
+            //         _displayLogger.GameLog(LogType.Error, response.Message, _loginForm._responseLabel);
+            //     }
+            //     
+            //     return response;
+            // });
+            var client = new NetworkClient(_internalSetting.RootEndPoint, TimeSpan.FromSeconds(10),
+                new UnityProgressReport(),
+                new LoggingDecorator(),
+                new ReturnToLoginPageDecorator());
+            var result = await client.PostAsync("login.php", new AuthenticationRequest()
             {
-                if (response.Success)
-                {
-                    _displayLogger.GameLog(LogType.Log, "login Successful", _loginForm._responseLabel);
-                }
-                else
-                {
-                    _displayLogger.GameLog(LogType.Error, response.Message, _loginForm._responseLabel);
-                }
-                
-                return response;
+                password = password,
+                username = username
             });
+            return null;
         }
         
     }

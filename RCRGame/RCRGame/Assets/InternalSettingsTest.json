@@ -1,0 +1,13 @@
+{
+  "DBconnectionString": "",
+  "RootEndPoint": "",
+  "DefaultRequestTimeOut": 500,
+  "DebugErrorColor": "FF0000",
+  "DebugAssertColor": "FFFFFF",
+  "DebugWarningColor": "FFFFFF",
+  "DebugLogColor": "602121",
+  "DebugExceptionColor": "FFFFFF",
+  "id": "e625b365-1c0a-42ac-921d-6cfe624b5816",
+  "name": "Base Internal Settings",
+  "hideFlags": 0
+}

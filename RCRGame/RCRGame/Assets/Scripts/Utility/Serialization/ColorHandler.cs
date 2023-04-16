@@ -8,12 +8,13 @@ namespace Utility.Serialization
     {
         public ColorHandler(){}
 
-        public override bool CanConvert(Type objectType)
+        public override void WriteJson(JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
         {
-            return true;
+            string val = ColorUtility.ToHtmlStringRGB((Color)value);
+            writer.WriteValue(val);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             try
             {
@@ -26,11 +27,10 @@ namespace Utility.Serialization
                 return null;
             }
         }
-        
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+
+        public override bool CanConvert(Type objectType)
         {
-            string val = ColorUtility.ToHtmlStringRGB((Color)value);
-            writer.WriteValue(val);
+            return true;
         }
     }
 }

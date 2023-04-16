@@ -5,13 +5,15 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Utility;
 using Utility.Serialization;
+using VContainer;
+using JsonSerializer = Utility.JsonSerializer;
 
 namespace Core3.SciptableObjects
 {
 #if UNITY_EDITOR
     [CreateAssetMenu(fileName = "New_InternalSetting", menuName = "RCR/Asset/InternalSetting", order = 0)]
 #endif
-    public class InternalSetting : BaseScriptableObject
+    public class InternalSetting : GenericBaseScriptableObject<InternalSetting>
     {
         [ShowInInspector]
         [CanBeNull] public string DBconnectionString { get; set; }
@@ -51,28 +53,53 @@ namespace Core3.SciptableObjects
             OldestLogPath = Application.persistentDataPath + "/OldestLog.txt";
         }
 
+        protected override void Initialize(InternalSetting obj)
+        {
+            this.DebugAssertColor = obj.DebugAssertColor;
+            this.DebugErrorColor = obj.DebugErrorColor;
+            this.DebugExceptionColor = obj.DebugExceptionColor;
+            this.DebugLogColor = obj.DebugLogColor;
+            this.DebugWarningColor = obj.DebugWarningColor;
+            this.DBconnectionString = obj.DBconnectionString;
+            this.DefaultRequestTimeOut = obj.DefaultRequestTimeOut;
+            this.RootEndPoint = obj.RootEndPoint;
+            this.NewestLogPath = obj.NewestLogPath;
+            this.PreviousLogPath = obj.PreviousLogPath;
+            this.OldestLogPath = obj.OldestLogPath;
+        }
+        
+        public static InternalSetting CreateInternalSettingInstance(string filepath, IDeserializer<string> deserializer = null)
+        {
+            InternalSetting instance = ScriptableObject.CreateInstance<InternalSetting>();
+            instance.Initialize(deserializer.DeserializeFromPath<InternalSetting>(filepath));
+            return instance;
+        }
 
 #if UNITY_EDITOR
-        
-        [Button("To Json")]
-        private void SerializeSettings()
-        {
-            ObjectSerializerCreator.ShowDialog(Application.dataPath, this, (setting) =>
-            {
-                Debug.Log("Setting's where saved");
-            });
-        }
-
-        [Button("Refresh Default Values")]
-        private void RefreshDefaultValue()
-        {
-            DebugErrorColor = Color.white;
-            DebugAssertColor = Color.white;
-            DebugWarningColor = Color.white;
-            DebugLogColor = Color.white;
-            DebugExceptionColor = Color.white;
-            DefaultRequestTimeOut = 2;
-        }
+        //
+        // [Button("To Json")]
+        // private void SerializeSettings()
+        // {
+        //     JsonSerializer.Serialize(Application.dataPath, this);
+        // }
+        //
+        // [Button("from Json")]
+        // private void DeserializeSettings()
+        // {
+        //     InternalSetting setting = JsonDeserializer.Deserialize<InternalSetting>();
+        //     if (setting == null) return;
+        //     this.DebugAssertColor = setting.DebugAssertColor;
+        //     this.DebugErrorColor = setting.DebugErrorColor;
+        //     this.DebugExceptionColor = setting.DebugExceptionColor;
+        //     this.DebugLogColor = setting.DebugLogColor;
+        //     this.DebugWarningColor = setting.DebugWarningColor;
+        //     this.DBconnectionString = setting.DBconnectionString;
+        //     this.DefaultRequestTimeOut = setting.DefaultRequestTimeOut;
+        //     this.RootEndPoint = setting.RootEndPoint;
+        //     this.NewestLogPath = setting.NewestLogPath;
+        //     this.PreviousLogPath = setting.PreviousLogPath;
+        //     this.OldestLogPath = setting.OldestLogPath;
+        // }
 #endif
         
     }

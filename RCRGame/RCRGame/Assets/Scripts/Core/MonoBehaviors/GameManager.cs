@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Core3.MonoBehaviors
 {
-    public class GameManager : BaseManager
+    public class GameManager : Singelton<GameManager>
     {
         private async void Start()
         {

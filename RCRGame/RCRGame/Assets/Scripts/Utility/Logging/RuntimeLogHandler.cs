@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace Utility.Logging
 {
-    public class RuntimeLogHandler : ILogHandler
+    public class RuntimeLogHandler : ILogHandler, IDisposable
     {
         private readonly InternalSetting _setting;
         private ILogHandler m_DefaultLogHandler = Debug.unityLogger.logHandler;
@@ -88,5 +88,12 @@ namespace Utility.Logging
             m_DefaultLogHandler.LogException(exception,context);
         }
         
+        public void Dispose()
+        {
+            m_StreamWriter.Close();
+            m_fileStream.Close();
+            m_fileStream?.Dispose();
+            m_StreamWriter?.Dispose();
+        }
     }
 }

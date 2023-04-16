@@ -3,18 +3,13 @@
 namespace Core3.SciptableObjects
 {
     [CreateAssetMenu(fileName = "New_AssetDatabaseSO", menuName = "RCR/Asset/AssetDatabase", order = 0)]
-    public class AssetDatabaseSO : BaseScriptableObject
+    public class AssetDatabaseSO : GenericBaseScriptableObject<AssetDatabaseSO>
     {
         public BaseScriptableObject[] scriptableObjects;
-
-        public override void Init(BaseScriptableObject scriptableObject)
+        
+        protected override void Initialize(AssetDatabaseSO obj)
         {
-            base.Init(scriptableObject);
-
-            if (scriptableObject is AssetDatabaseSO c)
-            {
-                scriptableObjects = c.scriptableObjects;
-            }
+            scriptableObjects = obj.scriptableObjects;
         }
     }
 }

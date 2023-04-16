@@ -1,5 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,10 +7,7 @@ namespace Core3.SciptableObjects
     public abstract class BaseScriptableObject : ScriptableObject
     {
         public Guid id { get; private set; } //Should Not Change..
-
-        [SerializeField] [ReadOnly]
-        protected string id_display;
-        
+        [SerializeField] [ReadOnly] protected string id_display;
         public BaseScriptableObject()
         {
             if (id == null || id == Guid.Empty)
@@ -20,10 +16,9 @@ namespace Core3.SciptableObjects
                 id_display = id.ToString();
             }
         }
-
-        public virtual void Init(BaseScriptableObject scriptableObject)
-        {
-            id = scriptableObject.id;
-        }
+        
+        public virtual void Initialize(BaseScriptableObject obj){}
+        
+        
     }
 }

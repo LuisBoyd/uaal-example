@@ -22,7 +22,7 @@ namespace Core3.MonoBehaviors
             if (obj != null)
             {
                 T instance = ScriptableObject.CreateInstance<T>();
-                instance.Init(obj);
+                instance.Initialize(obj);
                 return instance;
             }
             return null;
@@ -42,7 +42,7 @@ namespace Core3.MonoBehaviors
             if (obj != null)
             {
                 T instance = ScriptableObject.CreateInstance<T>();
-                instance.Init(obj);
+                instance.Initialize(obj);
                 return instance;
             }
             return null;
@@ -51,7 +51,7 @@ namespace Core3.MonoBehaviors
         public static T CreateObject<T>(T scriptableObject) where T : BaseScriptableObject
         {
             T instance = ScriptableObject.CreateInstance<T>();
-            instance.Init(scriptableObject);
+            instance.Initialize(scriptableObject);
             return instance;
         }
     }

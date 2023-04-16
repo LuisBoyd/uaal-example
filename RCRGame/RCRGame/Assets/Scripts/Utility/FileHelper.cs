@@ -48,5 +48,27 @@ namespace Utility
 
             return true;
         }
+        
+        public static bool WriteToOrCreateFile(string path,[CanBeNull] string content, bool append = false)
+        {
+            var fullPath = Path.Combine(Application.dataPath, path);
+            try
+            {
+                using (FileStream fileStream = new FileStream(fullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    using (var writer = new StreamWriter(fileStream))
+                    {
+                        writer.Write(content);
+                        writer.Flush();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Writing to File or creating it Failed {e.Message}");
+                return false;
+            }
+            return true;
+        }
     }
 }

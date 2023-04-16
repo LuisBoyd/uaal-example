@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core3.SciptableObjects;
 using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using Sirenix.Serialization;
@@ -35,14 +36,19 @@ namespace Core.Services
             {
                 var getRequest = CreateRequest(endPoint);
                 await getRequest.SendWebRequest();
-                return SerializationUtility.DeserializeValue<T>(getRequest.downloadHandler.data, DataFormat.JSON);
+                if (!HandleResponseCode(getRequest))
+                {
+                    //Response Failed we pass back json string from the HTTP request. in php on the server.
+                    return JsonConvert.DeserializeObject<T>(getRequest.downloadHandler.text);
+                }
+                //Response Success we pass back json string from the HTTP request. in php on the server.
+                return JsonConvert.DeserializeObject<T>(getRequest.downloadHandler.text);
             }
-            catch (Exception e)
+            catch (UnityWebRequestException e)
             {
                 _logger.LogWarning("[Warning]", e.Message);
-                _logger.LogException(e);
+                return default;
             }
-            return default;
         }
 
         public  async UniTask<T> Post<T>(string endPoint, object payload)
@@ -51,14 +57,20 @@ namespace Core.Services
             {
                 var postRequest = CreateRequest(endPoint, RequestType.POST, payload);
                 await postRequest.SendWebRequest();
-                return SerializationUtility.DeserializeValue<T>(postRequest.downloadHandler.data, DataFormat.JSON);
+                if (!HandleResponseCode(postRequest))
+                {
+                    //Response Failed we pass back json string from the HTTP request. in php on the server.
+                    return JsonConvert.DeserializeObject<T>(postRequest.downloadHandler.text);
+                }
+                //Response Success we pass back json string from the HTTP request. in php on the server.
+                return JsonConvert.DeserializeObject<T>(postRequest.downloadHandler.text);
+                //return SerializationUtility.DeserializeValue<T>(postRequest.downloadHandler.data, DataFormat.JSON);
             }
-            catch (Exception e)
+            catch (UnityWebRequestException e)
             {
                 _logger.LogWarning("[Warning]", e.Message);
-               _logger.LogException(e);
+                return default;
             }
-            return default;
         }
 
 
@@ -68,16 +80,45 @@ namespace Core.Services
 
             if (data != null)
             {
-                var bodyRaw = SerializationUtility.SerializeValue(data, DataFormat.JSON);
+                var bodyRaw = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
                 request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             }
-
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
             
             request.timeout = _internalSetting.DefaultRequestTimeOut;
             Debug.Log(_internalSetting.DefaultRequestTimeOut);
             return request;
+        }
+
+        private bool HandleResponseCode(UnityWebRequest webRequest)
+        {
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                    _logger.LogError($"There was a connection Error {webRequest.error}", webRequest);
+                    return false;
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    _logger.LogError($"There was a protocol Error {webRequest.error}", webRequest);
+                    return false;
+                    break;
+                case UnityWebRequest.Result.InProgress:
+                    _logger.LogError($"undefined InPorgress error should not happen as we await the process", webRequest);
+                    return false;
+                    break;
+                case UnityWebRequest.Result.DataProcessingError:
+                    _logger.LogError($"There was a data processing Error {webRequest.error}", webRequest);
+                    return false;
+                    break;
+                case UnityWebRequest.Result.Success:
+                    return true;
+                    break;
+                default:
+                    _logger.LogError($"Undefined Error for networking", webRequest);
+                    return false;
+                    break;
+            }
         }
 
         private static void AttachHeader(UnityWebRequest request, string key, string value)
