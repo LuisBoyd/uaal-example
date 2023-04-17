@@ -394,7 +394,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 4057689166875604758}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: RCRCoreLib.Core.Timers.TimerToolTip, RCRCoreLib
           m_MethodName: HideTimer
           m_Mode: 1
@@ -1083,7 +1083,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4057689166875604758}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RCRCoreLib.Core.Timers.TimerToolTip, RCRCoreLib
         m_MethodName: SkipButton
         m_Mode: 1
@@ -1240,7 +1240,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4057689166875604752}
   - component: {fileID: 4057689166875604753}
-  - component: {fileID: 4057689166875604758}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -1322,22 +1321,3 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4057689166875604758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4057689166875604755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd069f0332024ae6b7e469f8a7391d96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiCamera: {fileID: 0}
-  callerNameText: {fileID: 4057689165373406668}
-  timeLeftText: {fileID: 4057689166685186356}
-  skipButton: {fileID: 4057689166669412830}
-  skipAmountText: {fileID: 4057689165264790649}
-  progressSlider: {fileID: 4057689166875604753}
-  Parent: {fileID: 4057689165360929529}

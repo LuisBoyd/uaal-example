@@ -262,7 +262,6 @@ GameObject:
   - component: {fileID: 8477796863757129120}
   - component: {fileID: 338486488414146119}
   - component: {fileID: 6819713378245018887}
-  - component: {fileID: 2709966105642919313}
   - component: {fileID: 5871581283900687889}
   m_Layer: 5
   m_Name: BuildingIcon
@@ -403,19 +402,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2709966105642919313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1191344134595009868}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad05f0d360e64d9d801a476b6d6db465, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
 --- !u!114 &5871581283900687889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1147,7 +1133,6 @@ GameObject:
   - component: {fileID: 1191344135801316152}
   - component: {fileID: 1191344135801316153}
   - component: {fileID: 1191344135801316150}
-  - component: {fileID: 5682457860299601778}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -1229,30 +1214,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
---- !u!114 &5682457860299601778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1191344135801316148}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 778288c288b14d0ca27ee8beeebabbc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CardBackGround: {fileID: 1191344135801316153}
-  BuildingIcon: {fileID: 1191344134595009870}
-  CurrencyIcon: {fileID: 6827882588846708271}
-  CurrencyDisplay: {fileID: 9151553402255366296}
-  TittleDisplay: {fileID: 1191344135654922509}
-  LVLDisplay: {fileID: 1191344134681286518}
-  LVLProgress: {fileID: 1191344135364793388}
-  CardsLeftTXT: {fileID: 1191344134499794520}
-  LockedColor: {r: 0.59607846, g: 0.43137255, b: 0.43137255, a: 1}
-  UnlockedColor: {r: 1, g: 1, b: 1, a: 1}
-  LockedTextColor: {r: 1, g: 0.078431375, b: 0.1882353, a: 1}
-  UnlockedTextColor: {r: 0.25882354, g: 0.31764707, b: 1, a: 1}
 --- !u!1 &3671187714641800808
 GameObject:
   m_ObjectHideFlags: 0
