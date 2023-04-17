@@ -11,9 +11,8 @@ using JsonSerializer = Utility.JsonSerializer;
 
 namespace Core3.SciptableObjects
 {
-#if UNITY_EDITOR
+
     [CreateAssetMenu(fileName = "New_InternalSetting", menuName = "RCR/Asset/InternalSetting", order = 0)]
-#endif
     public class InternalSetting : GenericBaseScriptableObject<InternalSetting>
     {
         [ShowInInspector]

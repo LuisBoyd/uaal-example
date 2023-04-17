@@ -25,14 +25,14 @@ namespace Utility
         [SerializeField] private SceneSO _loginFormSceneSo;
         [SerializeField] private LoadEventChannelSO _loadSceneEvent;
         [SerializeField] private InfoDisplayEventChannelSO _visualInfoLoggerEvent;
+        [SerializeField] private TextAsset PreCompiledSetting; //In actual production take this out.
 
         protected override void Configure(IContainerBuilder builder)
         {
             _jsonDeserializer = new JsonDeserializer();
             _jsonSerializer = new JsonSerializer();
             
-            var fullPath = Path.Combine(Application.dataPath, "Secrets/AppSettings.json");
-            _setting = InternalSetting.CreateInternalSettingInstance(fullPath, _jsonDeserializer);
+            _setting = _jsonDeserializer.Deserialize<InternalSetting>(PreCompiledSetting.text);
             if (_setting == null) throw new NullReferenceException("Missing Setting Object");
             _runtimeLogHandler = new RuntimeLogHandler(_setting);
             _defaultUnityLogHandler = Debug.unityLogger.logHandler;

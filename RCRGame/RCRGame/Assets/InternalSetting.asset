@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38053d8ce93c49b6a90617f2f2f032ca, type: 3}
-  m_Name: Base Internal Settings
+  m_Name: InternalSetting
   m_EditorClassIdentifier: 
-  id_display: 587fd96c-2cae-4c36-a58c-ee010ef2feaf
+  id_display: f6adbaf0-c294-4647-8cac-a3d305acfe09
   WebReqestContentType: 0
