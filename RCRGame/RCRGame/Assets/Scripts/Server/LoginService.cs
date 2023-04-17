@@ -1,67 +1,46 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Core.Services;
 using Core.Services.Network;
-using Core3.SciptableObjects;
 using Cysharp.Threading.Tasks;
-using UI;
-using UnityEngine;
-using Utility;
-using Utility.Logging;
-using VContainer.Unity;
+using DefaultNamespace.Core.Enum;
+
 
 namespace DefaultNamespace.Server
 {
     public interface ILoginService
     {
-        public UniTask<Response> Login(string username, string password);
+        public UniTaskVoid Login(string username, string password);
     }
     
     public class LoginService : ILoginService
     {
-        private readonly IHttpClient _client;
-        private readonly InternalSetting _internalSetting;
-        private readonly DisplayLogger _displayLogger;
-        private readonly LoginForm _loginForm;
-        public LoginService(IHttpClient client, InternalSetting internalSetting, DisplayLogger displayLogger,
-            LoginForm form)
+        //private readonly IHttpClient _client;
+        // private readonly InternalSetting _internalSetting;
+        // private readonly DisplayLogger _displayLogger;
+        // private readonly LoginForm _loginForm;
+        private readonly NetworkClient _netowrkClient;
+        public LoginService(NetworkClient networkClient)
         {
-            _client = client;
-            _internalSetting = internalSetting;
-            _displayLogger = displayLogger;
-            _loginForm = form;
+            //_client = client;
+            // _internalSetting = internalSetting;
+            // _displayLogger = displayLogger;
+            // _loginForm = form;
+            _netowrkClient = networkClient;
         }
         
-        public async UniTask<Response> Login(string username, string password)
+        public async UniTaskVoid Login(string username, string password)
         {
-            // return await _client.Post<Response>(_internalSetting.RootEndPoint + "login.php",
-            //     new AuthenticationRequest()
-            //     {
-            //         password = password,
-            //         username = username
-            //     }).ContinueWith((response) =>
-            // {
-            //     if (response.Success)
-            //     {
-            //         _displayLogger.GameLog(LogType.Log, "login Successful", _loginForm._responseLabel);
-            //     }
-            //     else
-            //     {
-            //         _displayLogger.GameLog(LogType.Error, response.Message, _loginForm._responseLabel);
-            //     }
-            //     
-            //     return response;
-            // });
-            var client = new NetworkClient(_internalSetting.RootEndPoint, TimeSpan.FromSeconds(10),
-                new UnityProgressReport(),
-                new LoggingDecorator(),
-                new ReturnToLoginPageDecorator());
-            var result = await client.PostAsync("login.php", new AuthenticationRequest()
+            try
             {
-                password = password,
-                username = username
-            });
-            return null;
+                var response = await _netowrkClient.PostAsync<Response>(RequestType.POST,"login.php", new AuthenticationRequest()
+                {
+                    password = password,
+                    username = username
+                });
+            }
+            catch (Exception e)
+            {
+                throw new OperationCanceledException();
+            }
         }
         
     }

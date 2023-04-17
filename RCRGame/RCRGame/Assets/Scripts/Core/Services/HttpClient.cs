@@ -24,10 +24,9 @@ namespace Core.Services
     {
         private readonly InternalSetting _internalSetting;
         private readonly RuntimeLogger _logger;
-        public HttpClient(InternalSetting setting, RuntimeLogger logger)
+        public HttpClient(InternalSetting setting)
         {
             _internalSetting = setting;
-            _logger = logger;
         }
         
         public  async UniTask<T> Get<T>(string endPoint)

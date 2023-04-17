@@ -3,6 +3,7 @@ using System.IO;
 using Core.Services;
 using Core.Services.Network;
 using Core3.SciptableObjects;
+using DefaultNamespace.Events;
 using UnityEngine;
 using Utility.Logging;
 using VContainer;
@@ -21,6 +22,10 @@ namespace Utility
         private NetworkClient _networkClient;
         private IProgress<float> _progressReporter;
 
+        [SerializeField] private SceneSO _loginFormSceneSo;
+        [SerializeField] private LoadEventChannelSO _loadSceneEvent;
+        [SerializeField] private InfoDisplayEventChannelSO _visualInfoLoggerEvent;
+
         protected override void Configure(IContainerBuilder builder)
         {
             _jsonDeserializer = new JsonDeserializer();
@@ -34,16 +39,26 @@ namespace Utility
             Debug.unityLogger.logHandler = _runtimeLogHandler;
             _displayLogger = new DisplayLogger(_runtimeLogHandler, _setting);
             _progressReporter = new UnityProgressReport();
-            _networkClient = new NetworkClient(_setting.RootEndPoint,
+            // _networkClient = new NetworkClient(_setting.RootEndPoint,
+            //     TimeSpan.FromSeconds(_setting.DefaultRequestTimeOut),
+            //     _progressReporter,
+            //     new LoggingDecorator(),
+            //     new ReturnToLoginPageDecorator());
+
+
+            builder.Register<NetworkClient>(resolver => new NetworkClient(_setting,
                 TimeSpan.FromSeconds(_setting.DefaultRequestTimeOut),
                 _progressReporter,
-                new LoggingDecorator(),
-                new ReturnToLoginPageDecorator());
-
+                new LoggingDecorator(_visualInfoLoggerEvent),
+                new SetupHeaderDecorator(_setting),
+                new ReturnToLoginPageDecorator(_loginFormSceneSo, _loadSceneEvent),
+                new AuthenticationDecorator()),
+                Lifetime.Singleton);
+            
             
             builder.RegisterInstance<ISerializer<string>>(_jsonSerializer);
             builder.RegisterInstance<IDeserializer<string>>(_jsonDeserializer);
-            builder.RegisterInstance<NetworkClient>(_networkClient);
+            //builder.RegisterInstance<NetworkClient>(_networkClient);
             builder.RegisterInstance<IProgress<float>>(_progressReporter);
             builder.RegisterInstance<DisplayLogger>(_displayLogger);
             builder.RegisterInstance<InternalSetting>(_setting);

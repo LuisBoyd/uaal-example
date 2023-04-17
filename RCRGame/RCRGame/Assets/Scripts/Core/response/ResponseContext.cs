@@ -20,8 +20,7 @@ namespace DefaultNamespace.Core.response
         }
 
         public string GetText() => text;
-
-        [Inject]
+        
         public T GetResponseAs<T>() 
         {
             return JsonConvert.DeserializeObject<T>(text);

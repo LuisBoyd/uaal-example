@@ -1,6 +1,4 @@
-﻿using System;
-using Core.Services;
-using Core3.MonoBehaviors;
+﻿using Core3.MonoBehaviors;
 using DefaultNamespace.Events;
 using UnityEngine;
 

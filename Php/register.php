@@ -43,13 +43,13 @@ if($passAttributeCurrentCount < $PassAttributeCount){
 }
 
 if(preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $parms->username)){
-    header("HTTP/1.0 500 Internal Server Error");
+    header("HTTP/1.0 400 Bad Request");
     echo json_encode(new Response("error: username can not contain special characters", false));
     exit();
 }
 
 if(strlen($parms->username) < $minimumChar){
-    header("HTTP/1.0 500 a username must contain '$minimumChar' characters");
+    header("HTTP/1.0 400 Bad Request");
     echo json_encode(new Response("error: a username must contain '$minimumChar' characters", false));
     exit();
 }
@@ -57,13 +57,13 @@ if(strlen($parms->username) < $minimumChar){
 //See if a user with the same username already exists.
 $DuplicateUsernameCount = $mysql->GetCount("system_users","username = '$parms->username'");
 if($DuplicateUsernameCount > 0){
-    header("HTTP/1.0 500 please choose another username");
+    header("HTTP/1.0 409 Conflict");
     echo json_encode(new Response("error: please choose another username", false));
     exit();
 }
 
 if($passwordError){
-    header("HTTP/1.0 500 Internal Server Error");
+    header("HTTP/1.0 400 Bad Request");
     echo json_encode(new Response("error: Passwords must have at least '$passXLength' characters and \n
     contain at least two of the following: uppercase letters,\n
     lowercase letters, numbers, and symbols", false));
@@ -76,7 +76,7 @@ $SaltAndHashedPwd = password_hash($parms->password, PASSWORD_DEFAULT);
 if($mysql->createData("system_users",
         "(username, hashedpwd)", "('$parms->username', '$SaltAndHashedPwd')") == null){
 
-    header("HTTP/1.0 500 Server could not create user");
+    header("HTTP/1.0 500 Internal Server Error");
     echo json_encode(new Response("error: Server could not create user", false));
     exit();
 }else{

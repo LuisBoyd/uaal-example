@@ -1,4 +1,5 @@
 ﻿using System;
+using DefaultNamespace.Core.Enum;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
@@ -20,7 +21,9 @@ namespace Core3.SciptableObjects
         [ShowInInspector]
         [CanBeNull] public string RootEndPoint { get; set; }
 
-       
+        [EnumToggleButtons] 
+        public ContentType WebReqestContentType;
+
         [CanBeNull][JsonIgnore]
         public string OldestLogPath { get; set; }
 
@@ -66,6 +69,7 @@ namespace Core3.SciptableObjects
             this.NewestLogPath = obj.NewestLogPath;
             this.PreviousLogPath = obj.PreviousLogPath;
             this.OldestLogPath = obj.OldestLogPath;
+            this.WebReqestContentType = obj.WebReqestContentType;
         }
         
         public static InternalSetting CreateInternalSettingInstance(string filepath, IDeserializer<string> deserializer = null)
@@ -73,6 +77,30 @@ namespace Core3.SciptableObjects
             InternalSetting instance = ScriptableObject.CreateInstance<InternalSetting>();
             instance.Initialize(deserializer.DeserializeFromPath<InternalSetting>(filepath));
             return instance;
+        }
+
+        public string GetContentHeader()
+        {
+            switch (WebReqestContentType)
+            {
+                case ContentType.Json:
+                    return "application/json";
+                    break;
+                case ContentType.Text:
+                    return "text/plain";
+                    break;
+                case ContentType.Javascript:
+                    return "application/javascript";
+                    break;
+                case ContentType.Html:
+                    return "text/html";
+                    break;
+                case ContentType.XML:
+                    return "application/xml";
+                    break;
+                default:
+                    return string.Empty;
+            }
         }
 
 #if UNITY_EDITOR

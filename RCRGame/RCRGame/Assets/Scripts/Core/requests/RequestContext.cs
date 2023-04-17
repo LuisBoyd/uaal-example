@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Services.Network;
+using DefaultNamespace.Core.Enum;
 
 namespace DefaultNamespace.Core.requests
 {
@@ -15,6 +16,8 @@ namespace DefaultNamespace.Core.requests
         public object Value { get; }
         public TimeSpan Timeout { get; }
         public DateTimeOffset TimeStamp { get; private set; }
+        
+        public RequestType RequestType { get; }
 
         public IDictionary<string, string> RequestHeader
         {
@@ -26,8 +29,9 @@ namespace DefaultNamespace.Core.requests
             }
         }
 
-        public RequestContext(string basePath, string path, object value, TimeSpan timeout, IAsyncDecorator[] filters)
+        public RequestContext(RequestType requestType ,string basePath, string path, object value, TimeSpan timeout, IAsyncDecorator[] filters)
         {
+            this.RequestType = requestType;
             this.decoratorIndex = -1;
             this._decorators = filters;
             this.BasePath = basePath;

@@ -1,26 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Core3.SciptableObjects;
+using DefaultNamespace.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility.Logging;
-using VContainer;
+
 
 namespace UI
 {
-    public class LoginForm : MonoBehaviour
+    public class LoginForm : MonoBehaviour, IInfoDisplayer
     {
-
         private TMP_InputField _usernameInput;
         private TMP_InputField _passwordInput;
         public TMP_Text _responseLabel;
         [HideInInspector]
         public Button _submitButton;
 
-        private InternalSetting _setting;
-        private RuntimeLogger _logger;
-        
+        [Header("Listening to")] [SerializeField]
+        private InfoDisplayEventChannelSO _infoDisplayEvent;
+
+        //private InternalSetting _setting;
+        // private RuntimeLogger _logger;
+        public IList<long> CodesToIgnore { get; private set; } = new List<long>()
+        {
+
+        };
+
+        public InfoDisplayEventChannelSO Listener
+        {
+            get => _infoDisplayEvent;
+        }
+
         public string Username
         {
             get => _usernameInput.text;
@@ -40,11 +52,27 @@ namespace UI
             _responseLabel.text = String.Empty;
         }
 
-        [Inject]
-        private void InjectSettings(InternalSetting setting, RuntimeLogger logger)
+        private void OnEnable()
         {
-            _setting = setting;
-            _logger = logger;
+            Listener.onEventRaised += DisplayInformation;
+        }
+        private void OnDisable()
+        {
+            Listener.onEventRaised -= DisplayInformation;
+        }
+        
+        // [Inject]
+        // private void InjectSettings(InternalSetting setting)
+        // {
+        //     _setting = setting;
+        //     //_logger = logger;
+        // }
+        public void DisplayInformation(long code, string message, Color messageColor)
+        {
+            if(CodesToIgnore.Contains(code))
+                return;
+            _responseLabel.color = messageColor;
+            _responseLabel.text = message;
         }
     }
 }

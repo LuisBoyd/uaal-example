@@ -2,15 +2,13 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38053d8ce93c49b6a90617f2f2f032ca, type: 3}
-  m_Name: Base Internal Settings
+  m_Script: {fileID: 11500000, guid: 12368ffd90e3c4ac4889486ab7b2aa78, type: 3}
+  m_Name: Samsung Android Provider Loader
   m_EditorClassIdentifier: 
-  id_display: 587fd96c-2cae-4c36-a58c-ee010ef2feaf
-  WebReqestContentType: 0

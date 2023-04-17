@@ -7,7 +7,7 @@ namespace Core.Services
     {
         public void Report(float value)
         {
-            Debug.Log($"Current Process is {value}");
+            // Debug.Log($"Current Process is {value}");
         }
     }
 }

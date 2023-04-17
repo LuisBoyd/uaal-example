@@ -21,7 +21,7 @@ namespace Core.Services
         {
           await _managersScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true);
           var menuLoadChannel = await _menuLoadChannel.LoadAssetAsync<LoadEventChannelSO>();
-          menuLoadChannel.RaiseEvent(_LoginScene, true);
+          menuLoadChannel.RaiseEvent(_LoginScene, false);
           SceneManager.UnloadSceneAsync(0);
         }
     }

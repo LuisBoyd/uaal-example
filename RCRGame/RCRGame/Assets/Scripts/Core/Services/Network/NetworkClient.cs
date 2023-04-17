@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
+using Core3.SciptableObjects;
 using Cysharp.Threading.Tasks;
+using DefaultNamespace.Core.Enum;
 using DefaultNamespace.Core.requests;
 using DefaultNamespace.Core.response;
 using Newtonsoft.Json;
@@ -17,19 +20,21 @@ namespace Core.Services.Network
         private readonly TimeSpan timeout;
         private readonly IProgress<float> _progress;
         private readonly string basePath;
+        private readonly InternalSetting Setting;
 
-        public NetworkClient(string basePath, TimeSpan timeout, params IAsyncDecorator[] decorators) : this(basePath,
+        public NetworkClient(InternalSetting setting, TimeSpan timeout, params IAsyncDecorator[] decorators) : this(setting,
             timeout, null, decorators)
         {
             
         }
 
-        public NetworkClient(string basePath, TimeSpan timeout, IProgress<float> progress,
+        public NetworkClient(InternalSetting setting, TimeSpan timeout, IProgress<float> progress,
             params IAsyncDecorator[] decorators)
         {
             this.next = InvokeRecursive;
 
-            this.basePath = basePath;
+            this.Setting = setting;
+            this.basePath = Setting.RootEndPoint;
             this.timeout = timeout;
             this._progress = progress;
             this._decorators = new IAsyncDecorator[decorators.Length + 1];
@@ -37,9 +42,9 @@ namespace Core.Services.Network
             this._decorators[^1] = this;
         }
 
-        public async UniTask<T> PostAsync<T>(string path, T value, CancellationToken token = default)
+        public async UniTask<T> PostAsync<T>(RequestType requestType ,string path, object value, CancellationToken token = default)
         {
-            var request = new RequestContext(basePath, path, value, timeout, _decorators);
+            var request = new RequestContext(requestType,basePath, path, value, timeout, _decorators);
             var response = await InvokeRecursive(request, token);
             return response.GetResponseAs<T>();
         }
@@ -58,8 +63,17 @@ namespace Core.Services.Network
             var data = JsonConvert.SerializeObject(context.Value);
             var formData = new Dictionary<string, string> { { "body", data } };
 
-            using (var req = UnityWebRequest.Post(basePath + context.Path, formData))
+            using (var req = new UnityWebRequest(basePath + context.Path, context.RequestType.ToString()))
             {
+
+                if (context.RequestType == RequestType.POST || context.RequestType == RequestType.PUT)
+                {
+                    var bodyRaw = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(context.Value));
+                    req.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                    req.uploadHandler.contentType = Setting.GetContentHeader();
+                }
+                req.downloadHandler = new DownloadHandlerBuffer();
+                
                 var header = context.GetRawHeaders();
                 if (header != null)
                 {

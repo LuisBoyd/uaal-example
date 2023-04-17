@@ -174,7 +174,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &301683000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,6 +547,10 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
+  _loginFormSceneSo: {fileID: 11400000, guid: 5312aa57e020a074f9b7f666a50501d4, type: 2}
+  _loadSceneEvent: {fileID: 11400000, guid: b338b348a9d5d964e86c2518267bdaae, type: 2}
+  _visualInfoLoggerEvent: {fileID: 11400000, guid: f691baf9749f0df41a9260704479269e,
+    type: 2}
 --- !u!1 &1752284011
 GameObject:
   m_ObjectHideFlags: 0
