@@ -24,6 +24,33 @@ class MySqlDb{
             die("Connection failed: " . $this->conn->connect_error);
         }
     }
+
+    function getTable($table)
+    {
+        $sql = "SELECT * FROM ".$table;
+        $sql = $this->conn->query($sql) or die($this->conn->error);
+        $a = array();
+        while($row = $sql->fetch_assoc()){
+            array_push($a, $row);
+        }
+        return $a;
+    }
+
+    function getFieldsFromTable($table, ...$fields){
+        $result = null;
+        foreach ($fields as $field){
+            $result = $result.','.$field;
+        }
+        $result = ltrim($result, $result[0]);
+        $sql = "SELECT ".$result." FROM ".$table;
+        $sql = $this->conn->query($sql) or die($this->conn->error);
+        $a = array();
+        while($row = $sql->fetch_assoc()){
+            array_push($a, $row);
+        }
+        return $a;
+    }
+
     function getData($table, $where){
         //$this->connect();
         $sql = "SELECT * FROM ".$table." WHERE ".$where;

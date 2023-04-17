@@ -15,10 +15,10 @@ class UserLoginResponse{
                          int  $free_slots,int $freemium_currency,
                          int $premium_currency
     ){
-        $this->$user_id = $user_id;
-        $this->$username = $username;
-        $this->$level = $level;
-        $this->$current_exp = $current_exp;
+        $this->user_id = $user_id;
+        $this->username = $username;
+        $this->level = $level;
+        $this->current_exp = $current_exp;
         $this->taken_slots = $taken_slots;
         $this->free_slots = $free_slots;
         $this->freemium_currency = $freemium_currency;

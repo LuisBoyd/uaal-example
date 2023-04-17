@@ -8,7 +8,6 @@ namespace Core3.MonoBehaviors
     {
         public virtual void Dispose()
         {
-            throw new NotImplementedException();
         }
     }
 }

@@ -26,5 +26,7 @@ if(!password_verify($parms->password, $userDetails["hashedpwd"])){
     exit();
 }
 else{
-    echo json_encode(new UserLoginResponse("Success: Logged in", true));
+    echo json_encode(new UserLoginResponse($userDetails["user_id"], $userDetails["username"],
+        $userDetails["Level"],  $userDetails["Current_EXP"], $userDetails["TakenSlots"],
+        $userDetails["FreeSlots"],$userDetails["Freemium_Currency"],$userDetails["Premium_Currency"] ));
 }
