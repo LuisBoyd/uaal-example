@@ -42,9 +42,15 @@ namespace Core.Services.Network
             this._decorators[^1] = this;
         }
 
-        public async UniTask<T> PostAsync<T>(RequestType requestType ,string path, object value, CancellationToken token = default)
+        public async UniTask<T> PostAsync<T>(string path, object value, CancellationToken token = default)
         {
-            var request = new RequestContext(requestType,basePath, path, value, timeout, _decorators);
+            var request = new RequestContext(RequestType.POST,basePath, path, value, timeout, _decorators);
+            var response = await InvokeRecursive(request, token);
+            return response.GetResponseAs<T>();
+        }
+        public async UniTask<T> GetAsync<T>(string path, object value, CancellationToken token = default)
+        {
+            var request = new RequestContext(RequestType.GET,basePath, path, value, timeout, _decorators);
             var response = await InvokeRecursive(request, token);
             return response.GetResponseAs<T>();
         }

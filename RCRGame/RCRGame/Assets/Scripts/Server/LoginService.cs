@@ -1,7 +1,10 @@
 ﻿using System;
 using Core.Services.Network;
+using Core3.SciptableObjects;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace.Core.Enum;
+using DefaultNamespace.Core.models;
+using DefaultNamespace.Events;
 
 
 namespace DefaultNamespace.Server
@@ -13,29 +16,31 @@ namespace DefaultNamespace.Server
     
     public class LoginService : ILoginService
     {
-        //private readonly IHttpClient _client;
-        // private readonly InternalSetting _internalSetting;
-        // private readonly DisplayLogger _displayLogger;
-        // private readonly LoginForm _loginForm;
         private readonly NetworkClient _netowrkClient;
-        public LoginService(NetworkClient networkClient)
+        private readonly User _userSession;
+
+        private readonly SceneSO _successloginScene;
+        private readonly LoadEventChannelSO _LoadEventChannelSo;
+        
+        public LoginService(NetworkClient networkClient, User userSession, LoadEventChannelSO loadEventChannelSo,
+            SceneSO successfulLoginScene)
         {
-            //_client = client;
-            // _internalSetting = internalSetting;
-            // _displayLogger = displayLogger;
-            // _loginForm = form;
             _netowrkClient = networkClient;
+            _userSession = userSession;
+            _LoadEventChannelSo = loadEventChannelSo;
+            _successloginScene = successfulLoginScene;
         }
         
         public async UniTaskVoid Login(string username, string password)
         {
             try
             {
-                var response = await _netowrkClient.PostAsync<Response>(RequestType.POST,"login.php", new AuthenticationRequest()
+                await _netowrkClient.PostAsync<UserloginResponse>("login.php", new AuthenticationRequest()
                 {
                     password = password,
                     username = username
                 });
+                _LoadEventChannelSo.RaiseEvent(_successloginScene, false);
             }
             catch (Exception e)
             {

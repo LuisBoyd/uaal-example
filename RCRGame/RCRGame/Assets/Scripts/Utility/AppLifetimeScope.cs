@@ -3,6 +3,7 @@ using System.IO;
 using Core.Services;
 using Core.Services.Network;
 using Core3.SciptableObjects;
+using DefaultNamespace.Core.models;
 using DefaultNamespace.Events;
 using UnityEngine;
 using Utility.Logging;
@@ -21,6 +22,7 @@ namespace Utility
         private DisplayLogger _displayLogger;
         private NetworkClient _networkClient;
         private IProgress<float> _progressReporter;
+        private User _userSession;
 
         [SerializeField] private SceneSO _loginFormSceneSo;
         [SerializeField] private LoadEventChannelSO _loadSceneEvent;
@@ -44,8 +46,9 @@ namespace Utility
             //     _progressReporter,
             //     new LoggingDecorator(),
             //     new ReturnToLoginPageDecorator());
-
-
+            _userSession = new User();
+            
+            
             builder.Register<NetworkClient>(resolver => new NetworkClient(_setting,
                 TimeSpan.FromSeconds(_setting.DefaultRequestTimeOut),
                 _progressReporter,
@@ -55,7 +58,7 @@ namespace Utility
                 new AuthenticationDecorator()),
                 Lifetime.Singleton);
             
-            
+            builder.Register<User>(Lifetime.Singleton);
             builder.RegisterInstance<ISerializer<string>>(_jsonSerializer);
             builder.RegisterInstance<IDeserializer<string>>(_jsonDeserializer);
             //builder.RegisterInstance<NetworkClient>(_networkClient);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core3.SciptableObjects;
 using DefaultNamespace.Events;
 using TMPro;
 using UnityEngine;
@@ -17,9 +18,11 @@ namespace UI
         public TMP_Text _responseLabel;
         [HideInInspector]
         public Button _submitButton;
-
+        
+        
         [Header("Listening to")] [SerializeField]
         private InfoDisplayEventChannelSO _infoDisplayEvent;
+        
 
         //private InternalSetting _setting;
         // private RuntimeLogger _logger;

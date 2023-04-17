@@ -1,6 +1,6 @@
 <?php
 require_once('db_mysql.php');
-require_once ('Response.php');
+require_once('UserLoginResponse.php');
 $http_verb = $_SERVER['REQUEST_METHOD'];
 $parms = json_decode(file_get_contents('php://input'));
 $mysql = new MySqlDb();
@@ -44,13 +44,13 @@ if($passAttributeCurrentCount < $PassAttributeCount){
 
 if(preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $parms->username)){
     header("HTTP/1.0 400 Bad Request");
-    echo json_encode(new Response("error: username can not contain special characters", false));
+    echo json_encode(new UserLoginResponse("error: username can not contain special characters", false));
     exit();
 }
 
 if(strlen($parms->username) < $minimumChar){
     header("HTTP/1.0 400 Bad Request");
-    echo json_encode(new Response("error: a username must contain '$minimumChar' characters", false));
+    echo json_encode(new UserLoginResponse("error: a username must contain '$minimumChar' characters", false));
     exit();
 }
 
@@ -58,13 +58,13 @@ if(strlen($parms->username) < $minimumChar){
 $DuplicateUsernameCount = $mysql->GetCount("system_users","username = '$parms->username'");
 if($DuplicateUsernameCount > 0){
     header("HTTP/1.0 409 Conflict");
-    echo json_encode(new Response("error: please choose another username", false));
+    echo json_encode(new UserLoginResponse("error: please choose another username", false));
     exit();
 }
 
 if($passwordError){
     header("HTTP/1.0 400 Bad Request");
-    echo json_encode(new Response("error: Passwords must have at least '$passXLength' characters and \n
+    echo json_encode(new UserLoginResponse("error: Passwords must have at least '$passXLength' characters and \n
     contain at least two of the following: uppercase letters,\n
     lowercase letters, numbers, and symbols", false));
     exit();
@@ -77,9 +77,9 @@ if($mysql->createData("system_users",
         "(username, hashedpwd)", "('$parms->username', '$SaltAndHashedPwd')") == null){
 
     header("HTTP/1.0 500 Internal Server Error");
-    echo json_encode(new Response("error: Server could not create user", false));
+    echo json_encode(new UserLoginResponse("error: Server could not create user", false));
     exit();
 }else{
-    echo json_encode(new Response("Success: Server created user", true));
+    echo json_encode(new UserLoginResponse("Success: Server created user", true));
 }
 
