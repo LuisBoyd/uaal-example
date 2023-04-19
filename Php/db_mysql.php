@@ -51,6 +51,7 @@ class MySqlDb{
         return $a;
     }
 
+
     function getData($table, $where){
         //$this->connect();
         $sql = "SELECT * FROM ".$table." WHERE ".$where;
@@ -64,6 +65,24 @@ class MySqlDb{
         $sql = $this->conn->query($sql) or die($this->conn->error);;
         $sql = $sql->fetch_assoc();
         return $sql;
+    }
+
+    function RawStatementRawResult($sqlStatement)
+    {
+        $sql = $sqlStatement;
+        $sql = $this->conn->query($sql) or die($this->conn->error);;
+        return $sql;
+    }
+
+    function RawStatementArray($sqlStatement)
+    {
+        $sql = $sqlStatement;
+        $sql = $this->conn->query($sql) or die($this->conn->error);
+        $a = array();
+        while ($row = $sql->fetch_assoc()){
+            array_push($a, $row);
+        }
+        return $a;
     }
 
     function GetCount($table, $where)
