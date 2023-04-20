@@ -1,6 +1,7 @@
 ﻿using System;
 using Core3.MonoBehaviors;
 using DefaultNamespace.Core.models;
+using DefaultNamespace.Events;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using TMPro;
@@ -18,11 +19,18 @@ namespace UI.RecyclableScrollRect
         [SerializeField] private TMP_Text AverageEarningsTMP;
         [SerializeField] private Image RibbonBackgroundImg;
         [SerializeField] private TMP_Text MarinaNameTMP;
-        [SerializeField] private Button BuySellBtn;
-        [SerializeField] private TMP_Text BuySellTMP;
+        [SerializeField] private Button BuyBtn;
+        [SerializeField] private TMP_Text BuyTMP;
+        [SerializeField] private Button SellBtn;
+        [SerializeField] private TMP_Text SellTMP;
         [SerializeField] private Button VisitBtn;
         [SerializeField] private Image BuySellImg;
         [SerializeField] private Image VistImg;
+
+        [Header("Broadcasting ON")] 
+        [SerializeField] private IntEventChannelSO BuyMarinaEventChannel;
+        [SerializeField] private IntEventChannelSO SellMarinaEventChannel;
+        [SerializeField] private IntEventChannelSO VisitMarinaEventChannel;
 
         public UnityAction<int> SellOwnedMarina;
         public UnityAction<int> BuyMarina;
@@ -31,40 +39,60 @@ namespace UI.RecyclableScrollRect
         //Model
         private Mariana _mariana;
         private int _cellIndex;
-        private UserMariana _UserMarianaInfo;
-
-        private bool HasOwner
+        
+        private void OnEnable()
         {
-            get => _UserMarianaInfo != null;
+            //Assign all the Actions to the button's
+            BuyBtn.onClick.AddListener(OnBuyBtnClick);
+            SellBtn.onClick.AddListener(OnSellBtnClick);
+            VisitBtn.onClick.AddListener(OnVistBtnClick);
         }
 
-        private void Start()
+        private void OnDisable()
         {
-            //Assign all the public NonAction fields in the inspector.
+            //Deassign all the Actions to the button's
+            BuyBtn.onClick.RemoveListener(OnBuyBtnClick);
+            SellBtn.onClick.RemoveListener(OnSellBtnClick);
+            VisitBtn.onClick.RemoveListener(OnVistBtnClick);
         }
 
         public void ConfigureCell(Mariana MarinaInfo, int cellIndex)
         {
             _cellIndex = cellIndex;
             _mariana = MarinaInfo;
+            ActivateButtons();
             ApplyVisuals();
         }
 
-        public void ConfigureCell(Mariana marianaInfo, UserMariana userMarianaInfo, int index)
+        private void ActivateButtons()
         {
-            _cellIndex = index;
-            _mariana = marianaInfo;
-            _UserMarianaInfo = userMarianaInfo;
-            ApplyVisuals();
+            if (_mariana.OwnStatus)
+            {
+                BuyBtn.gameObject.SetActive(false);
+                SellBtn.gameObject.SetActive(true);
+            }
+            else
+            {
+                BuyBtn.gameObject.SetActive(true);
+                SellBtn.gameObject.SetActive(false);
+            }
         }
-
+        
         private void ApplyVisuals()
         {
-            BuySellImg.color = HasOwner ? Color.red : Color.green; //For time being while setting up TODO replace with actual images
+            BuySellImg.color = _mariana.OwnStatus ? Color.red : Color.green; //For time being while setting up TODO replace with actual images
             VistImg.color = Color.blue;
             RibbonBackgroundImg.color = Color.yellow;
-            MarinaNameTMP.text = _mariana.name;
-            BuySellTMP.text = HasOwner ? _mariana.basesellcost.ToString() : _mariana.buycost.ToString();
+            MarinaNameTMP.text = _mariana.Name;
+            //BuySellTMP.text = _mariana.OwnStatus ? _mariana.BaseSellCost.ToString() : _mariana.BuyCost.ToString();
         }
+
+        #region Event-Stuff
+
+        private void OnBuyBtnClick() => BuyMarinaEventChannel.RaiseEvent(_mariana.POIid);
+        private void OnSellBtnClick() => SellMarinaEventChannel.RaiseEvent(_mariana.POIid);
+        private void OnVistBtnClick() => VisitMarinaEventChannel.RaiseEvent(_mariana.POIid);
+
+        #endregion
     }
 }

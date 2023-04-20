@@ -51,6 +51,17 @@ class MySqlDb{
         return $a;
     }
 
+    function getFieldsFromTableWhere($table,$where, ...$fields){
+        $result = null;
+        foreach ($fields as $field){
+            $result = $result.','.$field;
+        }
+        $result = ltrim($result, $result[0]);
+        $sql = "SELECT ".$result." FROM ".$table." WHERE ".$where;
+        $sql = $this->conn->query($sql) or die($this->conn->error);
+        return $sql;
+    }
+
 
     function getData($table, $where){
         //$this->connect();

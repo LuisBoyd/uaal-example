@@ -35,17 +35,28 @@ namespace DefaultNamespace.Server
         {
             try
             {
-                await _netowrkClient.PostAsync<UserloginResponse>("login.php", new AuthenticationRequest()
+               var loginResponse = await _netowrkClient.PostAsync<UserloginResponse>("login.php", new AuthenticationRequest()
                 {
                     password = password,
                     username = username
                 });
-                _LoadEventChannelSo.RaiseEvent(_successloginScene, false);
+               AssignUserSessionData(loginResponse);
+               _LoadEventChannelSo.RaiseEvent(_successloginScene, false);
             }
             catch (Exception e)
             {
                 throw new OperationCanceledException();
             }
+        }
+
+        private void AssignUserSessionData(UserloginResponse response)
+        {
+            _userSession.User_id = response.user_id;
+            _userSession.Username = response.username;
+            _userSession.Level = response.level;
+            _userSession.Current_Exp = response.current_exp;
+            _userSession.Freemium_Currency = response.freemium_currency;
+            _userSession.Premium_Currency = response.premium_currency;
         }
         
     }
