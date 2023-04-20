@@ -22,18 +22,45 @@ namespace Utility
                 case < 1000:
                     return string.Empty;
                     break;
-                case < 10000:
-                    break;
-                    return "Thousands";
                 case < 1000000:
-                    return "Millions";
+                    return "Thousands";
                     break;
                 case < 1000000000:
-                    return "Billions";
+                    return "Millions";
                     break;
+                // case < 1000000000:
+                //     return "Trillions"; not supported by int32 unfortunately
+                //     break;
                 case 2147483647:
                     return "Maxed";
                 break;
+            }
+            return string.Empty;
+        }
+        
+        /// <summary>
+        ///  converts a integer value into a decimal category shorthand so for example 1000 would return K or 1 million would return M
+        /// *Supports a standard int32 so the max value would be 2147483647 which is billions*
+        /// </summary>
+        public static string DeciamlCatergoryShortHand(int value)
+        {
+            switch (value)
+            {
+                case < 1000:
+                    return string.Empty;
+                    break;
+                case < 1000000:
+                    return "K";
+                    break;
+                case < 1000000000:
+                    return "M";
+                    break;
+                // case < 1000000000:
+                //     return "Trillions"; not supported by int32 unfortunately
+                //     break;
+                case 2147483647:
+                    return "Max";
+                    break;
             }
             return string.Empty;
         }
