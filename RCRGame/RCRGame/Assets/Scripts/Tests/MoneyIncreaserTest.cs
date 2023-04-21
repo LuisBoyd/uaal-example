@@ -1,7 +1,12 @@
 ﻿using System;
 using Core3.MonoBehaviors;
+using DefaultNamespace.Core.models;
 using DefaultNamespace.Events;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using VContainer;
+#endif
 
 namespace DefaultNamespace.Tests
 {
@@ -17,13 +22,22 @@ namespace DefaultNamespace.Tests
         private int PremiumMoneyCount;
 
 #if UNITY_EDITOR
+        private User _user;
+        
+        //Testing for the injection just for money counting
+        [Inject]
+        private void InjectUser(User user)
+        {
+            _user = user;
+        }
+        
         private void Update()
         {
             if (timeLeft <= 0.0f)
             {
                 timeLeft = timer;
-                CurrentFreeMoneyCount += 100;
-                PremiumMoneyCount += 50;
+                _user.Freemium_Currency += 100;
+                _user.Premium_Currency += 50;
                 FreemiumMoneyIncreaseEvent.RaiseEvent(CurrentFreeMoneyCount);
                 PremiumMoneyIncreaseEvent.RaiseEvent(PremiumMoneyCount);
             }

@@ -34,8 +34,17 @@ namespace Core3.SciptableObjects
         [CanBeNull][JsonIgnore]
         public string NewestLogPath { get; set; }
         
+        [CanBeNull][JsonIgnore]
+        public string UserDataLocalSavePath { get; set; }
+        
         [ShowInInspector]
         public int DefaultRequestTimeOut { get; set; } = 2;
+        
+        [ShowInInspector]
+        public int LocalSaveTimeMilliSeconds { get; set; } = 10000; //every 10s default
+        
+        [ShowInInspector]
+        public int RemoteSaveTimeMilliSeconds { get; set; } = 10000; //every 10s default
         
         [ShowInInspector][JsonConverter(typeof(ColorHandler))]
         public Color DebugErrorColor { get; set; } = Color.white;
@@ -53,6 +62,7 @@ namespace Core3.SciptableObjects
             NewestLogPath = Application.persistentDataPath + "/NewestLog.txt";
             PreviousLogPath = Application.persistentDataPath + "/PreviousLog.txt";
             OldestLogPath = Application.persistentDataPath + "/OldestLog.txt";
+            UserDataLocalSavePath = Application.persistentDataPath + "/userdata.txt";
         }
 
         protected override void Initialize(InternalSetting obj)
@@ -68,7 +78,10 @@ namespace Core3.SciptableObjects
             this.NewestLogPath = obj.NewestLogPath;
             this.PreviousLogPath = obj.PreviousLogPath;
             this.OldestLogPath = obj.OldestLogPath;
+            this.UserDataLocalSavePath = obj.UserDataLocalSavePath;
             this.WebReqestContentType = obj.WebReqestContentType;
+            this.RemoteSaveTimeMilliSeconds = obj.RemoteSaveTimeMilliSeconds;
+            this.LocalSaveTimeMilliSeconds = obj.LocalSaveTimeMilliSeconds;
         }
         
         public static InternalSetting CreateInternalSettingInstance(string filepath, IDeserializer<string> deserializer = null)

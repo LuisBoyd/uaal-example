@@ -22,7 +22,6 @@ namespace Utility
         private DisplayLogger _displayLogger;
         private NetworkClient _networkClient;
         private IProgress<float> _progressReporter;
-        private User _userSession;
 
         [SerializeField] private SceneSO _loginFormSceneSo;
         [SerializeField] private LoadEventChannelSO _loadSceneEvent;
@@ -46,9 +45,8 @@ namespace Utility
             //     _progressReporter,
             //     new LoggingDecorator(),
             //     new ReturnToLoginPageDecorator());
-            _userSession = new User();
-            
-            
+
+
             builder.Register<NetworkClient>(resolver => new NetworkClient(_setting,
                 TimeSpan.FromSeconds(_setting.DefaultRequestTimeOut),
                 _progressReporter,

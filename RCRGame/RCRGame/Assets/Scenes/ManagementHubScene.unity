@@ -284,13 +284,11 @@ MonoBehaviour:
   freemium_currency:
     currency_icon: {fileID: 1312291087}
     currency_display: {fileID: 1365233434}
-    tenthsDisplay: {fileID: 0}
     _onAlterntiveCurrencyChanged: {fileID: 11400000, guid: 1ce039fdcb97a6b44b741c95a54a00d9,
       type: 2}
   alternativeCurrencies:
   - currency_icon: {fileID: 1292926466}
     currency_display: {fileID: 1887600893}
-    tenthsDisplay: {fileID: 0}
     _onAlterntiveCurrencyChanged: {fileID: 11400000, guid: 074ea6972c4eb04409d29eef8550433c,
       type: 2}
   _userPfpBorderChanged: {fileID: 11400000, guid: adbc28e9ea29f6d47bad981428ec2e2e,
@@ -2303,6 +2301,7 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _recyclableMarinaView: {fileID: 1528042035}
   OnNewMarinaDataSet: {fileID: 11400000, guid: e31daedf1e6069d429f97b2822a89ea3, type: 2}
+  _increaserTest: {fileID: 326240929}
 --- !u!4 &1496982268
 Transform:
   m_ObjectHideFlags: 0

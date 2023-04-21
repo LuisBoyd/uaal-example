@@ -48,6 +48,11 @@ namespace Core.Services.Network
             var response = await InvokeRecursive(request, token);
             return response.GetResponseAs<T>();
         }
+        public async UniTask PostAsync(string path, object value, CancellationToken token = default)
+        {
+            var request = new RequestContext(RequestType.POST,basePath, path, value, timeout, _decorators);
+            var response = await InvokeRecursive(request, token);
+        }
         public async UniTask<T> GetAsync<T>(string path, object value, CancellationToken token = default)
         {
             var request = new RequestContext(RequestType.GET,basePath, path, value, timeout, _decorators);

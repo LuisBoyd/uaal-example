@@ -16,7 +16,6 @@ class MySqlDb{
         $this->password = getenv('mysql_password');
         $this->db = getenv('mysql_database');
         $this->connect();
-
     }
     private function connect(){
         $this->conn = new mysqli($this->host, $this->username, $this->password, $this->db);
@@ -124,8 +123,9 @@ class MySqlDb{
             return false;
         }
     }
-    function deleteData($table, $filter){
 
+
+    function deleteData($table, $filter){
         $this->connect();
         $sql =  "DELETE FROM ".$table." ".$filter;
         $sql = $this->conn->query($sql) or die($this->conn->error);;
