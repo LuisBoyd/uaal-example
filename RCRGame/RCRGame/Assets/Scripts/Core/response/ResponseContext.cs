@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Utility;
 using VContainer;
 
@@ -21,9 +23,13 @@ namespace DefaultNamespace.Core.response
 
         public string GetText() => text;
         
-        public T GetResponseAs<T>() 
+        public T GetResponseAs<T>()
         {
-            return JsonConvert.DeserializeObject<T>(text);
+            return JsonConvert.DeserializeObject<T>(text,
+                new JsonSerializerSettings()
+                {
+                    DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                });
         }
     }
 }

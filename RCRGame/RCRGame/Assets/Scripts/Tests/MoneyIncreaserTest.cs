@@ -38,8 +38,8 @@ namespace DefaultNamespace.Tests
                 timeLeft = timer;
                 _user.Freemium_Currency += 100;
                 _user.Premium_Currency += 50;
-                FreemiumMoneyIncreaseEvent.RaiseEvent(CurrentFreeMoneyCount);
-                PremiumMoneyIncreaseEvent.RaiseEvent(PremiumMoneyCount);
+                FreemiumMoneyIncreaseEvent.RaiseEvent(_user.Freemium_Currency);
+                PremiumMoneyIncreaseEvent.RaiseEvent(_user.Premium_Currency);
             }
             else
             {

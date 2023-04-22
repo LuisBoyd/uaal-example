@@ -1,4 +1,5 @@
 ﻿using Core.Services.Network;
+using Core.Services.persistence;
 using Core3.SciptableObjects;
 using DefaultNamespace.Core.models;
 using DefaultNamespace.Events;
@@ -24,12 +25,18 @@ namespace DefaultNamespace
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<LoginControlFlow>();
-            builder.Register<ILoginService>(resolver =>
-            {
-                var networkClient = resolver.Resolve<NetworkClient>();
-                var userSession = resolver.Resolve<User>();
-                return new LoginService(networkClient, userSession, SceneLoadSo, successfulLoginScene);
-            }, Lifetime.Singleton);
+            // builder.Register<ILoginService>(resolver =>
+            // {
+            //     var networkClient = resolver.Resolve<NetworkClient>();
+            //     var userSession = resolver.Resolve<User>();
+            //     var InternalSettings = resolver.Resolve<InternalSetting>();
+            //     var loader = resolver.Resolve<UserLoader>();
+            //     return new LoginService(networkClient, userSession, SceneLoadSo, successfulLoginScene, InternalSettings,
+            //         loader);
+            // }, Lifetime.Singleton);
+            builder.Register<ILoginService, LoginService>(Lifetime.Singleton)
+                .WithParameter<SceneSO>(successfulLoginScene).WithParameter<LoadEventChannelSO>(SceneLoadSo);
+            builder.Register<UserLoader>(Lifetime.Scoped);
             builder.RegisterComponent(_loginForm);
         }
     }
