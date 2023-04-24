@@ -2568,7 +2568,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1576435908}
-  - component: {fileID: 1576435907}
   m_Layer: 0
   m_Name: MarinaVisiter
   m_TagString: Untagged
@@ -2576,24 +2575,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1576435907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1576435906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f893c2b2eaf4618b7fb95cdd4c941f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _GameplayPersistantManagerScene: {fileID: 11400000, guid: 923bae8c7e358d849b7e2b8a708d0329,
-    type: 2}
-  _gamePlayScene: {fileID: 0}
-  VisitMarinaEventChannel: {fileID: 11400000, guid: d237b04c005990a46b40f2073253a8a8,
-    type: 2}
-  _SceneLoadChannel: {fileID: 0}
 --- !u!4 &1576435908
 Transform:
   m_ObjectHideFlags: 0

@@ -37,6 +37,9 @@ namespace Core3.SciptableObjects
         [CanBeNull][JsonIgnore]
         public string UserDataLocalSavePath { get; set; }
         
+        [CanBeNull][JsonIgnore]
+        public string UserMapDataLocalSavePath { get; set; }
+        
         [ShowInInspector]
         public int DefaultRequestTimeOut { get; set; } = 2;
         
@@ -63,6 +66,7 @@ namespace Core3.SciptableObjects
             PreviousLogPath = Application.persistentDataPath + "/PreviousLog.txt";
             OldestLogPath = Application.persistentDataPath + "/OldestLog.txt";
             UserDataLocalSavePath = Application.persistentDataPath + "/userdata.txt";
+            UserMapDataLocalSavePath = Application.persistentDataPath + "/usermapdata.txt";
         }
 
         protected override void Initialize(InternalSetting obj)

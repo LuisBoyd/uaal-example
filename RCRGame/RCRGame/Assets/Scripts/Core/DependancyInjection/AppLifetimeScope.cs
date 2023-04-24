@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Core.Services;
+using Core.Services.Marina;
 using Core.Services.Network;
 using Core3.SciptableObjects;
 using DefaultNamespace.Core.models;
@@ -27,6 +28,8 @@ namespace Utility
         [SerializeField] private LoadEventChannelSO _loadSceneEvent;
         [SerializeField] private InfoDisplayEventChannelSO _visualInfoLoggerEvent;
         [SerializeField] private TextAsset PreCompiledSetting; //In actual production take this out.
+
+        [SerializeField] private MarinaMapService _marinaMapService;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -57,12 +60,14 @@ namespace Utility
                 Lifetime.Singleton);
             
             builder.Register<User>(Lifetime.Singleton);
+            builder.Register<UserMariana>(Lifetime.Singleton);
             builder.RegisterInstance<ISerializer<string>>(_jsonSerializer);
             builder.RegisterInstance<IDeserializer<string>>(_jsonDeserializer);
             //builder.RegisterInstance<NetworkClient>(_networkClient);
             builder.RegisterInstance<IProgress<float>>(_progressReporter);
             builder.RegisterInstance<DisplayLogger>(_displayLogger);
             builder.RegisterInstance<InternalSetting>(_setting);
+            builder.RegisterComponent(_marinaMapService);
         }
 
         private void OnDisable()

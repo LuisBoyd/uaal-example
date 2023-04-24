@@ -10,13 +10,13 @@ namespace Core.Services.persistence
     public abstract class BaseLoader<T>
     {
         private readonly string _localFilePath;
-        private readonly string _remotePath;
+        //private readonly string _remotePath;
         protected readonly NetworkClient _networkClient;
 
-        protected BaseLoader(string localPath, string remotePath, NetworkClient client)
+        protected BaseLoader(string localPath, NetworkClient client)
         {
             _localFilePath = localPath;
-            _remotePath = remotePath;
+            //_remotePath = remotePath;
             _networkClient = client;
         }
 

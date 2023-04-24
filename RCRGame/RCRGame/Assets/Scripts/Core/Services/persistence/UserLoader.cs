@@ -13,7 +13,7 @@ namespace Core.Services.persistence
     public sealed class UserLoader : BaseLoader<User>
     {
         private readonly int _requestedUserID;
-        public UserLoader(int userId,NetworkClient client,string localPath, string remotePath) : base(localPath, remotePath,client)
+        public UserLoader(int userId,NetworkClient client,string localPath) : base(localPath,client)
         {
             _requestedUserID = userId;
         }

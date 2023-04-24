@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731715, g: 0.13414735, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 839308550}
   - component: {fileID: 839308551}
   m_Layer: 0
-  m_Name: MarinaManager
+  m_Name: MarinaBuilder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -359,10 +359,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 839308548}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 326004b2dad045b5a34b32e8e19a1d98, type: 3}
+  m_Script: {fileID: 11500000, guid: 45539714741f4adeaa665ba8cefde88a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsometricBaseMap: {fileID: 1309218736}
+  IsometricTileMap: {fileID: 1309218736}
+  _texture2D: {fileID: 2800000, guid: ee2297be90f04b44dbbc86e91921738a, type: 3}
 --- !u!1 &1309218733
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,4 +532,4 @@ MonoBehaviour:
     TypeName: Core.DependancyInjection.PersistantGameplayLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
-  _marinaManager: {fileID: 839308551}
+  _builderService: {fileID: 839308551}

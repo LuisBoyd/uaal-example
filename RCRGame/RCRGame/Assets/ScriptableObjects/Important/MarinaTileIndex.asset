@@ -46,7 +46,7 @@ MonoBehaviour:
       Data: UnityEngine.Color32, UnityEngine.CoreModule
     - Name: 
       Entry: 3
-      Data: 46
+      Data: 36
     - Name: 
       Entry: 3
       Data: 255
@@ -76,7 +76,7 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 3
-      Data: 148
+      Data: 252
     - Name: 
       Entry: 3
       Data: 255

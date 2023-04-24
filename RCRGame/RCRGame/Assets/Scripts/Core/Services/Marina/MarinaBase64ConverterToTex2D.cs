@@ -16,8 +16,13 @@ namespace Core.Services.Marina
 
         private readonly Texture2D _marinaTexture2D;
         private readonly TextureFormat _textureFormat;
+        public readonly int SetWidth;
+        public readonly int SetHeight;
+        
         public MarinaBase64ConverterToTex2D( int width, int height,TextureFormat textureFormat = TextureFormat.RGBA32)
         {
+            SetWidth = width;
+            SetHeight = height;
             _textureFormat = textureFormat;
             _marinaTexture2D = new Texture2D(width, height, _textureFormat, false);
         }
@@ -30,8 +35,10 @@ namespace Core.Services.Marina
                 Debug.LogError($"could not Reinitialize Texture");
                 return null;
             }
+            
             byte[] convertedbytes = System.Convert.FromBase64String(base64String);
-            _marinaTexture2D.LoadRawTextureData(convertedbytes);
+            //_marinaTexture2D.LoadRawTextureData(convertedbytes);
+            _marinaTexture2D.LoadImage(convertedbytes);
             _marinaTexture2D.Apply();
             return _marinaTexture2D;
         }

@@ -44,8 +44,7 @@ namespace DefaultNamespace.Server
                     username = username
                 });
                SetUserCustomSettings(loginResponse.user_id);
-               var userloader = new UserLoader(loginResponse.user_id, _netowrkClient, _setting.UserDataLocalSavePath,
-                   "GetUserData.php");
+               var userloader = new UserLoader(loginResponse.user_id, _netowrkClient, _setting.UserDataLocalSavePath);
                var latestUser =  await userloader.LoadMostRecent();
                AssignLatestUserData(latestUser);
                _LoadEventChannelSo.RaiseEvent(_successloginScene, false);

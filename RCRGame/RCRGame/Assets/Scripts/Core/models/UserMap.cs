@@ -1,10 +1,12 @@
-﻿
-public class UserMap
-{
+﻿using System.Collections.Generic;
+using DefaultNamespace.Core.models;
 
-    public int Id { get; set; }
-    
-    public int MarinaID { get; set; } //foreignKey
-    
-    public string OwnerID { get; set; } //foreignKey
+namespace Core.models
+{
+    public class UserMap
+    {
+        public UserMariana UserMariana { get; set; }
+        public List<Structure> Structures { get; set; }
+        public List<Plot> Plots { get; set; }
+    }
 }

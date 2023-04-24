@@ -12,7 +12,6 @@ namespace Core.Services
     public class InitializationLoader : BaseMonoBehavior
     {
         [SerializeField] private SceneSO _managersScene = default;
-        [SerializeField] private SceneSO _PersistantGameplayManagerScene = default;
         [SerializeField] private SceneSO _LoginScene;
 
         [Header("Broadcasting on")] [SerializeField]
@@ -21,7 +20,6 @@ namespace Core.Services
         private async UniTaskVoid Start()
         {
           await _managersScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true);
-          await _PersistantGameplayManagerScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true);
           var menuLoadChannel = await _menuLoadChannel.LoadAssetAsync<LoadEventChannelSO>();
           menuLoadChannel.RaiseEvent(_LoginScene, false);
           SceneManager.UnloadSceneAsync(0);

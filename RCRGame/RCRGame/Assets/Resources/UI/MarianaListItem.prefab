@@ -1530,7 +1530,7 @@ MonoBehaviour:
   SellBtn: {fileID: 5879187318507220561}
   SellCurrencyTypeIcon: {fileID: 4859224081868927141}
   SellCostTMP: {fileID: 1142382639255784771}
-  VisitBtn: {fileID: 3701058228895031131}
+  VisitBtn: {fileID: 5879187318507220561}
   AverageEarningsTMP: {fileID: 3701058229506241491}
   RibbonBackgroundImg: {fileID: 3701058229238555567}
   MarinaNameTMP: {fileID: 3701058228942592249}

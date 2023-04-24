@@ -16,7 +16,14 @@ foreach ($OwnedMarianaIds as $item) foreach ($item as $key=> $value){
         $OwnedPointsOfIntrest["buycost"],$OwnedPointsOfIntrest["basesellcost"],
     true));
 }
-$allEngWalesMarianas = $mysql->getFieldsFromTableWhere("pointsofinterest","pointOfInterestId NOT IN (".implode(",",$listOfOwnedPOIids).")" ,"id", "pointOfInterestId", "name", "buycost", "basesellcost",);
+
+$allEngWalesMarianas = null;
+if(count($listOfOwnedPOIids) != 0){
+    $allEngWalesMarianas = $mysql->getFieldsFromTableWhere("pointsofinterest","pointOfInterestId NOT IN (".implode(",",$listOfOwnedPOIids).")" ,"id", "pointOfInterestId", "name", "buycost", "basesellcost");
+}
+else{
+    $allEngWalesMarianas = $mysql->getFieldsFromTable("pointsofinterest","id", "pointOfInterestId", "name", "buycost", "basesellcost");
+}
 foreach ($allEngWalesMarianas as $marina){
     array_push($a, new MarinaObj($marina["id"], $marina["pointOfInterestId"], $marina["name"], $marina["buycost"], $marina["basesellcost"],
     false));
