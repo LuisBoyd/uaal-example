@@ -13,19 +13,43 @@ namespace UI.RecyclableScrollRect
 {
     public class MarianaCell : BaseMonoBehavior, ICell
     {
+        
+        #region MarinaImage
+        //TODO later it can be a full on Image instead of text
+        [Header("Marina Image")]
         [SerializeField]
         private Image MarinaImage;
+        [SerializeField] private TMP_Text MarinaTextInitals;
 
+        #endregion
+       
+
+        #region BuyButton
+        [Header("Buy Button")]
+        [SerializeField] private Button BuyBtn;
+        [SerializeField] private Image BuyCurrencyTypeIcon;
+        [SerializeField] private TMP_Text CostToBuyTMP;
+        #endregion
+        
+        #region SellButton
+        [Header("Sell Button")]
+        [SerializeField] private Button SellBtn;
+        [SerializeField] private Image SellCurrencyTypeIcon;
+        [SerializeField] private TMP_Text SellCostTMP;
+        #endregion
+
+        #region Visit Button
+        [Header("Visit Button")]
+        [SerializeField] private Button VisitBtn;
+        //TODO later add in Lock Icon Image to activate and deactivate or something to indicate the visit is locked
+        #endregion
+
+        #region Ribbon
+        [Header("Marina Information")]
         [SerializeField] private TMP_Text AverageEarningsTMP;
         [SerializeField] private Image RibbonBackgroundImg;
         [SerializeField] private TMP_Text MarinaNameTMP;
-        [SerializeField] private Button BuyBtn;
-        [SerializeField] private TMP_Text BuyTMP;
-        [SerializeField] private Button SellBtn;
-        [SerializeField] private TMP_Text SellTMP;
-        [SerializeField] private Button VisitBtn;
-        [SerializeField] private Image BuySellImg;
-        [SerializeField] private Image VistImg;
+        #endregion
 
         [Header("Broadcasting ON")] 
         [SerializeField] private IntEventChannelSO BuyMarinaEventChannel;
@@ -70,18 +94,58 @@ namespace UI.RecyclableScrollRect
             {
                 BuyBtn.gameObject.SetActive(false);
                 SellBtn.gameObject.SetActive(true);
+                VisitBtn.gameObject.SetActive(true);
             }
             else
             {
                 BuyBtn.gameObject.SetActive(true);
                 SellBtn.gameObject.SetActive(false);
+                VisitBtn.gameObject.SetActive(false);
             }
         }
         
         private void ApplyVisuals()
         {
-            BuySellImg.color = _mariana.OwnStatus ? Color.red : Color.green; //For time being while setting up TODO replace with actual images
-            VistImg.color = Color.blue;
+            #region BuyButton
+            /*TODO BuyCurrencyTypeIcon will need to be applied later on depending on what currency
+             is needed to buy the Marina 
+             */
+            //Cost to buy text is colored yellow hard coded although can be whatever color supported by TextMeshPro
+            CostToBuyTMP.text = $"<color=yellow>{_mariana.BuyCost.ToString()}</color>";
+            //The Current Buy Button on Click is red again can be changed to suit needs.
+            #endregion
+
+            #region SellButton
+            /*TODO SellCurrencyTypeIcon will need to be applied later on depending on what currency
+             is needed to buy the Marina 
+             */
+            //TODO SellCost Needs to be worked out based on certain aspects like what you have done at that marina.
+            #endregion
+
+            #region VisitButton
+            //TODO Visit button if it's locked as e.g someone had max 50 maps now they only have max 10 (can happen because drop in membership) then show a lock icon over the visit button.
+            #endregion
+
+            #region RibbonDetails
+            //Marina Name text is colored blue hard coded although can be whatever color supported by TextMeshPro
+            MarinaNameTMP.text = _mariana.Name;
+            MarinaNameTMP.color =  Color.white;
+            //TODO Need to work out average earnings of a marina to apply to average earning cost.
+            AverageEarningsTMP.text = "??? To be decided";
+            AverageEarningsTMP.color = Color.white;
+            
+            //TODO depending on the status of the marina e.g Not Bought yet, Bought or Locked this can be changed to some visual color queue.
+            RibbonBackgroundImg.color = _mariana.OwnStatus ? Color.yellow : Color.gray; //BUG This is not changing color of Ribbon
+            
+            #endregion
+
+            #region MarinaImage
+
+            //TODO later in the future if wanted we can grab a image for the marina rather than using it's intials
+            MarinaTextInitals.text = _mariana.Name.Substring(0, 2);
+
+            #endregion
+            
             RibbonBackgroundImg.color = Color.yellow;
             MarinaNameTMP.text = _mariana.Name;
             //BuySellTMP.text = _mariana.OwnStatus ? _mariana.BaseSellCost.ToString() : _mariana.BuyCost.ToString();

@@ -66,6 +66,7 @@ namespace Core.Services.Network
                             break;
                     }
                     HandleErrorCodes(uwe);
+                    throw;
                 }
             }
             finally

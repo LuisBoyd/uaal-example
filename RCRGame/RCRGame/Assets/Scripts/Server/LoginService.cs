@@ -23,17 +23,15 @@ namespace DefaultNamespace.Server
         private readonly SceneSO _successloginScene;
         private readonly LoadEventChannelSO _LoadEventChannelSo;
         private readonly InternalSetting _setting;
-        private readonly UserLoader _loader;
 
         public LoginService(NetworkClient networkClient, User userSession, LoadEventChannelSO loadEventChannelSo,
-            SceneSO successfulLoginScene, InternalSetting internalSetting, UserLoader loader)
+            SceneSO successfulLoginScene, InternalSetting internalSetting)
         {
             _netowrkClient = networkClient;
             _userSession = userSession;
             _LoadEventChannelSo = loadEventChannelSo;
             _successloginScene = successfulLoginScene;
             _setting = internalSetting;
-            _loader = loader;
         }
         
         public async UniTaskVoid Login(string username, string password)
@@ -46,7 +44,9 @@ namespace DefaultNamespace.Server
                     username = username
                 });
                SetUserCustomSettings(loginResponse.user_id);
-               var latestUser =  await _loader.LoadMostRecent();
+               var userloader = new UserLoader(loginResponse.user_id, _netowrkClient, _setting.UserDataLocalSavePath,
+                   "GetUserData.php");
+               var latestUser =  await userloader.LoadMostRecent();
                AssignLatestUserData(latestUser);
                _LoadEventChannelSo.RaiseEvent(_successloginScene, false);
             }
@@ -70,6 +70,7 @@ namespace DefaultNamespace.Server
         {
             _setting.UserDataLocalSavePath =
                 Application.persistentDataPath + $"/{userID}UserData.txt";
+            _userSession.User_id = userID; //IMPORTANT Must set the USER ID like this otherwise it defaults to 0 (or in the case of testing 7 which I set).
         }
         
     }

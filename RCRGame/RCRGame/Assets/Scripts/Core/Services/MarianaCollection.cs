@@ -6,6 +6,8 @@ using Cysharp.Threading.Tasks;
 using DefaultNamespace.Events;
 using UI;
 using UnityEngine;
+using UnityEngine.Events;
+using Utility;
 using VContainer.Unity;
 
 namespace DefaultNamespace.Core.models
@@ -14,7 +16,7 @@ namespace DefaultNamespace.Core.models
     /// IasyncStartable Collected all the Marina Data from the DB then this class can pass all that information onto
     /// whatever needs it
     /// </summary>
-    public class MarianaCollection : IAsyncStartable
+    public class MarianaCollection : IAsyncStartable, IDisposable
     {
         public List<Mariana> ReadonlyMarinaList { get; private set; }
         
@@ -22,13 +24,20 @@ namespace DefaultNamespace.Core.models
         private readonly User _user;
         private readonly NetworkClient _networkClient;
         private readonly EventRelay _onRetrievedUpdatedMarinaSet;
+        private readonly EventRelay _onSuccessfulBuyEvent;
+        private readonly UnityAction OnSuccessfulBuyAction;
 
         public MarianaCollection(User userInfo, NetworkClient networkClient,
-            EventRelay newMarinaSetNotifier)
+            EventRelay newMarinaSetNotifier, EventRelay onSuccessfulBuyEvent) //onSuccessfulBuyEvent
         {
             _user = userInfo;
             _networkClient = networkClient;
             _onRetrievedUpdatedMarinaSet = newMarinaSetNotifier;
+            _onSuccessfulBuyEvent = onSuccessfulBuyEvent;
+            OnSuccessfulBuyAction = UniTaskHelper.UnityAction(UpdateMarinaSet);
+            _onSuccessfulBuyEvent.onEventRaised += OnSuccessfulBuyAction;
+            
+            
             ReadonlyMarinaList = new List<Mariana>();
         }
         public async UniTask StartAsync(CancellationToken cancellation)
@@ -58,6 +67,11 @@ namespace DefaultNamespace.Core.models
                 throw new OperationCanceledException();
             }
             return list;
+        }
+
+        public void Dispose()
+        {
+            _onSuccessfulBuyEvent.onEventRaised -= OnSuccessfulBuyAction;
         }
     }
 }

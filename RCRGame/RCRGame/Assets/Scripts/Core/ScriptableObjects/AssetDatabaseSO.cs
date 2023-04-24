@@ -11,5 +11,6 @@ namespace Core3.SciptableObjects
         {
             scriptableObjects = obj.scriptableObjects;
         }
+        
     }
 }

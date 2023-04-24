@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Core3.SciptableObjects
 {
-    public abstract class BaseScriptableObject : ScriptableObject
+    public abstract class BaseScriptableObject : SerializedScriptableObject
     {
         public Guid id { get; private set; } //Should Not Change..
         [SerializeField] [ReadOnly] protected string id_display;

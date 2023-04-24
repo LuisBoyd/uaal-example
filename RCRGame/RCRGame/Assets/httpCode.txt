@@ -1,0 +1,3 @@
+5xxx
+512 - Resource In Database (a same entry has been found in the database)
+513 - Row Not Found In Database (a row was not found in the database)

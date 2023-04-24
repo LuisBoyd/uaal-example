@@ -70,6 +70,16 @@ class MySqlDb{
         return $sql;
     }
 
+    function GetRows($table, $where){
+        $sql = "SELECT * FROM ".$table." WHERE ".$where;
+        $sql = $this->conn->query($sql) or die($this->conn->error);;
+        $values = array();
+        while ($row = $sql->fetch_assoc()){
+            array_push($values, $row);
+        }
+        return $values;
+    }
+
     function RawStatement($sqlStatement){
         $sql = $sqlStatement;
         $sql = $this->conn->query($sql) or die($this->conn->error);;
@@ -103,6 +113,22 @@ class MySqlDb{
         return $sql['Quantity'];
     }
 
+    function DoesRowExist($table, ...$where)
+    {
+        $this->connect();
+        $whereQuery = implode(" AND ", $where);
+        $sql = "SELECT COUNT(*) as Quantity FROM ".$table." WHERE ".$whereQuery;
+        $sql = $this->conn->query($sql) or die($this->conn->error);
+        $sql = $sql->fetch_assoc();
+        $result = $sql['Quantity'];
+        if($result <= 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     function updateData($table, $update_value, $where){
         $this->connect();
         $sql = "UPDATE ".$table." SET ".$update_value." WHERE ".$where;
@@ -116,14 +142,9 @@ class MySqlDb{
     function createData($table, $columns, $values){
         $this->connect();
         $sql = "INSERT INTO ".$table." ".$columns." VALUES ".$values;
-        $sql = $this->conn->query($sql) or die($this->conn->error);;
-        if($sql == true){
-            return $sql;
-        }else{
-            return false;
-        }
+        $sql = $this->conn->query($sql) or die($this->conn->error);
+        return $sql;
     }
-
 
     function deleteData($table, $filter){
         $this->connect();

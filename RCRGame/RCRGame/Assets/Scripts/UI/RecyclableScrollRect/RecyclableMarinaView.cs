@@ -6,6 +6,7 @@ using DefaultNamespace.Core.models;
 using UnityEngine;
 using VContainer;
 using System.Linq;
+using Core.Services.Gameplay;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace.Events;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ namespace UI.RecyclableScrollRect
             RecyclableScrollRect _recyclableScrollRect;
 
             private MarianaCollection _collection;
+            private MarinaBuyService _marinaBuyService;
             private List<Mariana> _MutableMarianaList;
             private bool FilterOwned = false;
             private bool FilterUnowned = false;
@@ -32,6 +34,7 @@ namespace UI.RecyclableScrollRect
             [SerializeField]private StringEventChannelSO OnTextSearchFilterChanged;
             [SerializeField] private BoolEventChannelSO OnFilterOwnedChanged;
             [SerializeField] private BoolEventChannelSO OnFilterUnownedChanged;
+            [SerializeField] private EventRelay OnSuccessfulMarinaBuy;
             
             private void Awake()
             {
@@ -45,6 +48,7 @@ namespace UI.RecyclableScrollRect
                 OnTextSearchFilterChanged.onEventRaised += FilterResults;
                 OnFilterOwnedChanged.onEventRaised += ChangeOwnedFilter;
                 OnFilterUnownedChanged.onEventRaised += ChangeUnownedFilter;
+                OnSuccessfulMarinaBuy.onEventRaised += OnNewMarinaDataSet;
             }
 
             private void OnDisable()
@@ -53,6 +57,7 @@ namespace UI.RecyclableScrollRect
                 OnTextSearchFilterChanged.onEventRaised -= FilterResults;
                 OnFilterOwnedChanged.onEventRaised -= ChangeOwnedFilter;
                 OnFilterUnownedChanged.onEventRaised -= ChangeUnownedFilter;
+                OnSuccessfulMarinaBuy.onEventRaised -= OnNewMarinaDataSet;
             }
         
             [Inject]
