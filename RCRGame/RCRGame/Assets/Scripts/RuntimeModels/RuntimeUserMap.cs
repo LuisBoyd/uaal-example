@@ -3,9 +3,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Core.models;
+using Core.models.maths;
 using DefaultNamespace.Events;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Utility;
 
 namespace RuntimeModels
 {
@@ -16,6 +18,10 @@ namespace RuntimeModels
         private readonly IDictionary<Vector2Int, RuntimeUserPlot> _userPlots;
         private readonly TilePlacementEventChannelSO _tilePlacementEventChannelSo;
         public UserMap UserMap { get; private set; }
+        public List<RuntimeUserPlot> RuntimeUserPlots
+        {
+            get => _userPlots.Values.ToList();
+        }
 
         public RuntimeUserMap(UserMap userMap, Tilemap isometricTileMap)
         {
@@ -41,6 +47,21 @@ namespace RuntimeModels
             }
             return points.ToArray();
         }
+
+        public IEnumerable<Line> GetAllWorldPlotLines()
+        {
+            List<Line> lines = new List<Line>();
+            foreach (RuntimeUserPlot plot in RuntimeUserPlots)
+            {
+                foreach (Line plotLine in plot.lines)
+                {
+                    lines.Add(_isometricTileMap.ConvertLineToWorldPosition(plotLine));
+                }
+            }
+
+            return lines;
+        }
+        
         public Vector2[] GetallWorldPlotMinMaxPoints2D()
         {
             List<Vector2> points = new List<Vector2>();

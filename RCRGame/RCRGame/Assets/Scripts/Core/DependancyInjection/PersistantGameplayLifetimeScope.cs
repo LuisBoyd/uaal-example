@@ -20,8 +20,10 @@ namespace Core.DependancyInjection
         [SerializeField] private ColorTileIndex ColorTileIndex;
         [SerializeField] private CameraRestrictions CameraRestriction;
         [SerializeField] private PolygonCollider2D polygonCollider2D;
+        
         protected override void Configure(IContainerBuilder builder)
         {
+          
             //builder.RegisterComponent(CameraRestriction);
             builder.Register<MarinaBuildPipeline>(resolver =>
             {

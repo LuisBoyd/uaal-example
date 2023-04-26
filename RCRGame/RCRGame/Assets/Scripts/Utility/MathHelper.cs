@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Core.models.maths;
 using UnityEngine;
 
 namespace Utility
@@ -166,8 +167,16 @@ namespace Utility
                 .SelectMany(g => g);
             return enumerable.Except(duplicatePoints).ToList();
         }
-        
-        
+
+        public static IEnumerable<Line> RemoveDuplicateLines(this IEnumerable<Line> lines)
+        {
+            var enumerable = lines.ToList();
+            var duplicatePoints = enumerable.GroupBy(p => p.GetHashCode())
+                .Where(g => g.Count() > 1)
+                .SelectMany(g => g);
+            return enumerable.Except(duplicatePoints).ToList();
+        }
+
         /// <summary>
         /// Removes entry from collection if it shows up more than X times.
         /// </summary>
@@ -179,6 +188,7 @@ namespace Utility
                 .SelectMany(g => g);
             return enumerable.Except(duplicatePoints).ToList();
         }
+        
 
     }
 }
