@@ -27,7 +27,7 @@ namespace Core.Services.Network
         {
             
         }
-
+        
         public NetworkClient(InternalSetting setting, TimeSpan timeout, IProgress<float> progress,
             params IAsyncDecorator[] decorators)
         {

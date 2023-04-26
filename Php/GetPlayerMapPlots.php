@@ -33,7 +33,7 @@ $PlotObjs = array();
 $PlotObjsRequest = $mysql->GetRows("Plots", "OwningMarinaID = '$User_Mairna_ID'");
 foreach ($PlotObjsRequest as $Plot){
     array_push($PlotObjs, new PlotObj($Plot["Plot_ID"], $Plot["OwningMarinaID"],
-        $Plot["TileData"],$Plot["Plot_Index"]));
+        $Plot["TileData"],$Plot["Plot_Index_X"], $Plot["Plot_Index_Y"]));
 }
 //Get all Rows from Plots Table End
 
