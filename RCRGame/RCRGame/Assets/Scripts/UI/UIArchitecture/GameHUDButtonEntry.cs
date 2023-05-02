@@ -12,6 +12,8 @@ namespace UI.UIArchitecture
         [SerializeField] private string buttonText = "";
         [SerializeField] private string targetScreen = "";
         [SerializeField] private Vector2 buttonSize = new Vector2(200, 200);
+        [SerializeField] private bool clearWindowOnPress = false;
+        [SerializeField] private bool isTransition = false;
 
         public string ButtonText
         {
@@ -31,6 +33,16 @@ namespace UI.UIArchitecture
         public string TargetScreen
         {
             get => targetScreen;
+        }
+
+        public bool ClearWindowOnPress
+        {
+            get => clearWindowOnPress;
+        }
+
+        public bool IsTransition
+        {
+            get => isTransition;
         }
 
     }

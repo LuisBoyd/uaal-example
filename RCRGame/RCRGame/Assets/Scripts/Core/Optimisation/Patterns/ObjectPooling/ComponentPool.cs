@@ -9,6 +9,7 @@ namespace Core.Optimisation.Patterns.ObjectPooling
         [Title("Configurations", TitleAlignment = TitleAlignments.Centered)]
         [SerializeField] [Required]
         protected bool IsRoot;
+        [SerializeField] protected bool KeepObjectsWhileInactive = false;
 
         protected Transform _poolRoot;
 
@@ -72,15 +73,20 @@ namespace Core.Optimisation.Patterns.ObjectPooling
 
         public override void OnDisable()
         {
-            base.OnDisable();
-            if (_poolRoot != null)
+            if (!KeepObjectsWhileInactive)
             {
+                Avalible.Clear();
+                HasBeenPrewarmed = false;
+                if (_poolRoot != null)
+                {
 #if UNITY_EDITOR
-                DestroyImmediate(_poolRoot.gameObject);
-                
+                    //DestroyImmediate(_poolRoot.gameObject);
+                    Destroy(_poolRoot.gameObject);
+
 #else
                 Destroy(_poolRoot.gameObject);
 #endif
+                }
             }
         }
     }

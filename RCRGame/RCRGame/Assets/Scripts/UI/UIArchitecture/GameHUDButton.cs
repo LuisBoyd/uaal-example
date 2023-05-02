@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core3.MonoBehaviors;
 using DefaultNamespace.Events;
 using Sirenix.OdinInspector;
 using TMPro;
+using UI.UIAnimation;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.UIArchitecture
 {
     [RequireComponent(typeof(Button))]
-    public class GameHUDButton : BaseMonoBehavior
+    public class GameHUDButton : BaseMonoBehavior, ISelectHandler, IDeselectHandler
     {
         [Title("Game HUD Button Configuration", TitleAlignment = TitleAlignments.Centered)] 
+        [SerializeField] private List<UserAnimation> OnSelectAnimations = new List<UserAnimation>();
         [SerializeField] [Required] private TextMeshProUGUI buttonLabel = null;
         [SerializeField] [Required] private Image icon = null;
         [SerializeField] [Required] private RectTransform _rect = null;
@@ -61,5 +65,14 @@ namespace UI.UIArchitecture
             }
         }
 
+        public void OnSelect(BaseEventData eventData)
+        {
+            OnSelectAnimations.ForEach(animation => animation.Animate(transform, null));
+        }
+
+        public void OnDeselect(BaseEventData eventData)
+        {
+            OnSelectAnimations.ForEach(animation => animation.ReverseAnimate(transform, null));
+        }
     }
 }

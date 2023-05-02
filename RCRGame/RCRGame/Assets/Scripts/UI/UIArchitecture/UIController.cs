@@ -14,9 +14,8 @@ namespace UI.UIArchitecture
         [Title("UI Controller Configurations", TitleAlignment = TitleAlignments.Centered)] 
         [Required] [SerializeField] private UISettings defaultUISettings = null;
         [Required] [SerializeField] private EventRelay OngameHudBegin;
-        [Required] [SerializeField] private StringEventChannelSO NavigationEventChannel;
+        [Required] [SerializeField] private UIDisplayEvent NavigationEventChannel;
         [SerializeField] private float MainCanvasDistance = 5f;
-        [SerializeField] private List<TransitionEntry> _transitionEntries = new List<TransitionEntry>();
 
         private Camera _camera;
         private UIFrame _uiFrame;
@@ -54,15 +53,50 @@ namespace UI.UIArchitecture
             _uiFrame.OpenWindow(ScreenIds.GameHUDWindow);
         }
 
-        private void OnNavigateToWindow(string windowID)
+        private void OnNavigateToWindow(bool closeWindow,string windowID)
         {
-            _uiFrame.CloseCurrentWindow();
-            _uiFrame.HideAllPanels();
-            TransitionEntry entry = _transitionEntries.FirstOrDefault(entry => entry.TargetWindow.Equals(windowID));
-            if (entry == null)
-                throw new NullReferenceException();
-            _uiFrame.OpenWindow(entry.TargetWindow);
-            entry.PannelsToKeep.ForEach(panel => _uiFrame.ShowPanel(panel));
+            if (string.IsNullOrEmpty(windowID))
+            {
+                Debug.LogWarning($"Window Id is Null or Empty");
+                return;
+            }
+
+            if (closeWindow)
+            {
+                _uiFrame.CloseCurrentWindow();
+            }
+            switch (windowID)
+            {
+                case ScreenIds.GameHUDWindow:
+                    Manage_Game_HUD_Display();
+                    break;
+                case ScreenIds.TileEditingPanel:
+                    //BuildingConstruction so all that.
+                    Manage_Tile_Editing_Display();
+                    break;
+            }
+        }
+
+        private void Manage_Game_HUD_Display()
+        {
+            //hide the unnecessary Panels
+            _uiFrame.HidePanel(ScreenIds.TileEditingPanel);
+            
+            //show the necessary Panels
+            if(!_uiFrame.IsPanelOpen(ScreenIds.MenuPanel))
+                _uiFrame.ShowPanel(ScreenIds.MenuPanel);
+            if(!_uiFrame.IsPanelOpen(ScreenIds.ConstructionPannel))
+                _uiFrame.ShowPanel(ScreenIds.ConstructionPannel);
+            if(!_uiFrame.IsPanelOpen(ScreenIds.StatInfoPanel))
+                _uiFrame.ShowPanel(ScreenIds.StatInfoPanel);
+        }
+
+        private void Manage_Tile_Editing_Display()
+        {
+            //hide the unnecessary Panels
+            _uiFrame.HidePanel(ScreenIds.ConstructionPannel);
+            //show the necessary Panels
+            _uiFrame.ShowPanel(ScreenIds.TileEditingPanel);
         }
     }
 }

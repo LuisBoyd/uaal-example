@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731715, g: 0.13414735, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -154,6 +154,57 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &527984663
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 527984665}
+  - component: {fileID: 527984664}
+  m_Layer: 0
+  m_Name: Tilemap Service
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &527984664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527984663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42f0882c77114bf192aa8a6f34a55643, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorTileIndex: {fileID: 11400000, guid: ee349c0a8dc377a41a1ef41f82e86720, type: 2}
+  _serviceSwitchEventChannel: {fileID: 11400000, guid: a8fad4d5727463e468ba710120567ac9,
+    type: 2}
+  _cameraStateChangeEvent: {fileID: 11400000, guid: 58bf3fe7309f0b04eb7202479b41ef8e,
+    type: 2}
+  _isometricWorldTilemap: {fileID: 1309218736}
+  _isometricWorldTilemapRenderer: {fileID: 1309218735}
+--- !u!4 &527984665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527984663}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8.3408375, y: 1.7247276, z: -0.17322178}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &828364191
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +249,7 @@ Transform:
   - {fileID: 1309218734}
   - {fileID: 947998026}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &839308548
 GameObject:
@@ -419,7 +470,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 249f070ddf1f1564f83f51545230127d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -539,7 +590,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1990856728
 GameObject:
@@ -571,7 +622,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1990856730
 MonoBehaviour:
@@ -587,10 +638,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultUISettings: {fileID: 11400000, guid: 577c300a4934623438e64ed249524e2c, type: 2}
   OngameHudBegin: {fileID: 11400000, guid: 23914f52ef704d14ab0cc9a8b9afe6fb, type: 2}
-  NavigationEventChannel: {fileID: 11400000, guid: 28927a62aee35d6408dab1521e925b29,
+  NavigationEventChannel: {fileID: 11400000, guid: 03aa776aa06e6b244910156fc629eb6f,
     type: 2}
   MainCanvasDistance: 5
-  _transitionEntries: []
 --- !u!1 &2083169631
 GameObject:
   m_ObjectHideFlags: 0

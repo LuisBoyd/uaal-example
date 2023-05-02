@@ -351,7 +351,7 @@ MonoBehaviour:
   icon: {fileID: 2016003108389167622}
   _rect: {fileID: 5062355615269283836}
   ButtonClicked: {fileID: 0}
-  TargetScreenEventChannel: {fileID: 11400000, guid: 28927a62aee35d6408dab1521e925b29,
+  TargetScreenEventChannel: {fileID: 11400000, guid: 03aa776aa06e6b244910156fc629eb6f,
     type: 2}
 --- !u!1 &8505457318372207603
 GameObject:
@@ -366,6 +366,10 @@ GameObject:
   - component: {fileID: 8505457318372207605}
   - component: {fileID: 8505457318372207607}
   - component: {fileID: 8505457318372207606}
+  - component: {fileID: 4056189324044148413}
+  - component: {fileID: 6018669578957347212}
+  - component: {fileID: 7626248999419726907}
+  - component: {fileID: 2927320934371172168}
   m_Layer: 5
   m_Name: ConstructionPannel
   m_TagString: Untagged
@@ -475,17 +479,77 @@ MonoBehaviour:
   animOut: {fileID: 0}
   properties:
     priority: 0
+  ParentRect: {fileID: 8505457318372207602}
+  _buttonTransitionComponentPool: {fileID: 0}
+  _buttonComponentPool: {fileID: 0}
+  PrewarmButtonCount: 2
   ConstructionOptionEntries:
   - sprite: {fileID: 21300000, guid: 73e53a4d58946374eb7bf2c0d8d802c8, type: 3}
     buttonText: 
     targetScreen: 
     buttonSize: {x: 200, y: 200}
+    clearWindowOnPress: 0
+    isTransition: 0
   - sprite: {fileID: 21300000, guid: a25f66ee54867b844935651b1a8abfde, type: 3}
     buttonText: 
-    targetScreen: 
+    targetScreen: TilePlacementPannel
     buttonSize: {x: 150, y: 150}
-  templateButton: {fileID: 8505457319225889333}
-  transitionTemplateButton: {fileID: 663008752803786295}
+    clearWindowOnPress: 0
+    isTransition: 1
+--- !u!114 &4056189324044148413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8505457318372207603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86cb64cf0b7e4fb59002215cb1ff0bb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsRoot: 1
+  KeepObjectsWhileInactive: 1
+--- !u!114 &6018669578957347212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8505457318372207603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b256879a684844d988331e6112a56119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsRoot: 1
+  KeepObjectsWhileInactive: 1
+--- !u!114 &7626248999419726907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8505457318372207603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57138411af9d4db9b0c90cadea70413a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preset: {fileID: 8505457319225889333}
+--- !u!114 &2927320934371172168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8505457318372207603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2695a38d9dff4b8f9451ff3e5ee11249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preset: {fileID: 663008752803786295}
 --- !u!1 &8505457319010180536
 GameObject:
   m_ObjectHideFlags: 0

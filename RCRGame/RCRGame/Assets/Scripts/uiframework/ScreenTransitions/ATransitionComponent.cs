@@ -13,5 +13,6 @@ namespace deVoid.UIFramework {
         /// <param name="target">Target transform.</param>
         /// <param name="callWhenFinished">Delegate to be called when animation is finished.</param>
         public abstract void Animate(Transform target, Action callWhenFinished);
+
     }
 }

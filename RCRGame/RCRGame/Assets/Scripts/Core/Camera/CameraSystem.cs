@@ -1,6 +1,7 @@
 ﻿using System;
 using Cinemachine;
 using Core3.MonoBehaviors;
+using DefaultNamespace.Events;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,6 +19,7 @@ namespace Core.Camera
         private Transform _VCameraFollowTarget;
         [SerializeField] [Required] 
         private PolygonCollider2D _WorldBoundries;
+        [SerializeField] [Required] private BoolEventChannelSO _CameraSwitchActiveStateEvent;
         [PropertyRange(1f, 10f)]
         [SerializeField] private float MinOrthognathicSize = 2f;
         [PropertyRange(10f, 20f)]
@@ -34,6 +36,7 @@ namespace Core.Camera
             get => _VCamera.Follow != null;
         }
         private bool CanMove { get; set; }
+        private bool AllowMovement { get; set; } = true;
 
         private Vector3 _currentTouchPosition;
 
@@ -56,7 +59,22 @@ namespace Core.Camera
             _MainCamera.orthographic = true; //make sure camera is in orthographic mode.
             _VCamera.m_Lens.OrthographicSize = (MinOrthognathicSize + MaxOrthognathicSize) / 2f; //Get Mid Value between max and min.
         }
-        
+
+        private void OnEnable()
+        {
+            _CameraSwitchActiveStateEvent.onEventRaised += On_Camera_Switch_Active_State;
+        }
+
+        private void OnDisable()
+        {
+            _CameraSwitchActiveStateEvent.onEventRaised -= On_Camera_Switch_Active_State;
+        }
+
+        private void On_Camera_Switch_Active_State(bool state)
+        {
+            AllowMovement = state;
+        }
+
         [Inject]
         private void Inject(UnityEngine.Camera mainCamera)
         {
@@ -65,7 +83,7 @@ namespace Core.Camera
 
         private void Update()
         {
-            if(!CanVCamMove)
+            if(!CanVCamMove || !AllowMovement)
                 return;
             if (Input.touchCount > 0)
             {

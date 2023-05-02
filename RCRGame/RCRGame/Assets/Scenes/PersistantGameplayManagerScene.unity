@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731715, g: 0.13414735, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -548,6 +548,8 @@ MonoBehaviour:
   _VCamera: {fileID: 317222073}
   _VCameraFollowTarget: {fileID: 1446221347}
   _WorldBoundries: {fileID: 434529590}
+  _CameraSwitchActiveStateEvent: {fileID: 11400000, guid: 58bf3fe7309f0b04eb7202479b41ef8e,
+    type: 2}
   MinOrthognathicSize: 2
   MaxOrthognathicSize: 10
   ZoomSensitivity: 0.01
@@ -826,6 +828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsRoot: 1
+  KeepObjectsWhileInactive: 0
 --- !u!114 &1901222138
 MonoBehaviour:
   m_ObjectHideFlags: 0

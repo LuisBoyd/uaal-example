@@ -11,6 +11,12 @@
 
         #endregion
 
+        #region Tile Editing
+
+        public const string TileEditingPanel = "TilePlacementPannel";
+
+        #endregion
+
         public const string GameHUDWindow = "GameHudWindow";
 
         #region Stats
