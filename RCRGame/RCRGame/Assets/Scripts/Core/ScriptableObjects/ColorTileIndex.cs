@@ -13,5 +13,6 @@ namespace Core3.SciptableObjects
         [Title("Color and Tile Index", titleAlignment: TitleAlignments.Centered, bold: true)]
         //[JsonProperty(ItemConverterType = typeof(ColorHandler))]
         public Dictionary<Color32, TileBase> Color32TileMap = new Dictionary<Color32, TileBase>();
+        public TileBase WaterTile;
     }
 }

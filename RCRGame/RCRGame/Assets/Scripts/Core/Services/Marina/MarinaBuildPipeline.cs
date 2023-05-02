@@ -34,9 +34,9 @@ namespace Core.Services.Marina
             this._decorators[^1] = this;
         }
 
-        public async UniTask<RuntimeUserMap> BuildMarina(Tilemap tilemap,int marinaID,int UserID, CancellationToken token = default)
+        public async UniTask<RuntimeUserMap> BuildMarina(Tilemap tilemap,Tilemap outOfViewTilemap,int marinaID,int UserID, CancellationToken token = default)
         {
-            var request = new MarinaRequestContext(tilemap, marinaID, UserID, _decorators);
+            var request = new MarinaRequestContext(tilemap, outOfViewTilemap,marinaID, UserID, _decorators);
             var response = await InvokeRecursive(request, token);
             return response.RuntimeUserMap;
         }

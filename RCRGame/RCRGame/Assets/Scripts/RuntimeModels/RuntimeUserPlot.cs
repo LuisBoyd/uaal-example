@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core.models.maths;
+using NetTopologySuite.Geometries;
 using UnityEngine;
 
 
@@ -8,10 +9,11 @@ namespace RuntimeModels
     public class RuntimeUserPlot
     {
         private readonly Texture2D _plotTexture;
-        private readonly Plot _plot;
+        public readonly Plot _plot;
         private Color32[] _Pixels;
         public Vector3Int MaxPoint { get; private set; }
         public Vector3Int MinPoint { get; private set; }
+        
 
         public List<Line> lines { get; private set; }
 

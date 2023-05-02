@@ -28,6 +28,7 @@ namespace Utility
         [SerializeField] private LoadEventChannelSO _loadSceneEvent;
         [SerializeField] private InfoDisplayEventChannelSO _visualInfoLoggerEvent;
         [SerializeField] private TextAsset PreCompiledSetting; //In actual production take this out.
+        [SerializeField] private Camera GameCamera;
 
         [SerializeField] private MarinaMapService _marinaMapService;
 
@@ -67,6 +68,7 @@ namespace Utility
             builder.RegisterInstance<IProgress<float>>(_progressReporter);
             builder.RegisterInstance<DisplayLogger>(_displayLogger);
             builder.RegisterInstance<InternalSetting>(_setting);
+            builder.RegisterComponent(GameCamera);
             builder.RegisterComponent(_marinaMapService);
         }
 

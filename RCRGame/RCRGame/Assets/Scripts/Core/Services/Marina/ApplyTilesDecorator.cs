@@ -31,6 +31,11 @@ namespace Core.Services.Marina
             //Before response comeback
             MarinaResponseContext responseContext = await next(context, token); 
             //after response comeback
+            TilemapRenderer isometricRenderer = context.IsometricTilemap.GetComponent<TilemapRenderer>();
+            TilemapRenderer outOfViewRenderer = context.IsometricOutofView.GetComponent<TilemapRenderer>();
+            
+            //set the outof view renderer sorting index always lower than the isometric renderer.
+            isometricRenderer.sortingOrder = outOfViewRenderer.sortingOrder + 1;
             foreach (Plot plot in responseContext.UserMap.Plots)
             {
                 Texture2D plotTexture = ConvertToTexture(plot.Tile_Data);
@@ -56,7 +61,7 @@ namespace Core.Services.Marina
                 responseContext.RuntimeUserMap.AddPlot(plot.Plot_index_X, plot.Plot_index_Y, new RuntimeUserPlot(plot, plotTexture.GetPixels32(),
                     minPoint, maxPoint));
             }
-
+            FillBackgroundTilemapWithWater(context.IsometricOutofView, context.IsometricTilemap.cellBounds);
             return responseContext;
         }
 
@@ -88,6 +93,27 @@ namespace Core.Services.Marina
                 tiles[i] = _ColorTileIndex.Color32TileMap[pixels[i]];
             }
             return tiles;
+        }
+
+        private void FillBackgroundTilemapWithWater(Tilemap backgroundTilemap, BoundsInt bounds)
+        {
+            BoundsInt area = bounds;
+            TileBase[] waterTileArray = new TileBase[area.size.x * area.size.y * area.size.z];
+            Array.Fill(waterTileArray, _ColorTileIndex.WaterTile);
+            backgroundTilemap.SetTilesBlock(area, waterTileArray);
+        }
+
+        private void DrawIsometricTilemapBorder(Tilemap mapToDraw)
+        {
+            Vector3 a = mapToDraw.CellToWorld(mapToDraw.cellBounds.min);
+            Vector3 b = mapToDraw.CellToWorld(new Vector3Int(mapToDraw.cellBounds.xMin, mapToDraw.cellBounds.yMax));
+            Vector3 c = mapToDraw.CellToWorld(mapToDraw.cellBounds.max);
+            Vector3 d = mapToDraw.CellToWorld(new Vector3Int(mapToDraw.cellBounds.xMax, mapToDraw.cellBounds.yMin));
+            
+            Debug.DrawLine(a,b, Color.red, 100f);
+            Debug.DrawLine(b,c, Color.red, 100f);
+            Debug.DrawLine(c,d, Color.red, 100f);
+            Debug.DrawLine(d,a, Color.red, 100f);
         }
     }
 }

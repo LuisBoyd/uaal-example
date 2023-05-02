@@ -99,3 +99,4 @@ MonoBehaviour:
       Entry: 8
       Data: 
   id_display: 4e76c1e6-3c57-4e09-8c8a-259e1db6b80f
+  WaterTile: {fileID: 11400000, guid: 992772faf8f301443afe0d94104ecbde, type: 2}

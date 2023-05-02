@@ -21,12 +21,14 @@ namespace Core.Services.Marina
 
         [Title("Configuration", TitleAlignment = TitleAlignments.Centered)] 
         [SerializeField] private Tilemap IsometricTileMap;
+        [SerializeField] private Tilemap outOfViewTilemap;
 
         private RuntimeUserMap UserMap;
         
         #region Injected
         private MarinaBuildPipeline BuildPipeline { get; set; }
         private UserMariana UserMariana { get; set; }
+        
         
         [Inject]
         private void InjectValues(MarinaBuildPipeline buildPipeline, UserMariana userMariana)
@@ -38,7 +40,7 @@ namespace Core.Services.Marina
 
         private async void Start()
         {
-            UserMap = await BuildPipeline.BuildMarina(IsometricTileMap,
+            UserMap = await BuildPipeline.BuildMarina(IsometricTileMap,outOfViewTilemap,
                 UserMariana.marinaId, UserMariana.system_user_id,
                 this.GetCancellationTokenOnDestroy());
             if (UserMap != null)
