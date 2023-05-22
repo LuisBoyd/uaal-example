@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Global>
+	<CanvasOption
+		CanvasRenderMode= "0"
+		PixelPerfect = "false"
+		CameraID =""
+		OrderInLayer ="0"
+		AdditionalCanvasShaderChannels ="0"
+		/>
+	<CanvasScalarOption
+		UIScaleMode="0"
+		ScreenMatchMode="0"
+		Match="0.0"
+		ReferencePixelsPerUnit="0.0"
+		>
+		<ReferenceResolution>
+			<value>0</value>
+			<value>0</value>
+		</ReferenceResolution>
+	</CanvasScalarOption>
+	<GraphicRaycastOption
+		IgnoreReveredGraphics="false"
+		BlockingObjects ="0"
+		BlockingLayerMask="0"
+		/>
+</Global>

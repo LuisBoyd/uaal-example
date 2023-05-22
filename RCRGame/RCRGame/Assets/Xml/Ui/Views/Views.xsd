@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="https://www.w3schools.com"
+xmlns="https://www.w3schools.com"
+elementFormDefault="qualified">
+		<xs:complexType name ="view">
+			<xs:sequence>
+				<xs:element name="accessibilityHeading" type="xs:boolean"/>
+				<xs:element name="accessibilityLiveRegion" type="xs:unsignedInt"/>
+				<xs:element name="accessibilityPaneTitle" type="xs:string"/>
+				<xs:element name="accessibilityTraversalAfter" type="xs:unsignedInt"/>
+				<xs:element name="accessibilityTraversalBefore" type="xs:unsignedInt"/>
+				<xs:element name="allowClickWhenDisabled" type="xs:boolean"/>
+				<xs:element name="alpha" type="xs:decimal"/>
+				<xs:element name="autoHandwritingEnabled" type="xs:boolean"/>
+				<xs:element name="autofillHints" type="xs:string"/>
+				<xs:element name="autofilledHighlight" type="xs:string"/>
+				<xs:element name="background" type="xs:unsignedInt"/>
+				<xs:element name="backgroundTint" type="xs:unsignedInt"/>
+				<xs:element name="backgroundTintMode" type="xs:string"/>
+				<xs:element name="clickable" type="xs:boolean"/>
+				<xs:element name="clipToOutline" type="xs:boolean"/>
+				<xs:element name="contentDescription" type="xs:string"/>
+				<xs:element name="contextClickable" type="xs:boolean"/>
+				<xs:element name="defaultFocusHighlightEnabled" type="xs:boolean"/>
+				<xs:element name="drawingCacheQuality" type="xs:unsignedInt"/>
+				<xs:element name="duplicateParentState" type="xs:boolean"/>
+				<xs:element name="elevation" type="xs:unsignedInt"/>
+				<xs:element name="fadeScrollbars" type="xs:boolean"/>
+				<xs:element name="fadingEdgeLength" type="xs:decimal"/>
+				<xs:element name="filterTouchesWhenObscured" type="xs:boolean"/>
+				<xs:element name="fitsSystemWindows" type="xs:boolean"/>
+				<xs:element name="focusable" type="xs:boolean"/>
+				<xs:element name="focusableInTouchMode" type="xs:boolean"/>
+				<xs:element name="focusedByDefault" type="xs:boolean"/>
+				<xs:element name="forceHasOverlappingRendering" type="xs:boolean"/>
+				<xs:element name="foreground" type="xs:unsignedInt"/>
+				<xs:element name="foregroundGravity" type="xs:unsignedInt"/>
+				<xs:element name="foregroundTint" type="xs:unsignedInt"/>
+				<xs:element name="foregroundTintMode" type="xs:string"/>
+				<xs:element name="hapticFeedbackEnabled" type="xs:boolean"/>
+				<xs:element name="id" type="xs:string"/>
+				<xs:element name="importantForAccessibility" type="xs:unsignedInt"/>
+				<xs:element name="importantForAutofill" type="xs:unsignedInt"/>
+				<xs:element name="importantForContentCapture" type="xs:unsignedInt"/>
+				<xs:element name="isCredential" type="xs:boolean"/>
+				<xs:element name="isScrollContainer" type="xs:boolean"/>
+				<xs:element name="keepScreenOn" type="xs:boolean"/>
+				<xs:element name="layerType" type="xs:unsignedInt"/>
+				<xs:element name="layoutDirection" type="xs:unsignedInt"/>
+				<xs:element name="longClickable" type="xs:boolean"/>
+				<xs:element name="minHeight" type="xs:unsignedInt"/>
+				<xs:element name="minWidth" type="xs:unsignedInt"/>
+				<xs:element name="nextClusterForward" type="xs:string"/>
+				<xs:element name="nextFocusDown" type="xs:string"/>
+				<xs:element name="nextFocusForward" type="xs:string"/>
+				<xs:element name="nextFocusLeft" type="xs:string"/>
+				<xs:element name="nextFocusRight" type="xs:string"/>
+				<xs:element name="nextFocusUp" type="xs:string"/>
+				<xs:element name="onClick" type="xs:string"/>
+				<xs:element name="outlineAmbientShadowColor" type="xs:unsignedInt"/>
+				<xs:element name="outlineSpotShadowColor" type="xs:unsignedInt"/>
+				<xs:element name="padding" type="xs:unsignedInt"/>
+				<xs:element name="paddingBottom" type="xs:unsignedInt"/>
+				<xs:element name="paddingEnd" type="xs:unsignedInt"/>
+				<xs:element name="paddingHorizontal" type="xs:unsignedInt"/>
+				<xs:element name="paddingLeft" type="xs:unsignedInt"/>
+				<xs:element name="paddingRight" type="xs:unsignedInt"/>
+				<xs:element name="paddingStart" type="xs:unsignedInt"/>
+				<xs:element name="paddingTop" type="xs:unsignedInt"/>
+				<xs:element name="paddingVertical" type="xs:unsignedInt"/>
+				<xs:element name="preferKeepClear" type="xs:boolean"/>
+				<xs:element name="requiresFadingEdge" type="xs:unsignedInt"/>
+				<xs:element name="rotationX" type="xs:decimal"/>
+				<xs:element name="rotationY" type="xs:decimal"/>
+				<xs:element name="saveEnabled" type="xs:boolean"/>
+				<xs:element name="scaleX" type="xs:decimal"/>
+				<xs:element name="scaleY" type="xs:decimal"/>
+				<xs:element name="screenReaderFocusable" type="xs:boolean"/>
+				<xs:element name="scrollIndicators" type="xs:unsignedInt"/>
+				<xs:element name="scrollX" type="xs:unsignedInt"/>
+				<xs:element name="scrollY" type="xs:unsignedInt"/>
+				<xs:element name="scrollbarAlwaysDrawHorizontalTrack" type="xs:boolean"/>
+				<xs:element name="scrollbarAlwaysDrawVerticalTrack" type="xs:boolean"/>
+				<xs:element name="scrollbarDefaultDelayBeforeFade" type="xs:unsignedInt"/>
+				<xs:element name="scrollbarFadeDuration" type="xs:unsignedInt"/>
+				<xs:element name="scrollbarSize" type="xs:unsignedInt"/>
+				<xs:element name="scrollbarStyle" type="xs:unsignedInt"/>
+				<xs:element name="scrollbarThumbHorizontal" type="xs:string"/>
+				<xs:element name="scrollbarThumbVertical" type="xs:string"/>
+				<xs:element name="scrollbarTrackHorizontal" type="xs:string"/>
+				<xs:element name="scrollbarTrackVertical" type="xs:string"/>
+				<xs:element name="scrollbars" type="xs:unsignedInt"/>
+				<xs:element name="soundEffectsEnabled" type="xs:boolean"/>
+				<xs:element name="stateListAnimator" type="xs:string"/>
+				<xs:element name="tag" type="xs:string"/>
+				<xs:element name="textAlignment" type="xs:unsignedInt"/>
+				<xs:element name="textDirection" type="xs:unsignedInt"/>
+				<xs:element name="theme" type="xs:string"/>
+				<xs:element name="tooltipText" type="xs:string"/>
+				<xs:element name="transformPivotX" type="xs:decimal"/>
+				<xs:element name="transformPivotY" type="xs:decimal"/>
+				<xs:element name="transitionName" type="xs:string"/>
+				<xs:element name="translationX" type="xs:decimal"/>
+				<xs:element name="translationY" type="xs:decimal"/>
+				<xs:element name="translationZ" type="xs:decimal"/>
+				<xs:element name="visibility" type="xs:unsignedInt"/>
+			</xs:sequence>
+		</xs:complexType>
+	<xs:element name ="viewgroup">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="view">
+					<xs:sequence>
+						<xs:element name="addStatesFromChildren" type="xs:boolean"/>
+						<xs:element name="alwaysDrawnWithCache" type="xs:boolean"/>
+						<xs:element name="animateLayoutChanges" type="xs:boolean"/>
+						<xs:element name="animationCache" type="xs:boolean"/>
+						<xs:element name="clipChildren" type="xs:boolean"/>
+						<xs:element name="clipToPadding" type="xs:boolean"/>
+						<xs:element name="descendantFocusability" type="xs:unsignedInt"/>
+						<xs:element name="layoutAnimation" type="xs:string"/>
+						<xs:element name="layoutMode" type="xs:unsignedInt"/>
+						<xs:element name="persistentDrawingCache" type="xs:unsignedInt"/>
+						<xs:element name="splitMotionEvents" type="xs:boolean"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

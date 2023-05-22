@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<navigation rcr ="main.xsd">
+
+	<fragment
+		id =""
+		name =""
+		label=""
+		layout=""
+		>
+		<action
+			id=""
+			destination=""
+			/>
+	</fragment>
+	
+</navigation>
