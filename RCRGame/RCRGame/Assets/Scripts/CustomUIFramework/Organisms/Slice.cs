@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -26,7 +27,15 @@ namespace CustomUIFramework.Organisms
         [BoxGroup("Slice Properties/Camera Stacking")] 
         [SerializeField]
         private List<Camera> _camerasStack;
+        
 
+        private HashSet<Hash128> _hashGroupTags;
+        [SerializeField][ReadOnly]
+        private List<SlicePanel> _slicePanels;
+        public List<SlicePanel> slicePanels
+        {
+            get => _slicePanels;
+        }
         private void Awake()
         {
             /*
@@ -51,6 +60,11 @@ namespace CustomUIFramework.Organisms
                 _camerasStack.ForEach(c => _additionalCameraData.cameraStack
                     .Add(c));
             }
+            _hashGroupTags = new HashSet<Hash128>();
+            _slicePanels = GetComponentsInChildren<SlicePanel>().ToList();
         }
+
+        public void AppendTagHash(Hash128 hash) => _hashGroupTags.Add(hash);
+        public bool ContainsTag(Hash128 hash) => _hashGroupTags.Contains(hash);
     }
 }

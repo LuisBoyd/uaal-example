@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace CustomUIFramework.atoms
 {
-    public class ButtonAtom : Atom
+    public class ButtonAtom : Atom, IPointerDownHandler, IPointerUpHandler
     {
         [EnumToggleButtons] [SerializeField] 
         private EventMessagingType _eventMessagingType; //how do we send messages in this atom??
@@ -21,11 +21,12 @@ namespace CustomUIFramework.atoms
         [BoxGroup("SO Actions")]
         public EventRelay OnClickSo = default;
 
-        public override void OnPointerDown(PointerEventData eventData)
+        public  void OnPointerDown(PointerEventData eventData)
         {
-            _animationTargetEventHandler.AnimationTriggerSO.RaiseEvent("ClickedState");
-            
-            switch (_eventMessagingType)
+           _animator.SetBool(Animator.StringToHash("Pressed"), true);
+           _animator.SetTrigger(Animator.StringToHash("Clicked"));
+
+           switch (_eventMessagingType)
             {
                 case EventMessagingType.SObjects:
                     if(OnClickSo != null)
@@ -38,9 +39,9 @@ namespace CustomUIFramework.atoms
             }
         }
 
-        public override void OnPointerUp(PointerEventData eventData)
+        public void OnPointerUp(PointerEventData eventData)
         {
-            _animationTargetEventHandler.AnimationTriggerSO.RaiseEvent("UnClickedState");
+            _animator.SetBool(Animator.StringToHash("Pressed"), false);
         }
     }
 }

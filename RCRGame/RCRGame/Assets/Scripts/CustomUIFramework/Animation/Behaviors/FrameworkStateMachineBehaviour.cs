@@ -12,6 +12,8 @@ namespace CustomUIFramework.Animation.Behaviors
         [SerializeField] 
         protected U _selectable;
 
+        public void SetSelectable(U selectable) => _selectable = selectable;
+
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             if(_animationProperty == null || _selectable == null)

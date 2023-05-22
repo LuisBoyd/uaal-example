@@ -41,21 +41,21 @@ namespace CustomUIFramework.Technical.Transition
         public override void ShowTransition(SlicePanel slicePanel)
         {
             StartTransition();
-            slicePanel.rectTransform.anchorMax = anchoredPositionMaxShow;
-            slicePanel.rectTransform.anchorMin = anchoredPositionMinShow;
-            slicePanel.rectTransform.pivot = PivotShow;
-            slideAnimation = LeanTween.move(slicePanel.rectTransform,Vector3.zero, transitionTime)
-                .setEase(EaseTypeShow).setOnComplete(EndTransition);
+            // slicePanel.rectTransform.anchorMax = anchoredPositionMaxShow;
+            // slicePanel.rectTransform.anchorMin = anchoredPositionMinShow;
+            // slicePanel.rectTransform.pivot = PivotShow;
+            // slideAnimation = LeanTween.move(slicePanel.rectTransform,Vector3.zero, transitionTime)
+            //     .setEase(EaseTypeShow).setOnComplete(EndTransition);
         }
 
         public override void HideTransition(SlicePanel slicePanel)
         {
             StartTransition();
-            slicePanel.rectTransform.anchorMax = anchoredPositionMaxHide;
-            slicePanel.rectTransform.anchorMin = anchoredPositionMinHide;
-            slicePanel.rectTransform.pivot = PivotHide;
-            slideAnimation = LeanTween.move(slicePanel.rectTransform,Vector3.zero, transitionTime)
-                .setEase(EaseTypeHide).setOnComplete(EndTransition);
+            // slicePanel.rectTransform.anchorMax = anchoredPositionMaxHide;
+            // slicePanel.rectTransform.anchorMin = anchoredPositionMinHide;
+            // slicePanel.rectTransform.pivot = PivotHide;
+            // slideAnimation = LeanTween.move(slicePanel.rectTransform,Vector3.zero, transitionTime)
+            //     .setEase(EaseTypeHide).setOnComplete(EndTransition);
         }
     }
 }

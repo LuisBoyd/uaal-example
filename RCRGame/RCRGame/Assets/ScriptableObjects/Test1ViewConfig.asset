@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971abeec423244659085765ca0145635, type: 3}
+  m_Name: Test1ViewConfig
+  m_EditorClassIdentifier: 
+  Test: 0
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  id_display: 7eb3592c-5204-4c46-9f79-e40f6fbcc37a
+  _HidePrevious: 0
+  _BlockInteractionDuringTransition: 0
+  showTransitionConfig: {fileID: 0}
+  hideTransitionConfig: {fileID: 0}
+  SliceConfigList:
+  - Slice: {fileID: 1922808630565380083, guid: 873453a146fa0fc46bd8457eee97d596, type: 3}
+    OverrideViewShowTransition: 0
+    OverrideViewHideTransition: 0
+    ShowTransitionConfig: {fileID: 0}
+    HideTransitionConfig: {fileID: 0}
+  - Slice: {fileID: 1922808630565380083, guid: f63ad0faa70e3cf49be17e9ea247aec7, type: 3}
+    OverrideViewShowTransition: 0
+    OverrideViewHideTransition: 0
+    ShowTransitionConfig: {fileID: 0}
+    HideTransitionConfig: {fileID: 0}

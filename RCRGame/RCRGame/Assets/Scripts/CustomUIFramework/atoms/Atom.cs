@@ -14,9 +14,12 @@ namespace CustomUIFramework.atoms
     /// this Idea comes from Natalia Rebrova GDC talk 2019 on unified cross project UI.
     /// </summary>
     [DisallowMultipleComponent]
-    public abstract class Atom : Selectable
+    public abstract class Atom : MonoBehaviour
     {
-        [SerializeField] [ChildGameObjectsOnly]
-        protected AnimationTargetEventHandler _animationTargetEventHandler;
+        // [SerializeField] [ChildGameObjectsOnly]
+        // protected AnimationTargetEventHandler _animationTargetEventHandler;
+
+        [SerializeField] [ChildGameObjectsOnly][Required]
+        protected Animator _animator;
     }
 }

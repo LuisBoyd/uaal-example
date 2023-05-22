@@ -14,15 +14,31 @@ namespace CustomUIFramework.Technical
         [BoxGroup("View Config")]
         [SerializeField]
         private bool _HidePrevious;
+        public bool HidePrevious
+        {
+            get => _HidePrevious;
+        }
         [BoxGroup("View Config")]
         [SerializeField]
         private bool _BlockInteractionDuringTransition;
+        public bool BlockInteractionDuringTransition
+        {
+            get => _BlockInteractionDuringTransition;
+        }
         [BoxGroup("View Config")]
         [SerializeField]
         private TransitionConfig showTransitionConfig;
+        public TransitionConfig ShowTransitionConfig
+        {
+            get => showTransitionConfig;
+        }
         [BoxGroup("View Config")]
         [SerializeField]
         private TransitionConfig hideTransitionConfig;
+        public TransitionConfig HideTransitionConfig
+        {
+            get => hideTransitionConfig;
+        }
 
         [SerializeField] 
         public List<SliceConfig> SliceConfigList;
