@@ -171,7 +171,7 @@ namespace deVoid.UIFramework
         /// Show this screen with the specified properties.
         /// </summary>
         /// <param name="props">The data for the screen.</param>
-        public void Show(IScreenProperties props = null)
+        public virtual void Show(IScreenProperties props = null)
         {
             if (props != null)
             {

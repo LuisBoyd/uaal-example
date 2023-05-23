@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b717208ba86348c39f59683cc50e5cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _viewConfigs: []
 --- !u!1 &389049089
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 544946521}
-  - component: {fileID: 544946522}
+  - component: {fileID: 544946523}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -299,20 +300,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &544946522
-MonoBehaviour:
+--- !u!225 &544946523
+CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 544946520}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55ec6b59833f4fb2bf79f5d0315c317d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animationTargetEventHandler: {fileID: 0}
-  rectTransform: {fileID: 0}
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &837265611
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +321,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 837265612}
-  - component: {fileID: 837265613}
+  - component: {fileID: 837265614}
   m_Layer: 0
   m_Name: Foreground
   m_TagString: Untagged
@@ -351,20 +350,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &837265613
-MonoBehaviour:
+--- !u!225 &837265614
+CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 837265611}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55ec6b59833f4fb2bf79f5d0315c317d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animationTargetEventHandler: {fileID: 0}
-  rectTransform: {fileID: 0}
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &894936277
 GameObject:
   m_ObjectHideFlags: 0
@@ -561,6 +558,27 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1 &1193638900 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7778971651796073067, guid: 951bda4d61761b442b4840bc5d4ad1ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 1639055081}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1193638903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193638900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375d22e1976d423bafecd21e97510370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inTransition: {fileID: 0}
+  _outTransition: {fileID: 0}
+  children: []
 --- !u!1 &1245260815
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,6 +835,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d4cdcf276a1274a41b59ee2e602e0df7, type: 2}
   _sliceManager: {fileID: 242465947}
   _navigationManager: {fileID: 1943055540}
+  _components: []
 --- !u!4 &1426786034
 Transform:
   m_ObjectHideFlags: 0
@@ -1106,7 +1125,16 @@ PrefabInstance:
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8660941121083362203, guid: 951bda4d61761b442b4840bc5d4ad1ff,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 8660941121083362203, guid: 951bda4d61761b442b4840bc5d4ad1ff,
+        type: 3}
+    m_RemovedComponents:
+    - {fileID: 7843639617326148340, guid: 951bda4d61761b442b4840bc5d4ad1ff, type: 3}
+    - {fileID: 8660941121083362203, guid: 951bda4d61761b442b4840bc5d4ad1ff, type: 3}
+    - {fileID: 1922808630565380083, guid: 951bda4d61761b442b4840bc5d4ad1ff, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 951bda4d61761b442b4840bc5d4ad1ff, type: 3}
 --- !u!224 &1639055082 stripped
 RectTransform:
@@ -1373,3 +1401,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sliceManager: {fileID: 0}
   navigationListener: {fileID: 11400000, guid: 217e322478e417048bd7de90447b9b5a, type: 2}
+  _currentManagedViewConfig: {fileID: 0}
